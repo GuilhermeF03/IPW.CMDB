@@ -1,4 +1,4 @@
-# Group-02
+# Group-02<img src="https://skillicons.dev/icons?i=js&perline=8" />
 
 Repository for Introduction to Web Programming course, winter semester of 2022-2023
 
