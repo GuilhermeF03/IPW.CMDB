@@ -1,74 +1,42 @@
 import express from "express";
+import webapi from "./cmdb-web-api.mjs";
 
-const app = express()
+const app = express();
+const PORT = 8080;
 
+console.log("Start setting us server");
 
-/* Filter requests with body in json-format */
-app.use(express.json())
+app.use(express.json());
 
+// Get the list of the most popular movies. The request has an optional parameter to limit the number of returned movies (max 250)
+app.get("/popular", webapi.getPopularMovies);
 
+// Search movies by name. The request has an optional parameter to limit the number of returned movies (max 250)
+app.get("/search/:movie", webapi.searchMovie);
 
+// Groups
+// Create group providing its name and description
+app.post("/groups", webapi.createGroup);
 
-app.get("/chart/:top",getTop())
+// Edit group by changing its name and description
+app.put("/groups/:id", webapi.updateMovies);
 
-app.get("/find",getMovie())
+// List all groups
+app.get("/groups", webapi.listGroups);
 
-app.get("/group/:groupId")
+// Delete a group
+app.delete("/groups/:id", webapi.deleteGroup);
 
+// Get the details of a group, with its name, description, the names and total duration of the included movies
+app.get("/groups/:id", webapi.getMoviesById);
 
+// Add a movie to a group
+app.put("/groups/:group_id/add-movie", webapi.putMovies);
 
+// Remove a movie from a group
+app.delete("/groups/:group-id/:movie-id", webapi.deleteGroup);
 
+// Create new user
+app.post("/user", webapi.createUser);
 
-
-
-
-
-
-app.listen(8080, ()=>console.log("Listening..."))
-
-
-
-
-/*import express from 'express'
-
-const app = express()
- 
-app.use(express.json())
-app.get("/tasks", getTasks)
-app.get("/tasks/:taskId", getTaskById)
-app.post("/tasks", createTask)
-
-app.listen(8080, ()=>console.log("Listening..."))
-
-const tasks = [
-    {id : 1, text : "study tds"},
-    {id : 2, text : "study isi"},
-]
-
-let nextTaskId = 3
-
-function getTasks(req, resp){
-    console.log(req.query)
-    resp.json(tasks)
-}
-
-function getTaskById(req, resp){
-    console.log(req.params)
-    resp.json(tasks.find( t => t.id == req.params.taskId))
-}
-
-function createTask(req, resp){
-    console.log(req.body)
-    const task = {id : nextTaskId , text : req.body.text}
-    tasks.push(task)
-    ++nextTaskId
-    resp.status(201).json(task)
-}
-
-
-
-
-
-
-
- */
+app.listen(PORT, () => console.log(`Server listening in http://localhost:${PORT}`)) ;
