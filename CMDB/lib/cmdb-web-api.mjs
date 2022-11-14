@@ -1,76 +1,120 @@
 // API - handles HTTP request and redirects to services module
-import services from "./cmdb-services.mjs";
+import * as services from "./cmdb-services.mjs";
 
 // Handlers//
 
 // This handlers don't require any user token
-export const getPopularMovies = getPopularMovies();
-export const searchMovie = searchMovie();
-export const createUser = createUser();
+export const getPopularMovies = getPopularMoviesInternal();
+export const searchMovie = searchMovieInternal();
+export const createUser = createUserInternal();
 
 // Each handler requires a user token, token is validated on 'services' module
-export const createGroup = verifyAuthentication(createGroup());
-export const updateMovies = verifyAuthentication(updateMovies());
-export const listGroups = verifyAuthentication(listGroups());
-export const deleteGroup = verifyAuthentication(deleteGroup());
-export const deleteMovie = verifyAuthentication(deleteMovie());
-export const getMoviesById = verifyAuthentication(getMoviesById());
-export const putMovies = verifyAuthentication(putMovies());
+export const createGroup = verifyAuthentication(createGroupInternal());
+export const updateGroup = verifyAuthentication(updateGroupInternal());
+export const listGroups = verifyAuthentication(listGroupsInternal());
+export const deleteGroup = verifyAuthentication(deleteGroupInternal());
+export const deleteMovie = verifyAuthentication(deleteMovieInternal());
+export const getMoviesById = verifyAuthentication(getMoviesByIdInternal());
+export const putMovies = verifyAuthentication(putMoviesInternal());
 
 //cmdb-server.js -> cmdb-web-api.js -> cmdb-services.js -> cmdb-movies-data.js
 //                                                      -> cmdb-data-mem.js
-async function getPopularMovies(req, resp) {
-  if (req.query.max = undefined)
-    resp.status(400).json({ error: "Invalid query" });
-
+async function getPopularMoviesInternal(req, resp) {
+  if (Object.values(req.query)[0] != undefined && typeof Object.values(req.query)[0] != Number) 
+    resp.status(400).json({ error: `Invalid argument given` });
 
   try {
-    const popularMovies = await services.getPopularMovies(req.query);
-    resp.write(`Top ${req.query.max} movies`).json(popularMovies);
+    let max = Object.values(req.query)[0] || 250
+    const popularMovies = await services.getPopularMovies(max);
+
+    resp.json({
+      result: `Top ${req.query.max} movies`,
+      movies: popularMovies
+    })
+
   } catch {
-    (error) => resp.status(404).json(error);
+    //verify error
   }
 }
 
-async function searchMovie(req, resp) {
-  if (req.params.movieId == undefined)
-    resp.status(400).json({ error: "Undefined Id of the movie" });
+async function searchMovieInternal(req, resp) {
   try {
     const search = await services.searchMovie(req.params.movieId);
-    resp.json(search);
-    if (search.results.size == 0)
+
+    if (search.results.size == 0) 
       resp.status(204).json({ error: `No results for ${req.params.movieId}` });
+    resp.json(search);
   } catch {
-    (error) => resp.status(404).json(error);
+    //verify erro
   }
 }
 
-async function createUser(req, resp) {
-  if (req.body == 0) resp.status(204).json({ error: "No content" });
+async function createUserInternal(req, resp) {
+  if (req.body == undefined) 
+    resp.status(204).json({ error: "No content" });
+
   try {
     let newUser = await services.createUser(req.body);
     resp.status(201).json({
-      status: `User created with id ${newUser.id}`,
-      id: newUser.id,
+      status: `User created with token ${newUser.id}`,
+      id: newUser
     });
   } catch (error) {
-    resp.status(400).json({ error: `Error creating user: ${error}` });
+    
   }
 }
 
-async function createGroup(req, resp) {}
+async function createGroupInternal(req, resp) {
+  if(req.body == undefined) resp.status(204).json({error: "No content"}) 
+  try {
+    let newGroup = await services.createGroup(req.body)
+    resp.status(201).json({
+      status: `Group created with id: <${newGroup.id}>, name: <${newGroup.name}> and description: <${newGroup.description}>`,
+      group : newGroup
+    })
+  } catch (error) {
+    // resp.status(400).json({error: `Error creating group: ${error}`})
+  }
+}
+// async function searchMovieInternal(req, resp) {
+//   try {
+//     const search = await services.searchMovie(req.params.movieId);
 
-async function updateMovies(req, resp) {}
+//     if (search.results.size == 0)
+//       resp.status(204).json({ error: `No results for ${req.params.movieId}` });
 
-async function listGroups(req, resp) {}
+//     resp.json(search);
+//   } catch {
+//     //verify erro
+//   }
+// }
 
-async function deleteGroup(req, resp) {}
+async function updateGroupInternal(req, resp) {
+  if(req.body == undefined) resp.status(204).json({error: "No content"}) 
+  try {
+    let uptGroup = await services.createGroup(req.params.id)
+    resp.stat
+    
+    
+  }
+}
 
-async function deleteMovie(req, resp) {}
+async function listGroupsInternal(req, resp) {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
 
-async function getMoviesById(req, resp) {}
+async function deleteGroupInternal(req, resp) {}
 
-async function putMovies(req, resp) {}
+async function deleteMovieInternal(req, resp) {}
+
+async function getMoviesByIdInternal(req, resp) {}
+
+async function putMoviesInternal(req,resp){}
+
 
 // High order function that takes user token from request -> redirect to respective handler
 function verifyAuthentication(handlerFunction) {
