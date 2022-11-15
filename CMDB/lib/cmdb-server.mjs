@@ -11,14 +11,12 @@ console.log("Setting up server...");
 
 app.get("/popular", webapi.getPopularMovies);
 
-app.get("/search/:movieId", webapi.searchMovie);
+app.get("/search/:movie", webapi.searchMovie);
 
 // USER
 app.post("/user", webapi.createUser);
 
 // GROUPS
-
-
 app.get("/groups", webapi.listGroups);
 
 app.post("/groups", webapi.createGroup);
@@ -29,8 +27,10 @@ app.put("/groups/:groupId", webapi.updateGroup);
 
 app.delete("/groups/:groupId/", webapi.deleteGroup);
 
-app.put("groups/:groupId/:movieId",webapi.putMovies)
+app.put("groups/:groupId/:movieId",webapi.addMovie)
 
 app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
 
+
+// Boot-up server
 app.listen(PORT, () =>console.log(`Server listening in http://localhost:${PORT}`));

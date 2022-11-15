@@ -15,14 +15,14 @@ export const updateGroup = verifyAuthentication(updateGroupInternal());
 export const listGroups = verifyAuthentication(listGroupsInternal());
 export const deleteGroup = verifyAuthentication(deleteGroupInternal());
 export const deleteMovie = verifyAuthentication(deleteMovieInternal());
-export const getMoviesById = verifyAuthentication(getMoviesByIdInternal());
-export const putMovies = verifyAuthentication(putMoviesInternal());
+//export const getMoviesById = verifyAuthentication(getMoviesByIdInternal());
+export const addMovie = verifyAuthentication(addMovieInternal());
 
 //cmdb-server.js -> cmdb-web-api.js -> cmdb-services.js -> cmdb-movies-data.js
 //                                                      -> cmdb-data-mem.js
 
 /** POPULAR FORMAT
- * @var {status: `Top {max} movies`, popularMovies : [] }
+ * @var {results : [] }
  */
 async function getPopularMoviesInternal(req, resp) {
   // if (Object.values(req.query)[0] != undefined && typeof Object.values(req.query)[0] != Number) 
@@ -31,9 +31,9 @@ async function getPopularMoviesInternal(req, resp) {
     let max = Object.values(req.query)[0] || 250;
     const popularMovies = await services.getPopularMovies(max);
 
-    resp.json({
-      result: `Top ${req.query.max} movies`,
-      movies: popularMovies
+    resp.status(200).json({
+      status: `Retrieved top ${req.query.max} movies.`,
+      'movies': popularMovies.results
     })
     
   } catch (error) {
@@ -43,16 +43,20 @@ async function getPopularMoviesInternal(req, resp) {
 }
 
 /**SEARCH FORMAT
- * @var {status: `Results for <${movieId}>`, results: []}
+ * @var {results: []}
  */
 async function searchMovieInternal(req, resp) {
   try {
-    const search = await services.searchMovie(req.params.movieId);
+    const max = req.query.max || 250
+    const search = await services.searchMovie(req.params.movie, max);
     
     if (search.results.size == 0) 
-      resp.status(204).json({ error: `No results for ${req.params.movieId}` });
+      resp.status(204).json({ error: `No results for '${req.params.movie}'.` });
 
-    resp.json(search);
+    resp.status(200).json({
+      status : `Returned ${max} results for '${req.params.movie}'.`,
+      'results' : search.results
+    });
   } catch {
     const httpError = convertToHttpError(error)
     resp.status(httpError.status).json(httpError.body)
@@ -60,7 +64,7 @@ async function searchMovieInternal(req, resp) {
 }
 
 /**USER FORMAT
- * @var  {token :{name : "user-name", groups : [object]}} 
+ * @var  {token :"", name :""}} 
  */
 async function createUserInternal(req, resp) {
   // if (req.body == undefined) 
@@ -69,7 +73,7 @@ async function createUserInternal(req, resp) {
     let newUser = await services.createUser(req.body);
 
     resp.status(201).json({
-      status: `User <${newUser.name}> created with token <${Object.keys(newUser)[0]}>`,
+      status: `User <${newUser.name}> created with token <${newUser.token}>`,
       'user-info': newUser
     });
 
@@ -80,7 +84,7 @@ async function createUserInternal(req, resp) {
 }
 
 /**GROUP FORMAT
- * @var  {id : ,name: "", description : "", movies : [object]}
+ * @var  {id : ,name: "", description : ""}
  */
 async function createGroupInternal(req, resp) {
   // if(req.body == undefined) resp.status(204).json({error: "No content"}) 
@@ -89,7 +93,7 @@ async function createGroupInternal(req, resp) {
 
     resp.status(201).json({
       status: `Group created with id: <${newGroup.id}>, name: <${newGroup.name}> and description: <${newGroup.description}>`,
-      'new-group' : newGroup
+      'content' : "no content"
     })
 
   } catch (error) {
@@ -107,8 +111,8 @@ async function updateGroupInternal(req, resp) {
     let updatedGroup = await services.updateGroup(req.params.groupId, req.body)
 
     resp.status(200).json({
-      status: `Group <${updatedGroup.name}>, with id <${req.params.groupId}> updated successfully`,
-      'updated-group': updatedGroup
+      status: `Group <${updatedGroup.name}>, with id <${req.params.groupId}> was updated successfully`,
+      'content': undefined
     })  
 
   } catch(error) {
@@ -124,8 +128,8 @@ async function listGroupsInternal(req, resp) {
   try {
     let userGroups = await services.listUserGroups()
     resp.status().json({
-      status: `Retured all ${userGroups.groups.size} ${userGroups.name}'s groups`,
-      'users-groups': userGroups.groups
+      status: `Retured all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
+      'user-groups': userGroups.groups
     })
     
   } catch (error) {
@@ -135,27 +139,56 @@ async function listGroupsInternal(req, resp) {
 }
 
 
-/**
- * @var
- * 
- * splice(id,1)
+/**DELETED-GROUP 
+ * @var {name : ""}
  */
 async function deleteGroupInternal(req, resp) {
-
+  try {
+    let deletedGroup = await services.deleteGroup()
+    resp.status(200).json({
+      status: `${deletedGroup.name} successfully removed from group list.`,
+      'content': undefined
+    })
+    
+  } catch (error) {
+    const httpError = convertToHttpError(error)
+    resp.status(httpError.status).json(httpError.body)
+  }
 }
 
+/**DELETED-MOVIE 
+ * @var {name : "", group : ""}
+ */
 async function deleteMovieInternal(req, resp) {
-
+  try {
+    let deletedMovie = await services.deleteMovie()
+    resp.status(200).json({
+      status: `${deletedMovie.name} successfully removed from <${deletedMovie.group}>.`,
+      'content': undefined
+    })
+    
+  } catch (error) {
+    const httpError = convertToHttpError(error)
+    resp.status(httpError.status).json(httpError.body)
+  }
 }
 
-async function getMoviesByIdInternal(req, resp) {
-
+/**DELETED-MOVIE 
+ * @var {name : "",id:"", group : ""}
+ */
+async function addMovieInternal(req, resp) {
+  try {
+    let addedMovie = await services.deleteMovie()
+    resp.status(200).json({
+      status: `${addedMovie.name}, with id:<${addedMovie.id}>, was successfully added to <${addedMovie.group}>.`,
+      'content': undefined
+    })
+    
+  } catch (error) {
+    const httpError = convertToHttpError(error)
+    resp.status(httpError.status).json(httpError.body)
+  }
 }
-
-async function putMoviesInternal(req, resp) {
-  
-}
-
 
 
 // VERIFIERS
