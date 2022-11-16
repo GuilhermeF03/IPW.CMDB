@@ -11,7 +11,7 @@ console.log("Setting up server...");
 
 app.get("/popular", webapi.getPopularMovies);
 
-app.get("/search/:movie", webapi.searchMovie);
+app.get("/search/:movieName", webapi.searchMovie);
 
 // USER
 app.post("/user", webapi.createUser);

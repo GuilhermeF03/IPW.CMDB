@@ -1,5 +1,5 @@
 // API - handles HTTP request and redirects to services module
-import * as services from "./cmdb-services.mjs";
+import services from "./cmdb-services.mjs";
 import { convertToHttpError } from "../errors/http-errors.mjs";
 
 // Handlers//
@@ -15,14 +15,12 @@ export const updateGroup = verifyAuthentication(updateGroupInternal());
 export const listGroups = verifyAuthentication(listGroupsInternal());
 export const deleteGroup = verifyAuthentication(deleteGroupInternal());
 export const deleteMovie = verifyAuthentication(deleteMovieInternal());
-//export const getMoviesById = verifyAuthentication(getMoviesByIdInternal());
 export const addMovie = verifyAuthentication(addMovieInternal());
+export const getGroupById = verifyAuthentication(getGroupByIdInternal());
 
-//cmdb-server.js -> cmdb-web-api.js -> cmdb-services.js -> cmdb-movies-data.js
-//                                                      -> cmdb-data-mem.js
 
 /** POPULAR FORMAT
- * @var {results : [] }
+ * @var {results : [{id, rank, title, imDbRating}]}
  */
 async function getPopularMoviesInternal(req, resp) {
   // if (Object.values(req.query)[0] != undefined && typeof Object.values(req.query)[0] != Number) 
@@ -43,18 +41,18 @@ async function getPopularMoviesInternal(req, resp) {
 }
 
 /**SEARCH FORMAT
- * @var {results: []}
+ * @var {results: [{id, title, description}]}
  */
 async function searchMovieInternal(req, resp) {
   try {
     const max = req.query.max || 250
-    const search = await services.searchMovie(req.params.movie, max);
+    const search = await services.searchMovie(req.params.movieName, max);
     
     if (search.results.size == 0) 
-      resp.status(204).json({ error: `No results for '${req.params.movie}'.` });
+      resp.status(204).json({ error: `No results for '${req.params.movieName}'.` });
 
     resp.status(200).json({
-      status : `Returned ${max} results for '${req.params.movie}'.`,
+      status : `Returned ${max} results for '${req.params.movieName}'.`,
       'results' : search.results
     });
   } catch {
@@ -83,17 +81,17 @@ async function createUserInternal(req, resp) {
   }
 }
 
-/**GROUP FORMAT
+/**GROUP FORMAT -> create group
  * @var  {id : ,name: "", description : ""}
  */
 async function createGroupInternal(req, resp) {
   // if(req.body == undefined) resp.status(204).json({error: "No content"}) 
   try {
-    let newGroup = await services.createGroup(req.body)
+    let newGroup = await services.createGroup(req.userToken, req.body)
 
     resp.status(201).json({
       status: `Group created with id: <${newGroup.id}>, name: <${newGroup.name}> and description: <${newGroup.description}>`,
-      'content' : "no content"
+      'content' : undefined
     })
 
   } catch (error) {
@@ -102,17 +100,17 @@ async function createGroupInternal(req, resp) {
   }
 }
 
-/**GROUP FORMAT
- * @var  {name: "", description : "", movies : [object]}
+/**GROUP FORMAT -> UPDATE GROUP
+ * @var  {name: "", description : "" }
  */
 async function updateGroupInternal(req, resp) {
   // if(req.body == undefined) resp.status(204).json({error: "No content"}) 
   try {
-    let updatedGroup = await services.updateGroup(req.params.groupId, req.body)
+    let updatedGroup = await services.updateGroup(req.userToken, req.params.groupId, req.body)
 
     resp.status(200).json({
-      status: `Group <${updatedGroup.name}>, with id <${req.params.groupId}> was updated successfully`,
-      'content': undefined
+      status: `Group with id <${req.params.groupId}> was successfully updated.`,
+      'updated-info': updatedGroup
     })  
 
   } catch(error) {
@@ -121,12 +119,12 @@ async function updateGroupInternal(req, resp) {
   }
 }
 
-/**ALL USER GROUPS
- * @var {user : name, groups: []}
+/** USER GROUPS
+ * @var {name : "", groups: [{group-info}]}
  */
 async function listGroupsInternal(req, resp) {
   try {
-    let userGroups = await services.listUserGroups()
+    let userGroups = await services.listUserGroups(req.userToken)
     resp.status().json({
       status: `Retured all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
       'user-groups': userGroups.groups
@@ -144,9 +142,9 @@ async function listGroupsInternal(req, resp) {
  */
 async function deleteGroupInternal(req, resp) {
   try {
-    let deletedGroup = await services.deleteGroup()
+    let deletedGroup = await services.deleteGroup(req.userToken, req.params.groupId)
     resp.status(200).json({
-      status: `${deletedGroup.name} successfully removed from group list.`,
+      status: `${deletedGroup.name} was successfully removed from groups list.`,
       'content': undefined
     })
     
@@ -161,9 +159,9 @@ async function deleteGroupInternal(req, resp) {
  */
 async function deleteMovieInternal(req, resp) {
   try {
-    let deletedMovie = await services.deleteMovie()
+    let deletedMovie = await services.deleteMovie(req.userToken, req.params.groupId, req.params.movieId)
     resp.status(200).json({
-      status: `${deletedMovie.name} successfully removed from <${deletedMovie.group}>.`,
+      status: `${deletedMovie.name} was successfully removed from <${deletedMovie.group}>.`,
       'content': undefined
     })
     
@@ -173,20 +171,36 @@ async function deleteMovieInternal(req, resp) {
   }
 }
 
-/**DELETED-MOVIE 
- * @var {name : "",id:"", group : ""}
+/** ADDED-MOVIE 
+ * @var {group : "", name : "",id: "", info : {movie-info}}
  */
 async function addMovieInternal(req, resp) {
   try {
-    let addedMovie = await services.deleteMovie()
+    let addedMovie = await services.addMovie(req.userToken, req.params.groupId, req.params.movieId)
     resp.status(200).json({
       status: `${addedMovie.name}, with id:<${addedMovie.id}>, was successfully added to <${addedMovie.group}>.`,
-      'content': undefined
+      'movie-info': addedMovie.movie
     })
-    
   } catch (error) {
     const httpError = convertToHttpError(error)
     resp.status(httpError.status).json(httpError.body)
+  }
+}
+
+/**GROUP FORMAT -> GET SINGLE GROUP
+ * @var {name: "", description : "", movies : [{movie-info}]}
+ */
+
+async function getGroupByIdInternal(req, resp) {
+  try {
+    let group = await services.getGroupById(req.userToken, req.params.groupId);
+    resp.status(200).json({
+      status: `The group <${group.name}>, with the following id <${req.params.id}>, was successfully retrieved.`,
+      "group-info": group,
+    });
+  } catch (error) {
+    const httpError = convertToHttpError(error);
+    resp.status(httpError.status).json(httpError.body);
   }
 }
 
