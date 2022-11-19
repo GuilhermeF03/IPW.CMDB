@@ -25,9 +25,10 @@ app.get("/groups/:groupId", webapi.getGroupById);
 
 app.put("/groups/:groupId", webapi.updateGroup);
 
-app.delete("/groups/:groupId/", webapi.deleteGroup);
+app.delete("/groups/:groupId", webapi.deleteGroup);
 
 app.put("groups/:groupId/:movieId",webapi.addMovie)
+//app.post("groups/:groupId", webapi.addMovie)
 
 app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
 

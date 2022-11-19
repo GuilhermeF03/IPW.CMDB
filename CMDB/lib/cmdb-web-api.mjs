@@ -41,7 +41,7 @@ async function getPopularMoviesInternal(req, resp) {
 }
 
 /**SEARCH FORMAT
- * @var {results: [{id, title, description}]}
+ * @var {results: [{id, title, year, description}]}
  */
 async function searchMovieInternal(req, resp) {
   try {
@@ -126,7 +126,7 @@ async function listGroupsInternal(req, resp) {
   try {
     let userGroups = await services.listUserGroups(req.userToken)
     resp.status().json({
-      status: `Retured all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
+      status: `Returned all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
       'user-groups': userGroups.groups
     })
     
