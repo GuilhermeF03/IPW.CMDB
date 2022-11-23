@@ -1,380 +1,215 @@
 import data from "./cmdb-movies-data.mjs";
 import mem from "./cmdb-data-mem.mjs";
 import fetch from "node-fetch";
-import { convertToHttpError, errors } from "../errors/http-errors.mjs";
+import { convertToHttpError } from "../errors/http-errors.mjs";
 
-//código antigo
-/* 
-const MAX_LIMIT = 250
+// todos os throw tem de ser verificados
+// todos os trhows tem de ser convertidos para erros http
+const MAX_LIMIT = 250;
+const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
 
-async function getPopularMovies(max) {
-  max = Number(max)
+export default function getServices(data, mem) {
 
-  if(isNAN(limit) || max <= 0 || max > MAX_LIMIT) {
-    throw (`Limit must be positive, less than ${max}`)
-  }
+  if (!data) { }
   
-  try {
-    const topMovies = await data.getTop250()
-    topMovies.items.splice(max, MAX_LIMIT - max)
-    return {results : topMovies.items.map((elem) => (elem = {id: elem.id, rank: elem.rank, title: elem.title, imDbRating: elem.imDbRating}))}
-  } catch (error) {
-    // const httpErr = convertToHttpError(error)
-    // return httpErr
-  }
+  if (!mem) { }
+
+  async function getPopularMovies(max) {
+    max = Number(max);
+    await validateMaxMovies(max);
+    
+    let topMovies = await data.getTop250();
+    topMovies.results.splice(max, MAX_LIMIT - max);
   
+    if (!topMovies.results.lenght) 
+      throw new Error("No movies found");
+    
+    return topMovies;
+  }
+
+  async function searchMovie(movieName, max) {
+    max = Number(max);
+    await validateMaxMovies(max);
+
+    const movies = await data.searchMovieByName(movieName);
+    movies.results.splice(max, MAX_LIMIT - max);
+
+    return movies;
+  }
+
+  async function createUser(userInfo) {
+    await isValidString(userInfo.name);
+
+    let uInfo = { token: crypto.randomUUID(), name: userInfo.name };
+
+    if(mem.getUserInfo(uInfo.token))
+      throw new Error("Invalid")
+
+    await mem.createUser(uInfo);
+
+    return uInfo;
+  }
+
+  // [Group Services]
+  async function createGroup(userToken, groupInfo) {
+    await validateUser(userToken);
+
+    let gInfo = await mem.createGroup(userToken, groupInfo);
+    
+    // TODO: passar para o mem
+    return { id: gInfo.id, name: gInfo.name, description: gInfo.description };
+  }
+
+  async function getGroupById(userToken, groupId) {
+    groupId = Number(groupId);
+
+    await validateId(groupId);
+    await validateUser(userToken);
+
+    let gInfo = await mem.getGroupById(userToken, groupId);
+    
+    if (!gInfo)
+      throw new Error("Group not found");
+    
+    // TODO: passar para o mem
+    return {
+      id: gInfo.id,
+      name: gInfo.name,
+      description: gInfo.description,
+      "number of movies": gInfo.movies.lenght,
+    };
+  }
+
+  async function updateGroup(userToken, groupId, updateInfo) {
+    groupId = Number(groupId);
+
+    // Validate Info
+    await isValidString(updateInfo.name);
+    await isValidString(updateInfo.description);
+    await validateId(groupId);
+    await validateUser(userToken);
+    
+    let gInfo = await mem.updateGroup(userToken, groupId, updateInfo);
+    
+    if (!gInfo)
+      throw new Error("Group not found");
+    // TODO: passar para o mem
+    return { name: gInfo.name, description: gInfo.description };
+  }
+
+  async function deleteGroup(userToken, groupId) {
+    groupId = Number(groupId);
+
+    await validateId(groupId);
+    await validateUser(userToken);
+
+    let gInfo = { name: (await mem.getGroupById(userToken, groupId)).name };
+    if (!gInfo)
+      throw new Error("Group not found");
+
+    await mem.deleteGroup(userToken, groupId);
+
+    return gInfo;
+  }
+ 
+
+  // mostra os grupos de um utilizador com name e description com os nomes e respetivas durações dos filmes
+  async function listUserGroups(userToken) {
+    await validateUser(userToken);
+
+    let groups = await mem.listUserGroups(userToken);
+
+    // TODO: verificar
+    if (!groups)
+      throw new Error("No groups found");
+    
+    return groups;
+  }
+
+// [Movie Services]
+  async function addMovie(userToken, groupId, movieId) {
+    groupId = Number(groupId);
+
+    await validateId(groupId);
+    await validateUser(userToken);
+
+    let mInfo = await data.getMovieById(movieId);
   
-}
-
-async function searchMovie(movieName, max) {
-  try {
-    const data = await searchMovieByName(movieName)
-    data.results.splice(max, MAX_LIMIT - max);
-    return {results: data.results.map((elem) => (elem = {id: elem.id, title: elem.title, year : elem.year, description: elem.description}))};
-  } catch (error) {
+    if (!mInfo)
+      throw new Error("Movie not found");
+  //TODO:
     
-  }
-}
-
-async function createUser(userInfo) {
-  try{
-    let uInfo = {token : crypto.randomUUID(), name : userInfo.name}
-    await mem.createUser(uInfo)
-    return uInfo
-  }catch(error){
+    // {id: mInfo.id, title: mInfo.title,duration: mInfo.runtimeMins}
+    let gInfo = await mem.addMovie(groupId, mInfo);
     
-  }
-}
+    if (!gInfo)
+      throw new Error("Group not found");
 
-async function createGroup(userToken, groupInfo) {
-  try {
-    await validateUser(userToken)
-    let gInfo = await mem.createGroup(userToken, groupInfo)
-    return {id: gInfo.id, name: gInfo.name, description: gInfo.description}
-  } catch (error) {
-    
-  }
-}
-
-async function getGroupById(userToken, groupId) {
-  try {
-    await validateUser(userToken)
-    let gInfo = await mem.getGroupById(userToken, groupId)
-    return {id: gInfo.id, name: gInfo.name, description: gInfo.description}
-  } catch (error) {
-    
-  }
-}
-
-async function updateGroup(userToken, groupId, updateInfo) {
-  try {
-    await validateUser(userToken)
-    let gInfo = await mem.updateGroup(userToken, groupId, updateInfo)
-    return {name : gInfo.name, description : gInfo.description}
-  } catch (error) {
-    
-  }
-}
-
-async function deleteGroup(userToken, groupId) {
-  try {
-    await validateUser(userToken)
-    let gInfo = {name : await mem.getGroupById(userToken,groupId).name}
-    await(mem.deleteGroup(userToken,groupId))
-    return gInfo
-  } catch (error) {
-    
-  }
-}
-
-async function listUserGroups(userToken) {
-  try {
-    await validateUser(userToken)
-    return await mem.listUserGroups(userToken)
-    
-  } catch (error) {
-    
-  }
-}
-
-async function deleteMovie(userToken, groupId, movieId) {
-  try {
-    await validateUser(userToken)
-    
-  } catch (error) {
-    
-  }
-}
-
-async function addMovie(userToken, groupId, movieId) {
-  try { 
-    await validateUser(userToken)
-    
-
-  } catch (error) {
-    
-  }
-}
-
-
-async function validateUser(token) {
-  return await mem.validateUser(token)
-}
-
-
-
-
-
-export const services = {
-  getPopularMovies,
-  searchMovie,
-  createUser,
-  createGroup,
-  updateGroup,
-  listUserGroups,
-  deleteGroup,
-  deleteMovie,
-  addMovie,
-  getGroupById,
-};
-
-export default services;
-
-*/
-
-const MAX_LIMIT = 250
-
-async function getPopularMovies(max) {
-  max = Number(max)
-
-  if(isNAN(max) || max <= 0 || max > MAX_LIMIT) {
-    throw `Limit must be positive, less than ${max}`
-  }
-  
-  try {
-    const topMovies = await data.getTop250()
-    topMovies.items.splice(max, MAX_LIMIT - max)
-    return {results : topMovies.items.map((elem) => (elem = { 
-      id: elem.id,
-      rank: elem.rank, 
-      title: elem.title, 
-      imDbRating: elem.imDbRating
-    }))}
-  } catch {
-    throw errors.NOT_AUTHORIZED()
-  }
-}
-
-async function searchMovie(movieName, max) {
-  max = Number(max)
-
-  if(isNAN(max) || max <= 0 || max > MAX_LIMIT) {
-    throw `Limit must be positive, less than ${max}`
+    return gInfo;
+    // TODO: passar para o mem
+    // return { groupName: gInfo.name, id: gInfo.id, addedMovie: mInfo };
   }
 
-  if(!isValidString(movieName)) {
-    throw `Invalid string <${movieName}>`
-  }
+  async function deleteMovie(userToken, groupId, movieId) {
+    groupId = Number(groupId);
 
-  try {
-    const search = await data.searchMovieByName(movieName)
-    search.results.splice(max, MAX_LIMIT - max);
-    return {results: search.results.map((elem) => ({id: elem.id, title: elem.title, year : elem.year, description: elem.description}))};
-  } catch {
-    throw `movie <${movieName}> not found`
-  }
-}
+    await validateId(groupId);
+    await validateUser(userToken);
 
-async function createUser(userInfo) {
-  if(userInfo.name == undefined) {
-    throw `Invalid user name`
-  }
-  let uInfo = {token : crypto.randomUUID(), name : userInfo.name}
-  await mem.createUser(uInfo)
-  
-  if(!uInfo.token) {
-    throw `token not found`
-  }
-
-  if(!uInfo.name) {
-    throw `name not found`
-  }
-  
-  return uInfo
-  
-}
-
-async function createGroup(userToken, groupInfo) {
-  // if(userToken || groupId == undefined) {
-  //   throw `Invalid user token or group Information`
-  // }
-
-  await validateUser(userToken)
-
-  if(!validateUser) {
-    throw `Invalid user token`
-  }
-
-  let gInfo = await mem.createGroup(userToken, groupInfo)
-  if(!gInfo.id) {
-    throw `Group Id <${gInfo.id}> not found`
-  }
-  if(!gInfo.name) {
-    throw `Group name <${gInfo.name}> not found`
-  }
-  if(!gInfo.description) {
-    throw `Group description <${gInfo.description}> not found`
-  }
-  return {id: gInfo.id, name: gInfo.name, description: gInfo.description}
-}
-
-async function getGroupById(userToken, groupId) {
-  // if(userToken || groupId == undefined) {
-  //   throw `Invalid user token or group Information`
-  // }
-
-  try {
-    await validateUser(userToken)
-    if(!validateUser) {
-      throw `Invalid user token`
+    let info = {
+      title : await mem.getMovieById(userToken, groupId, movieId).title,
+      group : await mem.getGroupById(userToken, groupId)
     }
-    let gInfo = await mem.getGroupById(userToken, groupId)
-    // if(gInfo.movies == null) {
-    //   throw `The group has no movies`
-    // }
-    //DÚVIDA NA GINFO.MOVIES.MAP
-    return {name: gInfo.name, description: gInfo.description, movies : gInfo.movies.map((elem) => (elem = {
-      name: elem.name,
-      duration: elem.duration
-    }))}
-  } catch {
-    throw `Group Id not found`
-  }
-}
 
-async function updateGroup(userToken, groupId, updateInfo) {
-  // if(userToken || groupId == undefined) {
-  //   throw `Invalid user token or group Information`
-  // }
-  try {
-    await validateUser(userToken)
-    if(!validateUser) {
-      throw `Invalid user token`
-    }
-    let gInfo = await mem.updateGroup(userToken, groupId, updateInfo)
-    return {name : gInfo.name, description : gInfo.description}
-  } catch {
-    throw `Group Id not found`
-  }
-}
 
-async function deleteGroup(userToken, groupId) {
-  // if(userToken || groupId == undefined) {
-  //   throw `Invalid user token or group Information`
-  // }
-  try {
-    await validateUser(userToken)
-    if(!validateUser) {
-      throw `Invalid user token`
-    }
-    let gInfo = {name : await mem.getGroupById(userToken,groupId).name}
-    await(mem.deleteGroup(userToken,groupId))
-    return gInfo
-  } catch {
-    throw `Group Id not found`
-  }
-}
-//DÚVIDA NO LIST USER GROUPS
-async function listUserGroups(userToken) {
-  try {
-    await validateUser(userToken)
-    if(!validateUser) {
-      throw `Invalid user token`
-    }
-    const listGroup =  await mem.listUserGroups(userToken)
-    return {name : listGroup.name, groups : listGroup.groups.map((element) => (element = {
-      name: gInfo.name, 
-      description: gInfo.description, 
-      movies : gInfo.movies.map((elem) => (elem = {
-        name: elem.name,
-        duration: elem.duration
-      }
-    ))}))}
-  } catch (error) {
-    throw `${error}`
-  }
-}
-
-async function deleteMovie(userToken, groupId, movieId) {
-  // if(userToken || groupId == undefined) {
-  //   throw `Invalid user token or group Information`
-  // }
-  try {
-    await validateUser(userToken)
-    if(!validateUser) {
-      throw `Invalid user token`
-    }
-    const movie = await data.getMovieById(movieId)
-    if(!movie) {
-      throw `Movie Id is not found`
-    }
-    const delMovie = await mem.deleteMovie(userToken, groupId, movie)
-    return {name : delMovie.name, group : delMovie.group}
-  } catch (error) {
+    if (!info.group)
+      throw new Error("Group not found");
     
-  }
-}
-
-async function addMovie(userToken, groupId, movieId) {
-  // if(userToken || groupId == undefined) {
-  //   throw `Invalid user token or group Information`
-  // }
-  try { 
-    await validateUser(userToken)
-    if(!validateUser) {
-      throw `Invalid user token`
-    }
-    const movie = await data.getMovieById(movieId)
-    if(!movie) {
-      throw `Movie Id is not found`
-    }
-    const add = await mem.addMovie(userToken, groupId, movie)
-
-    //{group : "", name : "",id: "", info : {movie-info}}
-    return {group : add.group, name : add.name, id : add.id, info : add.info.map((elem) => (elem = {
-      name: elem.name,
-      duration: elem.duration
-    }))}
-  } catch (error) {
+    if (!info.name)
+      throw new Error("Movie not found");
     
+    await mem.deleteMovie(userToken, groupId, movieId);
+    
+    return info;
   }
+
+// [Validators]
+  // TODO: verficar
+  async function validateUser(token) {
+    try {
+      return await mem.validateUser(token);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async function validateId(id) {
+    if (isNaN(id) || id < 0) {
+      throw "GroupId must be positive number";
+    }
+  }
+
+  async function validateMaxMovies(max) {
+    if (isNaN(max) || !range(MAX_LIMIT).includes(max))
+      throw `Limit must be positive number, less than ${MAX_LIMIT}`;
+  }
+
+  async function isValidString(value) {
+    if (!(typeof value == "string" && value != "")) {
+      throw `Invalid string <${value}>`;
+    }
+  }
+
+  return {
+    getPopularMovies,
+    searchMovie,
+    createUser,
+    createGroup,
+    updateGroup,
+    listUserGroups,
+    deleteGroup,
+    deleteMovie,
+    addMovie,
+    getGroupById,
+  };
 }
-
-
-async function validateUser(token) {
-  return await mem.validateUser(token)
-}
-
-// Auxiliary function
-function isValidString(value) {
-  return typeof value == 'string' && value != ""
-}
-
-
-
-
-
-export const services = {
-  getPopularMovies,
-  searchMovie,
-  createUser,
-  createGroup,
-  updateGroup,
-  listUserGroups,
-  deleteGroup,
-  deleteMovie,
-  addMovie,
-  getGroupById,
-};
-
-export default services;
