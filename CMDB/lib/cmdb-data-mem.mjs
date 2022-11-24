@@ -1,68 +1,176 @@
-// // Get data from elastic/memory
-
-// // Create
-// // Read
-// // Update
-// // Delete
-
-// // function create(){}
-// // function read(){}
-// // function update(){}
-// // function delete(){}
-
-// export const mem = {}
+import { read } from "node:fs";
 import fs from "node:fs/promises";
 
 const dataPath = "../data/data.json";
 
 function createUser(userInfo) {
-  let data = readData(dataPath);
-  data[`${userInfo.token}`] = { name: userInfo.name, groups: [] };
-  writeData(dataPath, data);
+  return readData(dataPath)
+    .then((data) => {
+      data[`${userInfo.token}`] = { name: userInfo.name, groups: [] };
+      writeData(dataPath, data);
+    })
+    .catch((error) => console.error(error));
+  // outra possibilidade com async await
+  // try {
+  //   let data = await readData(dataPath);
+
+  //   data[`${userInfo.token}`] = { name: userInfo.name, groups: [] };
+
+  //
+  //   // aqui é uma void function
+  //   return data[`${userInfo.token}`];
+  // } catch (error) {
+  //   console.error(error);
+  //   throw error;
 }
 
 function createGroup(userToken, groupInfo) {
-  fs.readData(dataPath)
+  return readData(dataPath)
     .then((data) => {
-      JSON.parse(data);
-      data[`${userToken.token}`] = { groups: groupInfo };
-      fs.writeFile(dataPath, JSON.stringify(data));
+      data[`${userToken}`].groups.push(groupInfo);
+
+      writeData(dataPath, data);
+      return data[`${userToken}`].groups.last();
     })
-    .catch(error);
+    .catch((error) => console.error(error));
+  // try {
+  //   let data = await readData(dataPath);
+
+  //   data[`${userToken}`].groups.push(groupInfo);
+
+  //   writeData(dataPath, data);
+
+  //   // TODO: verificar se o grupo foi criado
+  //   return data[`${userToken}`].groups.last();
+  // } catch (error) {
+  //   console.error(error);
+  // }
 }
 
-function getGroupById(userToken, groupId) {}
+function getGroupById(userToken, groupId) {
+  return readData(dataPath)
+    .then((data) => {
+      return data[`${userToken}`].groups[groupId];
+    })
+    .catch((error) => console.error(error));
+  // try {
+  //   let data = await readData(dataPath);
+  //   return data[`${userToken}`].groups[groupId];
+  // } catch (error) {
+  //   console.error(error);
+  // }
+}
 
-function updateGroup(userToken, groupId, updateInfo) {}
+function updateGroup(userToken, groupId, updateInfo) {
+  readData(dataPath)
+    .then((data) => {
+      if (!data[`${userToken}`].groups[groupId])
+        throw new Error("[mem] Group not found");
 
-function deleteGroup(userToken, groupId) {}
+      data[`${userToken}`].groups[groupId] = updateInfo;
 
-function listUserGroups(userToken) {}
+      writeData(dataPath, data);
+      return data[`${userToken}`].groups[groupId];
+    })
+    .catch((error) => console.error(error));
+  // try {
+  //   let data = await readData(dataPath);
+  //   // TODO: verificar erro de undefined
+  //   if (!data[`${userToken}`].groups[groupId]) throw new Error("Group not found");
+  //   data[`${userToken}`].groups[groupId] = updateInfo;
+  //   writeData(dataPath, data);
+  //   return data[`${userToken}`].groups[groupId];
+  // } catch (error) {
+  //   console.error(error);
+  // }
+}
 
-function deleteMovie(userToken, groupId, movieId) {}
+function deleteGroup(userToken, groupId) {
+  readData(dataPath)
+    .then((data) => {
+      if (!data[`${userToken}`].groups[groupId])
+        throw new Error("[mem] Group not found");
 
-function addMovie(userToken, groupId, movieId) {}
+      data[`${userToken}`].groups.splice(groupId, 1);
 
+      writeData(dataPath, data);
+    })
+    .catch((error) => console.error(error));
+}
+// TODO: verificar o output
+function listUserGroups(userToken) {
+  readData(dataPath)
+    .then((data) => {
+      if (!data[`${userToken}`]) throw new Error("[mem] User not found");
+      return data[`${userToken}`].groups;
+    })
+    .catch((error) => console.error(error));
+}
+
+function deleteMovie(userToken, groupId, movieId) {
+  readData(dataPath)
+    .then((data) => {
+      if (!data[`${userToken}`].groups[groupId].movies.movieId)
+        throw new Error("[mem] movie not found");
+
+      delete data[`${userToken}`].groups[groupId].movies.movieId;
+
+      writeData(dataPath, data);
+    })
+    .catch((error) => console.error(error));
+}
+
+function addMovie(userToken, groupId, mInfo) {
+  readData(dataPath)
+    .then((data) => {
+      // verificar erros
+      if (!data[`${userToken}`].groups[groupId])
+        throw new Error("[mem] Group not found");
+
+      if (!(!data[`${userToken}`].groups[groupId].movies[`${mInfo.id}`]))
+        throw new Error("[mem] Movie alredy exists");
+      
+      data[`${userToken}`].groups[groupId].movies[`${mInfo.id}`] = mInfo;
+
+      writeData(dataPath, data);
+    }).catch((error) => console.error(error));
+}
+
+// TODO: corrigir os erros
 const readData = (path) => {
   return fs
     .readFile(path)
     .then((data) => JSON.parse(data))
-    .catch("File not found");
+    .catch("[err] File not found");
 };
 
-// TODO: verificar erro
+// TODO: verificar erro e retorno do then
 const writeData = (path, data) => {
-  fs.writeFile(path, JSON.stringify(obj, null, 2))
-    .then(() => console.log("File written"))
-    .catch((error) => console.log(error));
+  return fs
+    .writeFile(path, JSON.stringify(data, null, 2))
+    .then(() => console.log("[mem] Data written successfully!"))
+    .catch((error) => console.log(`[err] ${error}`));
 };
 
-// const setData = () => {fs.writeFile(dataPath)}
+// Create data.json file when module is imported
+const setData = () => {
+  fs.writeFile(dataPath);
+};
+setData();
 
-// setData()
-
-const dataMem = {
+const dataMemory = {
   createUser,
+  createGroup,
+  getGroupById,
+  updateGroup,
+  deleteGroup,
+  listUserGroups,
+  deleteMovie,
+  addMovie,
 };
 
-export default dataMem;
+Array.prototype.last = () => {
+  return this[this.length - 1];
+};
+
+export default dataMemory;

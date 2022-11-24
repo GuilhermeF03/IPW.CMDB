@@ -5,6 +5,7 @@ import { convertToHttpError } from "../errors/http-errors.mjs";
 
 // todos os throw tem de ser verificados
 // todos os trhows tem de ser convertidos para erros http
+
 const MAX_LIMIT = 250;
 const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
 
@@ -14,6 +15,7 @@ export default function getServices(data, mem) {
   
   if (!mem) { }
 
+  // [General Services]
   async function getPopularMovies(max) {
     max = Number(max);
     await validateMaxMovies(max);
@@ -27,6 +29,7 @@ export default function getServices(data, mem) {
     return topMovies;
   }
 
+
   async function searchMovie(movieName, max) {
     max = Number(max);
     await validateMaxMovies(max);
@@ -37,18 +40,24 @@ export default function getServices(data, mem) {
     return movies;
   }
 
+
   async function createUser(userInfo) {
+    
+    if (!userInfo)
+      throw new Error("No user info provided");
     await isValidString(userInfo.name);
 
     let uInfo = { token: crypto.randomUUID(), name: userInfo.name };
 
-    if(mem.getUserInfo(uInfo.token))
-      throw new Error("Invalid")
+    while(mem.getUserInfo(uInfo.token)) // check if token is duplicated, and if so resolve new token
+      uInfo.token = crypto.randomUUID()
 
-    await mem.createUser(uInfo);
+    mem.createUser(uInfo);
 
     return uInfo;
+  
   }
+
 
   // [Group Services]
   async function createGroup(userToken, groupInfo) {
@@ -59,6 +68,7 @@ export default function getServices(data, mem) {
     // TODO: passar para o mem
     return { id: gInfo.id, name: gInfo.name, description: gInfo.description };
   }
+
 
   async function getGroupById(userToken, groupId) {
     groupId = Number(groupId);
@@ -79,6 +89,7 @@ export default function getServices(data, mem) {
       "number of movies": gInfo.movies.lenght,
     };
   }
+
 
   async function updateGroup(userToken, groupId, updateInfo) {
     groupId = Number(groupId);
@@ -140,7 +151,7 @@ export default function getServices(data, mem) {
   //TODO:
     
     // {id: mInfo.id, title: mInfo.title,duration: mInfo.runtimeMins}
-    let gInfo = await mem.addMovie(groupId, mInfo);
+    let gInfo = await mem.addMovie(usertoken, groupId, mInfo);
     
     if (!gInfo)
       throw new Error("Group not found");

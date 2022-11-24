@@ -7,7 +7,7 @@ export default function getApi(){
   /** POPULAR FORMAT
    * @var {results : [{id, rank, title, imDbRating}]}
    */
-  async function getPopularMoviesInternal(req, resp) {
+  async function getPopularMovies(req, resp) {
     // if (Object.values(req.query)[0] != undefined && typeof Object.values(req.query)[0] != Number) 
     //   resp.status(400).json({ error: `Invalid argument given` });
     try {
@@ -28,7 +28,7 @@ export default function getApi(){
   /**SEARCH FORMAT
    * @var {results: [{id, title, description}]}
    */
-  async function searchMovieInternal(req, resp) {
+  async function searchMovie(req, resp) {
     try {
       const max = req.query.max || 250
       const search = await services.searchMovie(req.params.movieName, max);
@@ -49,7 +49,7 @@ export default function getApi(){
   /**USER FORMAT
    * @var  {token :"", name :""}} 
    */
-  async function createUserInternal(req, resp) {
+  async function createUser(req, resp) {
     // if (req.body == undefined) 
     //   resp.status(204).json({ error: "No content" });
     try {
@@ -207,7 +207,7 @@ export default function getApi(){
     // This handlers don't require any user token
     getPopularMoviesl,
     searchMovie,
-    createUserInternal,
+    createUser,
 
     // Each handler requires a user token, token is validated on 'services' module
     createGroup : verifyAuthentication(createGroupInternal()),
