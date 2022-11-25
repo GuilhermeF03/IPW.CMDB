@@ -58,6 +58,8 @@ export default function getServices(data, mem) {
     
     // TODO: passar para o mem
     return { id: gInfo.id, name: gInfo.name, description: gInfo.description };
+    // TODO: passar para o mem
+    return { id: gInfo.id, name: gInfo.name, description: gInfo.description };
   }
 
   async function getGroupById(userToken, groupId) {
@@ -78,6 +80,13 @@ export default function getServices(data, mem) {
       description: gInfo.description,
       "number of movies": gInfo.movies.lenght,
     };
+    // TODO: passar para o mem
+    return {
+      id: gInfo.id,
+      name: gInfo.name,
+      description: gInfo.description,
+      "number of movies": gInfo.movies.lenght,
+    };
   }
 
   async function updateGroup(userToken, groupId, updateInfo) {
@@ -91,6 +100,10 @@ export default function getServices(data, mem) {
     
     let gInfo = await mem.updateGroup(userToken, groupId, updateInfo);
     
+    if (!gInfo)
+      throw new Error("Group not found");
+    // TODO: passar para o mem
+    return { name: gInfo.name, description: gInfo.description };
     if (!gInfo)
       throw new Error("Group not found");
     // TODO: passar para o mem
@@ -123,6 +136,7 @@ export default function getServices(data, mem) {
     if (!groups)
       throw new Error("No groups found");
     
+    return groups;
     return groups;
   }
 

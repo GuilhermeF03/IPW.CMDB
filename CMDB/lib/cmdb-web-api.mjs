@@ -14,14 +14,15 @@ export default function getApi(services){
       let max = Object.values(req.query)[0] || 250;
       const popularMovies = await services.getPopularMovies(max);
 
-      resp.status(200).json({
-        status: `Retrieved top ${req.query.max} movies.`,
-        'movies': popularMovies.results
-      })
-      
-    } catch (error) {
-        const httpError = convertToHttpError(error)
-        resp.status(httpError.status).json(httpError.body)
+        resp.status(200).json({
+          status: `Retrieved top ${req.query.max} movies.`,
+          'movies': popularMovies.results
+        })
+        
+      } catch (error) {
+          const httpError = convertToHttpError(error)
+          resp.status(httpError.status).json(httpError.body)
+    }
     }
   }
 
@@ -36,33 +37,35 @@ export default function getApi(services){
       if (search.results.size == 0) 
         resp.status(204).json({ error: `No results for '${req.params.movieName}'.` });
 
-      resp.status(200).json({
-        status : `Returned ${max} results for '${req.params.movieName}'.`,
-        'results' : search.results
-      });
-    } catch {
-      const httpError = convertToHttpError(error)
-      resp.status(httpError.status).json(httpError.body)
+        resp.status(200).json({
+          status : `Returned ${max} results for '${req.params.movieName}'.`,
+          'results' : search.results
+        });
+      } catch {
+        const httpError = convertToHttpError(error)
+        resp.status(httpError.status).json(httpError.body)
+    }
     }
   }
 
-  /**USER FORMAT
-   * @var  {token :"", name :""}} 
-   */
-  async function createUserInternal(req, resp) {
-    // if (req.body == undefined) 
-    //   resp.status(204).json({ error: "No content" });
-    try {
-      let newUser = await services.createUser(req.body);
+    /**USER FORMAT
+     * @var  {token :"", name :""}} 
+     */
+    async function createUser(req, resp) {
+      // if (req.body == undefined) 
+      //   resp.status(204).json({ error: "No content" });
+      try {
+        let newUser = await services.createUser(req.body);
 
-      resp.status(201).json({
-        status: `User <${newUser.name}> created with token <${newUser.token}>`,
-        'user-info': newUser
-      });
+        resp.status(201).json({
+          status: `User <${newUser.name}> created with token <${newUser.token}>`,
+          'user-info': newUser
+        });
 
-    } catch (error) {
-      const httpError = convertToHttpError(error)
-      resp.status(httpError.status).json(httpError.body)
+      } catch (error) {
+        const httpError = convertToHttpError(error)
+        resp.status(httpError.status).json(httpError.body)
+    }
     }
   }
 // adicionar o movies
@@ -74,33 +77,35 @@ export default function getApi(services){
     try {
       let newGroup = await services.createGroup(req.userToken, req.body)
 
-      resp.status(201).json({
-        status: `Group created with id: <${newGroup.id}>, name: <${newGroup.name}> and description: <${newGroup.description}>`,
-        'content' : undefined
-      })
+        resp.status(201).json({
+          status: `Group created with id: <${newGroup.id}>, name: <${newGroup.name}> and description: <${newGroup.description}>`,
+          'content' : undefined
+        })
 
-    } catch (error) {
-      const httpError = convertToHttpError(error)
-      resp.status(httpError.status).json(httpError.body)
+      } catch (error) {
+        const httpError = convertToHttpError(error)
+        resp.status(httpError.status).json(httpError.body)
+    }
     }
   }
 
-  /**GROUP FORMAT -> UPDATE GROUP
-   * @var  {name: "", description : ""}
-   */
-  async function updateGroupInternal(req, resp) {
-    // if(req.body == undefined) resp.status(204).json({error: "No content"}) 
-    try {
-      let updatedGroup = await services.updateGroup(req.userToken, req.params.groupId, req.body)
+    /**GROUP FORMAT -> UPDATE GROUP
+     * @var  {name: "", description : ""}
+     */
+    async function updateGroupInternal(req, resp) {
+      // if(req.body == undefined) resp.status(204).json({error: "No content"}) 
+      try {
+        let updatedGroup = await services.updateGroup(req.userToken, req.params.groupId, req.body)
 
-      resp.status(200).json({
-        status: `Group with id <${req.params.groupId}> was successfully updated.`,
-        'updated-info': updatedGroup
-      })  
+        resp.status(200).json({
+          status: `Group with id <${req.params.groupId}> was successfully updated.`,
+          'updated-info': updatedGroup
+        })  
 
-    } catch(error) {
-      const httpError = convertToHttpError(error)
-      resp.status(httpError.status).json(httpError.body)
+      } catch(error) {
+        const httpError = convertToHttpError(error)
+        resp.status(httpError.status).json(httpError.body)
+    }
     }
   }
 
@@ -122,20 +127,21 @@ export default function getApi(services){
   }
 
 
-  /**DELETED-GROUP 
-   * @var {name : ""}
-   */
-  async function deleteGroupInternal(req, resp) {
-    try {
-      let deletedGroup = await services.deleteGroup(req.userToken, req.params.groupId)
-      resp.status(200).json({
-        status: `${deletedGroup.name} was successfully removed from groups list.`,
-        'content': undefined
-      })
-      
-    } catch (error) {
-      const httpError = convertToHttpError(error)
-      resp.status(httpError.status).json(httpError.body)
+    /**DELETED-GROUP 
+     * @var {name : ""}
+     */
+    async function deleteGroupInternal(req, resp) {
+      try {
+        let deletedGroup = await services.deleteGroup(req.userToken, req.params.groupId)
+        resp.status(200).json({
+          status: `${deletedGroup.name} was successfully removed from groups list.`,
+          'content': undefined
+        })
+        
+      } catch (error) {
+        const httpError = convertToHttpError(error)
+        resp.status(httpError.status).json(httpError.body)
+    }
     }
   }
 
@@ -176,38 +182,55 @@ export default function getApi(services){
    * @var {name: "", description : "", movies : {id: {movie-info}}}
    */
 
-  async function getGroupByIdInternal(req, resp) {
-    try {
-      let group = await services.getGroupById(req.userToken, req.params.groupId);
-      resp.status(200).json({
-        status: `The group <${group.name}>, with the following id <${req.params.id}>, was successfully retrieved.`,
-        "group-info": group,
-      });
-    } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+    async function getGroupByIdInternal(req, resp) {
+      try {
+        let group = await services.getGroupById(req.userToken, req.params.groupId);
+        resp.status(200).json({
+          status: `The group <${group.name}>, with the following id <${req.params.id}>, was successfully retrieved.`,
+          "group-info": group,
+        });
+      } catch (error) {
+        const httpError = convertToHttpError(error);
+        resp.status(httpError.status).json(httpError.body);
+    }
     }
   }
 
 
-  // VERIFIERS
-  function verifyAuthentication(handlerFunction) {
-    return function (req, resp) {
-      let userToken = req.get("Authorization");
-      userToken = userToken ? userToken.split(" ")[1] : null;
+    // VERIFIERS
+    function verifyAuthentication(handlerFunction) {
+      return function (req, resp) {
+        let userToken = req.get("Authorization");
+        userToken = userToken ? userToken.split(" ")[1] : null;
 
-      if (!userToken)
-        return resp.status(400).json({ error: `User token not provided` });
+        if (!userToken)
+          return resp.status(400).json({ error: `User token not provided` });
 
-      req.userToken = userToken; 
-      handlerFunction(req, resp);
-    };
+        req.userToken = userToken; 
+        handlerFunction(req, resp);
+      };
   }
   return {
     // This handlers don't require any user token
     getPopularMoviesl,
     searchMovie,
     createUserInternal,
+
+    // Each handler requires a user token, token is validated on 'services' module
+    createGroup : verifyAuthentication(createGroupInternal()),
+    updateGroup : verifyAuthentication(updateGroupInternal()),
+    listGroups  : verifyAuthentication(listGroupsInternal()),
+    deleteGroup : verifyAuthentication(deleteGroupInternal()),
+    deleteMovie : verifyAuthentication(deleteMovieInternal()),
+    addMovie    : verifyAuthentication(addMovieInternal()),
+    getGroupById: verifyAuthentication(getGroupByIdInternal()),
+  }
+  }
+  return {
+    // This handlers don't require any user token
+    getPopularMoviesl,
+    searchMovie,
+    createUser,
 
     // Each handler requires a user token, token is validated on 'services' module
     createGroup : verifyAuthentication(createGroupInternal()),
@@ -251,6 +274,7 @@ export default function getApi(services){
   *   title,
   *   description,
   *   run-time,
+  *   year,,
   *   year,
   * }
   */
