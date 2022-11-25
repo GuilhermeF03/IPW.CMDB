@@ -1,4 +1,5 @@
 import express from "express";
+import * as services from "./cmdb-services.mjs";
 import * as webapi from "./cmdb-web-api.mjs";
 
 const app = express();
@@ -6,8 +7,9 @@ const PORT = 8080;
 
 console.log("[S] Setting up server...");
 
+const webapi = getApi(services)
 
-app.use(express.json());// JSON parser Middleware
+app.use(express.json()); // JSON parser Middleware
 
 // GENERAL
 app.use(express.json());

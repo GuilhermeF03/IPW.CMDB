@@ -1,6 +1,3 @@
-// import data from "./cmdb-movies-data.mjs";
-// import mem from "./cmdb-data-mem.mjs";
-import fetch from "node-fetch";
 import { convertToHttpError } from "../errors/http-errors.mjs";
 
 // todos os throw tem de ser verificados
@@ -10,9 +7,8 @@ const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
 
 export default function getServices(data, mem) {
 
-  if (!data) { }
-  
-  if (!mem) { }
+  if (!data) throw new Error("[s] Data module not provided");
+  if (!mem) throw new Error("[s] Mem module not provided");
 
   async function getPopularMovies(max) {
     max = Number(max);
