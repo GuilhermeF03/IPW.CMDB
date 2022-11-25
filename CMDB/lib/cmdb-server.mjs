@@ -7,8 +7,8 @@ const PORT = 8080;
 console.log("Setting up server...");
 
 // GENERAL
- app.use(express.json());
-
+app.use(express.json());
+ 
 app.get("/popular", webapi.getPopularMovies);
 
 app.get("/search/:movieName", webapi.searchMovie);
@@ -25,13 +25,14 @@ app.get("/groups/:groupId", webapi.getGroupById);
 
 app.put("/groups/:groupId", webapi.updateGroup);
 
-app.delete("/groups/:groupId", webapi.deleteGroup);
+app.delete("/groups/:groupId/", webapi.deleteGroup);
 
 app.put("groups/:groupId/:movieId",webapi.addMovie)
-//app.post("groups/:groupId", webapi.addMovie)
 
 app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
 
 
 // Boot-up server
 app.listen(PORT, () =>console.log(`Server listening in http://localhost:${PORT}`));
+
+
