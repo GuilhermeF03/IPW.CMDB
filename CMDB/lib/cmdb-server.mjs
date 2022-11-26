@@ -13,16 +13,15 @@ console.log("[S] Setting up server...");
 const services = servicesInit(data,mem)
 const webapi = webApiInit(services)
 
-// // GENERAL
-app.use(express.json());
- 
+
+app.use(express.json()); 
+// GENERAL
 app.get("/popular", webapi.getPopularMovies);
-app.get("/search/:movieName", webapi.searchMovie);
+app.get("/search/", webapi.searchMovie);
 
 // USER
 app.post("/user", webapi.createUser);
 
-// setData();
 // GROUPS
 app.get("/groups", webapi.listGroups);
 app.get("/groups/:groupId", webapi.getGroupById);

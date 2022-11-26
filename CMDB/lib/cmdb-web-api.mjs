@@ -1,17 +1,25 @@
-/** API - 
- * handles HTTP requests
- * redirects to services module
- */
-
-
 import { convertToHttpError } from "../errors/http-errors.mjs";
 
-export default function(services) {
+// AUX FUNCTION
+function verifyAuthentication(handlerFunction) {
+  return function (req, resp) {
+    let userToken = req.get("Authorization");
+    userToken = userToken ? userToken.split(" ")[1] : null;
 
+    if (!userToken)
+      return resp.status(400).json({ error: `User token not provided` });
+
+    req.userToken = userToken;
+    handlerFunction(req, resp);
+  };
+}
+
+
+export default function(services) {
   if (!services)
     throw new Error("[wa] Services module not provided");
 
-  /** [RESPONSE FORMAT]: @var {results : [{id, rank, title, year, imDbRating}]}*/
+/* ----------------------------- [GENERAL] -------------------------------------------------------------------------------------------------- */
   async function getPopularMovies(req, resp) {
     try {
       
@@ -19,16 +27,16 @@ export default function(services) {
       const popularMovies = await services.getPopularMovies(max);
       resp.status(200).json({
         status: `Retrieved top ${max} movies.`,
-        movies: popularMovies.results,
+        movies: popularMovies,
       });
     } catch (error) {
       console.error(error)
     }
   }
 
-  /** [RESPONSE FORMAT]: @var {results: [{id, title, description}]} */
   async function searchMovie(req, resp) {
     try {
+      const movie = req.query.movie
       const max = req.query.max || 250;
       const search = await services.searchMovie(req.params.movieName, max);
 
@@ -47,7 +55,6 @@ export default function(services) {
     }
   }
 
-  /** [RESPONSE FORMAT] @var  {token : "", name : ""}}*/
   async function createUser(req, resp) {
     try {
       if (req.body == undefined) resp.status(204).json({ error: "No content" });
@@ -64,10 +71,8 @@ export default function(services) {
     }
   }
 
-  // adicionar o movies
-  /**GROUP FORMAT -> create group
-   * @var  {id : ,name: "", description : ""}
-   */
+
+  /* --------------------------- [GROUP] ---------------------------------------------------------------------------------------------------- */
   async function createGroupInternal(req, resp) {
     // if(req.body == undefined) resp.status(204).json({error: "No content"})
     try {
@@ -83,9 +88,35 @@ export default function(services) {
     }
   }
 
-  /**GROUP FORMAT -> UPDATE GROUP
-   * @var  {name: "", description : ""}
-   */
+  async function listGroupsInternal(req, resp) {
+    try {
+      let userGroups = await services.listUserGroups(req.userToken);
+      resp.status().json({
+        status: `Retured all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
+        "user-groups": userGroups.groups,
+      });
+    } catch (error) {
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
+    }
+  }
+
+ async function getGroupByIdInternal(req, resp) {
+  try {
+    let group = await services.getGroupById(
+      req.userToken,
+      req.params.groupId
+    );
+    resp.status(200).json({
+      status: `The group <${group.name}>, with id <${req.params.id}>, was successfully retrieved.`,
+      "group-info": group,
+    });
+  } catch (error) {
+    // const httpError = convertToHttpError(error);
+    // resp.status(httpError.status).json(httpError.body);
+  }
+  }
+
   async function updateGroupInternal(req, resp) {
     // if(req.body == undefined) resp.status(204).json({error: "No content"})
     try {
@@ -105,25 +136,6 @@ export default function(services) {
     }
   }
 
-  /** USER GROUPS
-     @var {name : "", groups: [{name: "", description: "", number of movies : int}]}
-   */
-  async function listGroupsInternal(req, resp) {
-    try {
-      let userGroups = await services.listUserGroups(req.userToken);
-      resp.status().json({
-        status: `Retured all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
-        "user-groups": userGroups.groups,
-      });
-    } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
-    }
-  }
-
-  /**DELETED-GROUP
-   * @var {name : ""}
-   */
   async function deleteGroupInternal(req, resp) {
     try {
       let deletedGroup = await services.deleteGroup(
@@ -140,9 +152,21 @@ export default function(services) {
     }
   }
 
-  /**DELETED-MOVIE
-   * @var {name : "", group : ""}
-   */
+
+  /* --------------------------- [MOVIE] ---------------------------------------------------------------------------------------------------- */
+  async function addMovieInternal(req, resp) {
+    try {
+      let addedMovie = await services.addMovie(req.userToken,req.params.groupId,req.params.movieId);
+      resp.status(200).json({
+        status: `<${movieInfo.name}>, with id <${movieInfo.id}>, was successfully added to <${group.name}>.`,
+        "movie-info": movieInfo
+      });
+    } catch (error) {
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
+    }
+  }
+
   async function deleteMovieInternal(req, resp) {
     try {
       let deletedMovie = await services.deleteMovie(
@@ -160,53 +184,6 @@ export default function(services) {
     }
   }
 
-  /** ADDED-MOVIE
-   * @var {groupName : "",groupId : "", movieInfo : {movie-info}}
-   */
-  // Response format : {movie}
-  async function addMovieInternal(req, resp) {
-    try {
-      let addedMovie = await services.addMovie(req.userToken,req.params.groupId,req.params.movieId);
-      resp.status(200).json({
-        status: `${movieInfo.name}, with id:<${movieInfo.id}>, was successfully added to <${group.name}>.`,
-        "movie-info": movieInfo
-      });
-    } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
-    }
-  }
-
-  // Response format : {}
-  async function getGroupByIdInternal(req, resp) {
-    try {
-      let group = await services.getGroupById(
-        req.userToken,
-        req.params.groupId
-      );
-      resp.status(200).json({
-        status: `The group <${group.name}>, with the following id <${req.params.id}>, was successfully retrieved.`,
-        "group-info": group,
-      });
-    } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
-    }
-  }
-
-  // VERIFIERS
-  function verifyAuthentication(handlerFunction) {
-    return function (req, resp) {
-      let userToken = req.get("Authorization");
-      userToken = userToken ? userToken.split(" ")[1] : null;
-
-      if (!userToken)
-        return resp.status(400).json({ error: `User token not provided` });
-
-      req.userToken = userToken;
-      handlerFunction(req, resp);
-    };
-  }
 
   return {
     // This handlers don't require any user token
@@ -225,6 +202,7 @@ export default function(services) {
   };
 }
 
+
 /** DATA
  * @var {
  *  token1 : {user-info},
@@ -234,6 +212,7 @@ export default function(services) {
 
 /** USER-INFO
  * @var {
+ * token,
  *  name,
  *  groups : [{group-info}]
  * }
@@ -255,8 +234,7 @@ export default function(services) {
  * @var {
  *   title,
  *   description,
- *   run-time,
- *   year,,
  *   year,
+ *   runtime,
  * }
  */

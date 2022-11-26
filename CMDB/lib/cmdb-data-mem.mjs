@@ -2,9 +2,8 @@ import fs from "node:fs/promises";
 import { errors } from "../errors/http-errors.mjs";
 
 const dataPath = "CMDB/data/data.json";
-// TODO: verificar erro
 
-// Additional Functions
+// Auxilliary Functions
 const readData = (path) => {
   return fs
     .readFile(path)
@@ -18,26 +17,27 @@ const writeData = (path, data) => {
     .catch((error) => console.error("error:" + error));
 };
 
+function validateUser(token) {
+  return readData(dataPath)
+    .then((data) => {if (!data[token]) Promise.reject(errors.NOT_AUTHORIZED)})
+    .catch((error) => console.error(error));
+}
+
 Array.prototype.last = () => { return this[this.length - 1] };
 Array.prototype.lastIndex = () => { return this.length - 1 };
 
-// Create data.json file when module is imported
-/*const setData = () => {
-  fs.readFile(dataPath)
-  .catch(writeData(dataPath,{}))
-}*/
-
-//writeData(dataPath,{})
-
+/* -------------------------------- [USER] -------------------------------------------------------------------------------------------------- */
 function createUser(userInfo) {
   return readData(dataPath)
     .then((data) => {
-      data[userInfo.token] = { name: userInfo.name, groups: [] };
+      data[userInfo.token] = { token : userInfo.token,name: userInfo.name, groups: [] };
       writeData(dataPath, data);
     })
     .catch((error) => console.error(error));
 }
 
+
+/* -------------------------------- [GROUP] ------------------------------------------------------------------------------------------------- */
 function createGroup(userToken, groupInfo) {
   return readData(dataPath)
     .then((data) => {
@@ -53,6 +53,19 @@ function createGroup(userToken, groupInfo) {
         name: group.name,
         description: group.description,
       };
+    })
+    .catch((error) => console.error(error));
+}
+
+function listUserGroups(userToken) {
+  return readData(dataPath)
+    .then((data) => {
+      let groups = data[userToken].groups
+      .map( elem => {
+        elem["number of movies"] = Object.keys(elem.movies).length
+        delete elem.movies
+      })
+        return {name : `${data[userToken].name}'s groups`, groups}
     })
     .catch((error) => console.error(error));
 }
@@ -89,36 +102,8 @@ function deleteGroup(userToken, groupId) {
     .catch((error) => console.error(error));
 }
 
-function listUserGroups(userToken) {
-  return readData(dataPath)
-    .then((data) => {
-      let groups = data[userToken].groups
-      .map( elem => {
-        elem["number of movies"] = Object.keys(elem.movies).length
-        delete elem.movies
-      })
-        return groups
-    })
-    .catch((error) => console.error(error));
-}
 
-function deleteMovie(userToken, groupId, movieId) {
-  return readData(dataPath)
-    .then((data) => {
-      let group = getGroupById(userToken,groupId)
-      let movie = group.movies[movieId];
-
-      if (!movie)
-        throw Promise.reject(errors.BAD_REQUEST);
-
-      group["total-duration"] -= movie.duration;
-
-      delete group.movies[movieId];
-      writeData(dataPath, data);
-    })
-    .catch((error) => console.error(error));
-}
-
+/* --------------------------------- [MOVIE] ------------------------------------------------------------------------------------------------ */
 function addMovie(userToken, groupId, mInfo) {
   return readData(dataPath)
   .then((data) => {
@@ -130,7 +115,7 @@ function addMovie(userToken, groupId, mInfo) {
 
     movie = mInfo;
 
-    group["total-duration"] += movie.duration;
+    group["total-duration"] += movie.runtime;
 
     writeData(dataPath, data);
 
@@ -138,9 +123,20 @@ function addMovie(userToken, groupId, mInfo) {
   });
 }
 
-function validateUser(token) {
+function deleteMovie(userToken, groupId, movieId) {
   return readData(dataPath)
-    .then((data) => {if (!data[token]) Promise.reject(errors.NOT_AUTHORIZED)})
+    .then((data) => {
+      let group = getGroupById(userToken,groupId)
+      let movie = group.movies[movieId];
+
+      if (!movie)
+        throw Promise.reject(errors.BAD_REQUEST);
+
+      group["total-duration"] -= movie.runtime;
+
+      delete group.movies[movieId];
+      writeData(dataPath, data);
+    })
     .catch((error) => console.error(error));
 }
 

@@ -1,0 +1,238 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: CMDB Server
+    url: https://virtserver.swaggerhub.com/GuilhermeF03/CMDB/1.0.0
+info:
+  version: "1.0.0"
+  title: CMDB-API
+  description: This API allows smooth movie services, such as listing popular movies, movie search or grouping movies and managing such groups.
+paths:
+  /groups:
+    get:
+      tags:
+        - Groups
+      description: Lists all user defined groups
+      operationId: listGroups 
+      security:
+        - bearToken: [] 
+      responses:
+        '401':
+          description: Invalid user token
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/UserInfo'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/UserInfo'
+        '204':
+          description: No groups found for user
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/UserInfo'
+        '200':
+          description: Valid user and group list
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/UserInfo'
+              example: 
+                status : "All Filipe's 2 list were successfully retrieved."
+                groups:
+                  - name: "Group 1"
+                    description: "First group"
+                    movies :
+                      - name: Interstellar
+                        description : "A movie about space."
+                        duration : 247
+                      - name : Dark Knight
+                        description : "A movie about a guy in a bat costume"
+                        duration : 144
+                  - name: "Group 2"
+                    description : "Second group"
+                    movies : []
+    post:
+      tags:
+        - Groups
+      operationId: createGroup
+      responses:
+        '200':
+          description: successfully created group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupInfo'
+  '/groups/{groupId}':
+    get:
+      tags:
+        - Groups
+      description: returns group info
+      operationId: getGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+    put:
+      tags:
+        - Groups
+      operationId: updateGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+    delete:
+      tags:
+        - Groups
+      operationId: deleteGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+  '/groups/{groupId}/{movieId}':
+    put:
+      tags:
+        - Movies
+      description: adds a movie to a given group
+      operationId: addMovie
+      parameters:
+        - name: groupId 
+          in: path 
+          required: true
+          schema:
+            type: string
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupInfo'
+  /popular:
+    get:
+      tags:
+        - Popular
+      operationId: getChart
+      parameters:
+        - name: max
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+  /user:
+    post: 
+      tags:
+        - User
+      operationId: createUser
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+  '/search/{movieName}':
+    get:
+      tags:
+        - Movies
+      description: searches for given movie name.
+      operationId: searchMovie
+      parameters:
+        - name: movieName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieInfo'
+components:
+  securitySchemes:
+    bearToken:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserInfo:
+      type: object
+      properties:
+        token:
+          type: string
+          format: password
+          example : "123-456-789"
+        name:
+          type : string
+          example : "Filipe"
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupInfo'
+    GroupInfo :
+      type: object
+      properties:
+          name:
+            type: string
+          description :
+            type: string
+          movies :
+            type : array
+            items:
+              $ref: '#/components/schemas/MovieInfo'
+    MovieInfo :
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        run-time:
+          type : string
+        year:
+          type : string

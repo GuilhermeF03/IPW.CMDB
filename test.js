@@ -1,4 +1,4 @@
-let obj = {movies : {}}
-let movie = obj.movies
-movie = {a: 0, b : 1}
-console.log(obj)
+
+import crypto from 'node:crypto'
+
+console.log(crypto.randomUUID())
