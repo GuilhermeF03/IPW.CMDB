@@ -4,6 +4,22 @@ import { errors } from "../errors/http-errors.mjs";
 const dataPath = "CMDB/data/data.json";
 
 // Auxilliary Functions
+function checkFileExists(file) {
+  return fs
+    .access(file, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false);
+}
+
+checkFileExists(dataPath)
+  .then((exists) => {
+    if (!exists) {
+      writeData(dataPath, {});
+      console.log("File Created");
+    }
+  })
+  .catch((error) => console.error(error));
+
 const readData = (path) => {
   return fs
     .readFile(path)
@@ -19,23 +35,32 @@ const writeData = (path, data) => {
 
 function validateUser(token) {
   return readData(dataPath)
-    .then((data) => {if (!data[token]) Promise.reject(errors.NOT_AUTHORIZED)})
+    .then((data) => {
+      if (!data[token]) Promise.reject(errors.NOT_AUTHORIZED);
+    })
     .catch((error) => console.error(error));
 }
 
-Array.prototype.last = () => { return this[this.length - 1] };
-Array.prototype.lastIndex = () => { return this.length - 1 };
+Array.prototype.last = () => {
+  return this[this.length - 1];
+};
+Array.prototype.lastIndex = () => {
+  return this.length - 1;
+};
 
 /* -------------------------------- [USER] -------------------------------------------------------------------------------------------------- */
 function createUser(userInfo) {
   return readData(dataPath)
     .then((data) => {
-      data[userInfo.token] = { token : userInfo.token,name: userInfo.name, groups: [] };
+      data[userInfo.token] = {
+        token: userInfo.token,
+        name: userInfo.name,
+        groups: [],
+      };
       writeData(dataPath, data);
     })
     .catch((error) => console.error(error));
 }
-
 
 /* -------------------------------- [GROUP] ------------------------------------------------------------------------------------------------- */
 function createGroup(userToken, groupInfo) {
@@ -60,12 +85,11 @@ function createGroup(userToken, groupInfo) {
 function listUserGroups(userToken) {
   return readData(dataPath)
     .then((data) => {
-      let groups = data[userToken].groups
-      .map( elem => {
-        elem["number of movies"] = Object.keys(elem.movies).length
-        delete elem.movies
-      })
-        return {name : `${data[userToken].name}'s groups`, groups}
+      let groups = data[userToken].groups.map((elem) => {
+        elem["number of movies"] = Object.keys(elem.movies).length;
+        delete elem.movies;
+      });
+      return { name: `${data[userToken].name}'s groups`, groups };
     })
     .catch((error) => console.error(error));
 }
@@ -102,16 +126,13 @@ function deleteGroup(userToken, groupId) {
     .catch((error) => console.error(error));
 }
 
-
 /* --------------------------------- [MOVIE] ------------------------------------------------------------------------------------------------ */
 function addMovie(userToken, groupId, mInfo) {
-  return readData(dataPath)
-  .then((data) => {
-    let group = getGroupById(userToken, groupId)
+  return readData(dataPath).then((data) => {
+    let group = getGroupById(userToken, groupId);
     let movie = group.movies[mInfo.id];
-    
-    if(movie)
-      throw Promise.reject(errors.BAD_REQUEST);
+
+    if (movie) throw Promise.reject(errors.BAD_REQUEST);
 
     movie = mInfo;
 
@@ -126,11 +147,10 @@ function addMovie(userToken, groupId, mInfo) {
 function deleteMovie(userToken, groupId, movieId) {
   return readData(dataPath)
     .then((data) => {
-      let group = getGroupById(userToken,groupId)
+      let group = getGroupById(userToken, groupId);
       let movie = group.movies[movieId];
 
-      if (!movie)
-        throw Promise.reject(errors.BAD_REQUEST);
+      if (!movie) throw Promise.reject(errors.BAD_REQUEST);
 
       group["total-duration"] -= movie.runtime;
 
@@ -139,7 +159,6 @@ function deleteMovie(userToken, groupId, movieId) {
     })
     .catch((error) => console.error(error));
 }
-
 
 export default {
   createUser,
@@ -152,5 +171,3 @@ export default {
   addMovie,
   validateUser,
 };
-
-

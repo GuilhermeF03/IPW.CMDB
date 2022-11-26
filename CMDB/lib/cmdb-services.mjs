@@ -38,9 +38,9 @@ export default function(data, mem) {
     await validateMaxMovies(max);
 
     let topMovies = await data.getTop250(); // {items : [ {rank, id, title, year, imDbRating}]}
-    topMovies.items.splice(max, MAX_LIMIT - max);
+    topMovies.results.splice(max, MAX_LIMIT - max);
   
-    if (topMovies.items.length == 0) 
+    if (topMovies.results.length == 0) 
       throw new Error("No movies found");
     
     return topMovies;

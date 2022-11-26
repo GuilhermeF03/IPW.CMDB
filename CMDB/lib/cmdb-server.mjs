@@ -13,11 +13,10 @@ console.log("[S] Setting up server...");
 const services = servicesInit(data,mem)
 const webapi = webApiInit(services)
 
-
-app.use(express.json()); 
+app.use(express.json());
 // GENERAL
 app.get("/popular", webapi.getPopularMovies);
-app.get("/search/", webapi.searchMovie);
+app.get("/search", webapi.searchMovie);
 
 // USER
 app.post("/user", webapi.createUser);
@@ -38,9 +37,3 @@ app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
 
 // Boot-up server
 app.listen(PORT, () =>console.log(`[S] Server listening in http://localhost:${PORT}`));
-
-
-
-
-
-
