@@ -1,11 +1,32 @@
 import { convertToHttpError } from "../errors/http-errors.mjs";
 
-// todos os throw tem de ser verificados
-// todos os trhows tem de ser convertidos para erros http
+
 const MAX_LIMIT = 250;
 const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
 
-export default function getServices(data, mem) {
+// [Validators]
+  // TODO: verficar
+  async function validateUser(token){
+    await mem.validateUser(token)
+  }
+
+  async function validateId(id) {
+    if (isNaN(id) || id < 0)
+      throw "GroupId must be positive number";
+    
+  }
+
+  async function validateMaxMovies(max) {
+    if (isNaN(max) || !range(MAX_LIMIT).includes(max))
+      throw `Limit must be positive number, less than ${MAX_LIMIT}`;
+  }
+
+  async function isValidString(value) {
+    if (!(typeof value == "string" && value != ""))
+      throw `Invalid string <${value}>`;
+  }
+
+export default function(data, mem) {
 
   if (!data) throw new Error("[s] Data module not provided");
   if (!mem) throw new Error("[s] Mem module not provided");
@@ -13,11 +34,12 @@ export default function getServices(data, mem) {
   async function getPopularMovies(max) {
     max = Number(max);
     await validateMaxMovies(max);
-    
+
     let topMovies = await data.getTop250();
+
     topMovies.results.splice(max, MAX_LIMIT - max);
   
-    if (!topMovies.results.lenght) 
+    if (topMovies.results.length == 0) 
       throw new Error("No movies found");
     
     return topMovies;
@@ -49,13 +71,7 @@ export default function getServices(data, mem) {
   // [Group Services]
   async function createGroup(userToken, groupInfo) {
     await validateUser(userToken);
-
-    let gInfo = await mem.createGroup(userToken, groupInfo);
-    
-    // TODO: passar para o mem
-    return { id: gInfo.id, name: gInfo.name, description: gInfo.description };
-    // TODO: passar para o mem
-    return { id: gInfo.id, name: gInfo.name, description: gInfo.description };
+    return await mem.createGroup(userToken, groupInfo);
   }
 
   async function getGroupById(userToken, groupId) {
@@ -69,20 +85,7 @@ export default function getServices(data, mem) {
     if (!gInfo)
       throw new Error("Group not found");
     
-    // TODO: passar para o mem
-    return {
-      id: gInfo.id,
-      name: gInfo.name,
-      description: gInfo.description,
-      "number of movies": gInfo.movies.lenght,
-    };
-    // TODO: passar para o mem
-    return {
-      id: gInfo.id,
-      name: gInfo.name,
-      description: gInfo.description,
-      "number of movies": gInfo.movies.lenght,
-    };
+    return gInfo;
   }
 
   async function updateGroup(userToken, groupId, updateInfo) {
@@ -96,23 +99,18 @@ export default function getServices(data, mem) {
     
     let gInfo = await mem.updateGroup(userToken, groupId, updateInfo);
     
-    if (!gInfo)
-      throw new Error("Group not found");
-    // TODO: passar para o mem
-    return { name: gInfo.name, description: gInfo.description };
-    if (!gInfo)
-      throw new Error("Group not found");
-    // TODO: passar para o mem
-    return { name: gInfo.name, description: gInfo.description };
+    if (!gInfo) throw new Error("Group not found");
+
+    return gInfo;
   }
 
   async function deleteGroup(userToken, groupId) {
     groupId = Number(groupId);
-
     await validateId(groupId);
     await validateUser(userToken);
 
     let gInfo = { name: (await mem.getGroupById(userToken, groupId)).name };
+
     if (!gInfo)
       throw new Error("Group not found");
 
@@ -133,7 +131,6 @@ export default function getServices(data, mem) {
       throw new Error("No groups found");
     
     return groups;
-    return groups;
   }
 
 // [Movie Services]
@@ -147,17 +144,13 @@ export default function getServices(data, mem) {
   
     if (!mInfo)
       throw new Error("Movie not found");
-  //TODO:
     
-    // {id: mInfo.id, title: mInfo.title,duration: mInfo.runtimeMins}
     let gInfo = await mem.addMovie(userToken, groupId, mInfo);
     
     if (!gInfo)
       throw new Error("Group not found");
 
     return gInfo;
-    // TODO: passar para o mem
-    // return { groupName: gInfo.name, id: gInfo.id, addedMovie: mInfo };
   }
 
   async function deleteMovie(userToken, groupId, movieId) {
@@ -171,40 +164,18 @@ export default function getServices(data, mem) {
       group : await mem.getGroupById(userToken, groupId)
     }
 
+    if (!info.title)
+    throw new Error("Movie not found");
 
     if (!info.group)
       throw new Error("Group not found");
-    
-    if (!info.name)
-      throw new Error("Movie not found");
     
     await mem.deleteMovie(userToken, groupId, movieId);
     
     return info;
   }
 
-// [Validators]
-  // TODO: verficar
-  async function validateUser(token){
-    await mem.validateUser(token)
-  }
 
-  async function validateId(id) {
-    if (isNaN(id) || id < 0) {
-      throw "GroupId must be positive number";
-    }
-  }
-
-  async function validateMaxMovies(max) {
-    if (isNaN(max) || !range(MAX_LIMIT).includes(max))
-      throw `Limit must be positive number, less than ${MAX_LIMIT}`;
-  }
-
-  async function isValidString(value) {
-    if (!(typeof value == "string" && value != "")) {
-      throw `Invalid string <${value}>`;
-    }
-  }
 
   return {
     getPopularMovies,

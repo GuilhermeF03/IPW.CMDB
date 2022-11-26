@@ -20,25 +20,28 @@ async function searchMovieByName(movieName) {
           })
       ),
     };
-  } catch (error) {}
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 async function getTop250() {
   try {
     let top = await (await fetch(top250Url)).json();
+
     return {
       results: top.items.map(
-        (mov) =>
+        mov =>
           (mov = {
-            id: elem.id,
-            rank: elem.rank,
-            title: elem.title,
-            year: elem.title,
-            imDbRating: elem.imDbRating,
+            id: mov.id,
+            rank: mov.rank,
+            title: mov.title,
+            year: mov.title,
+            imDbRating: mov.imDbRating,
           })
       ),
     };
-  } catch (error) {}
+  } catch (error) {console.error(error)}
 }
 
 async function getMovieById(movieId) {
@@ -54,9 +57,8 @@ async function getMovieById(movieId) {
   } catch (error) {}
 }
 
-export const data = {
+export default {
   searchMovieByName,
   getTop250,
   getMovieById,
 };
-export default data;

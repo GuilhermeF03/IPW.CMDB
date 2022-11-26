@@ -34,13 +34,13 @@ function getTasks(token){
 
 
 export const errors = {
-    INVALID_TASK_ID: invalidTaskId,
+    BAD_REQUEST: badRequest,
     NOT_FOUND: notFound,
     NOT_AUTHORIZED: notAuthorized
 }
 
 
-function invalidTaskId(id) {
+function badRequest(id) {
     return {
         code: "e1",
         error: `${id.toString()} is not a valid id`

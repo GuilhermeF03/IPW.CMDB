@@ -1,17 +1,19 @@
 import express from "express";
-import * as services from "./cmdb-services.mjs";
-import * as webapi from "./cmdb-web-api.mjs";
+
+import servicesInit from "./cmdb-services.mjs";
+import webApiInit from "./cmdb-web-api.mjs";
+import data from "./cmdb-movies-data.mjs";
+import mem from "./cmdb-data-mem.mjs";
 
 const app = express();
 const PORT = 8080;
 
 console.log("[S] Setting up server...");
 
-const webapi = getApi(services)
+const services = servicesInit(data,mem)
+const webapi = webApiInit(services)
 
-app.use(express.json()); // JSON parser Middleware
-
-// GENERAL
+// // GENERAL
 app.use(express.json());
  
 app.get("/popular", webapi.getPopularMovies);
@@ -20,6 +22,7 @@ app.get("/search/:movieName", webapi.searchMovie);
 // USER
 app.post("/user", webapi.createUser);
 
+// setData();
 // GROUPS
 app.get("/groups", webapi.listGroups);
 app.get("/groups/:groupId", webapi.getGroupById);
@@ -32,9 +35,7 @@ app.delete("/groups/:groupId/", webapi.deleteGroup);
 
 app.put("groups/:groupId/:movieId",webapi.addMovie)
 
-app.delete("/groups/:groupId/", webapi.deleteGroup);
 app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
-
 
 // Boot-up server
 app.listen(PORT, () =>console.log(`[S] Server listening in http://localhost:${PORT}`));

@@ -1,28 +1,33 @@
 import fs from "node:fs/promises";
+import { errors } from "../errors/http-errors.mjs";
 
-const dataPath = "../data/data.json";
+const dataPath = "CMDB/data/data.json";
 // TODO: verificar erro
-const writeData = (path, data) => {
-  fs.writeFile(path, JSON.stringify(obj, null, 2))
-    .then(() => console.log("File written"))
-    .catch((error) => console.error(error));
+
+// Additional Functions
+const readData = (path) => {
+  return fs
+    .readFile(path)
+    .then((data) => JSON.parse(data))
+    .catch("File not found");
 };
 
-Array.prototype.last = () => {
-  return this[this.length - 1];
+const writeData = (path, data) => {
+  fs.writeFile(path, JSON.stringify(data, null, 2))
+    .then()
+    .catch((error) => console.error("error:" + error));
 };
-Array.prototype.lastIndex = () => {
-  return this.length - 1;
-};
+
+Array.prototype.last = () => { return this[this.length - 1] };
+Array.prototype.lastIndex = () => { return this.length - 1 };
 
 // Create data.json file when module is imported
-const setData = () => {
-  let data = new File(dataPath);
-  if (!data.exists()) {
-    fs.writeFile(dataPath);
-  }
-};
-setData();
+/*const setData = () => {
+  fs.readFile(dataPath)
+  .catch(writeData(dataPath,{}))
+}*/
+
+//writeData(dataPath,{})
 
 function createUser(userInfo) {
   return readData(dataPath)
@@ -63,10 +68,9 @@ function getGroupById(userToken, groupId) {
 function updateGroup(userToken, groupId, updateInfo) {
   return readData(dataPath)
     .then((data) => {
-      data[userToken].groups[groupId] = updateInfo;
+      let group = getGroupById(userToken, groupId);
+      group = updateInfo;
       writeData(dataPath, data);
-
-      let group = data[userToken].groups[groupId];
 
       delete group.movies;
       delete group["total-duration"];
@@ -88,7 +92,12 @@ function deleteGroup(userToken, groupId) {
 function listUserGroups(userToken) {
   return readData(dataPath)
     .then((data) => {
-      data[userToken];
+      let groups = data[userToken].groups
+      .map( elem => {
+        elem["number of movies"] = Object.keys(elem.movies).length
+        delete elem.movies
+      })
+        return groups
     })
     .catch((error) => console.error(error));
 }
@@ -96,54 +105,47 @@ function listUserGroups(userToken) {
 function deleteMovie(userToken, groupId, movieId) {
   return readData(dataPath)
     .then((data) => {
-      if (!data[`${userToken}`].groups[groupId].movies.movieId)
-        throw new Error("[mem] Movie not found");
+      let group = getGroupById(userToken,groupId)
+      let movie = group.movies[movieId];
 
-      let movie = data[`${userToken}`].groups[groupId].movies[movieId];
+      if (!movie)
+        throw Promise.reject(errors.BAD_REQUEST);
 
-      data[userToken].groups[groupId]["total-duration"] -= movie.duration;
+      group["total-duration"] -= movie.duration;
 
-      delete data[userToken].groups[groupId].movies[movieId];
+      delete group.movies[movieId];
       writeData(dataPath, data);
     })
     .catch((error) => console.error(error));
 }
 
 function addMovie(userToken, groupId, mInfo) {
-  return readData(dataPath).then((data) => {
-    if (!!data[`${userToken}`].groups[groupId].movies[mInfo.id])
-      throw new Error("[mem] Movie already exists");
+  return readData(dataPath)
+  .then((data) => {
+    let group = getGroupById(userToken, groupId)
+    let movie = group.movies[mInfo.id];
+    
+    if(movie)
+      throw Promise.reject(errors.BAD_REQUEST);
 
-    data[userToken].groups[groupId].movies[mInfo.id] = mInfo;
+    movie = mInfo;
 
-    let movie = data[`${userToken}`].groups[groupId].movies[mInfo.id];
+    group["total-duration"] += movie.duration;
 
-    data[userToken].groups[groupId]["total-duration"] += movie.duration;
-
-    delete movie.id;
     writeData(dataPath, data);
-    return movie;
+
+    return { groupName: group.name, id: groupId, movieInfo: movie };
   });
 }
 
-// Additional Functions
-const readData = (path) => {
-  return fs
-    .readFile(path)
-    .then((data) => JSON.parse(data))
-    .catch("File not found");
-};
-
-
 function validateUser(token) {
   return readData(dataPath)
-    .then((data) => {
-      if (!data[token]) throw error("Invalid user");
-    })
+    .then((data) => {if (!data[token]) Promise.reject(errors.NOT_AUTHORIZED)})
     .catch((error) => console.error(error));
 }
 
-const dataMemory = {
+
+export default {
   createUser,
   createGroup,
   getGroupById,
@@ -155,4 +157,4 @@ const dataMemory = {
   validateUser,
 };
 
-export default dataMemory;
+

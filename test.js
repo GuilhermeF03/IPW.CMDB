@@ -1,3 +1,4 @@
-const fruits = ["Banana", "Orange", "Apple", "Mango", "Kiwi"];
-
-console.log(!fruits[20]);
+let obj = {movies : {}}
+let movie = obj.movies
+movie = {a: 0, b : 1}
+console.log(obj)

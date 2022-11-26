@@ -3,11 +3,10 @@
  * redirects to services module
  */
 
-import * as data  from "./cmdb-movies-data.mjs";
-import * as mem  from "./cmdb-data-mem.mjs";
+
 import { convertToHttpError } from "../errors/http-errors.mjs";
 
-export default function getApi(services) {
+export default function(services) {
 
   if (!services)
     throw new Error("[wa] Services module not provided");
@@ -15,16 +14,15 @@ export default function getApi(services) {
   /** [RESPONSE FORMAT]: @var {results : [{id, rank, title, year, imDbRating}]}*/
   async function getPopularMovies(req, resp) {
     try {
-      let max = Object.values(req.query)[0] || 250;
+      
+      let max = Object.values(req.query)[0] || 250 ;
       const popularMovies = await services.getPopularMovies(max);
-
       resp.status(200).json({
-        status: `Retrieved top ${req.query.max} movies.`,
+        status: `Retrieved top ${max} movies.`,
         movies: popularMovies.results,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      console.error(error)
     }
   }
 
@@ -44,8 +42,8 @@ export default function getApi(services) {
         results: search.results,
       });
     } catch {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -61,8 +59,8 @@ export default function getApi(services) {
         "user-info": newUser,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -80,8 +78,8 @@ export default function getApi(services) {
         content: undefined,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -102,8 +100,8 @@ export default function getApi(services) {
         "updated-info": updatedGroup,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -118,8 +116,8 @@ export default function getApi(services) {
         "user-groups": userGroups.groups,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -137,8 +135,8 @@ export default function getApi(services) {
         content: undefined,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -157,29 +155,25 @@ export default function getApi(services) {
         content: undefined,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
   /** ADDED-MOVIE
-   * @var {groupName : "",id : "" addedmovie : {movie-info}}
+   * @var {groupName : "",groupId : "", movieInfo : {movie-info}}
    */
   // Response format : {movie}
   async function addMovieInternal(req, resp) {
     try {
-      let addedMovie = await services.addMovie(
-        req.userToken,
-        req.params.groupId,
-        req.params.movieId
-      );
+      let addedMovie = await services.addMovie(req.userToken,req.params.groupId,req.params.movieId);
       resp.status(200).json({
-        status: `${addedMovie.name}, with id:<${addedMovie.id}>, was successfully added to <${group.name}>, with id <${group.id}>.`,
-        "movie-info": addedMovie.movie,
+        status: `${movieInfo.name}, with id:<${movieInfo.id}>, was successfully added to <${group.name}>.`,
+        "movie-info": movieInfo
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -195,8 +189,8 @@ export default function getApi(services) {
         "group-info": group,
       });
     } catch (error) {
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
+      // const httpError = convertToHttpError(error);
+      // resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -216,7 +210,7 @@ export default function getApi(services) {
 
   return {
     // This handlers don't require any user token
-    getPopularMoviesl,
+    getPopularMovies,
     searchMovie,
     createUser,
 
