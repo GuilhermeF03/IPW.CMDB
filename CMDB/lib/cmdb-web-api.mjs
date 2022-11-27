@@ -1,4 +1,4 @@
-import { convertToHttpError } from "../errors/http-errors.mjs";
+// import { convertToHttpError } from "../errors/http-errors.mjs";
 
 // AUX FUNCTION
 function verifyAuthentication(handlerFunction) {
@@ -36,7 +36,6 @@ export default function(services) {
 
   async function searchMovie(req, resp) {
     try {
-      const movie = req.query.movie
       const max = req.query.max || 250;
       const search = await services.searchMovie(req.params.movieName, max);
 
@@ -46,7 +45,7 @@ export default function(services) {
           .json({ error: `No results for '${req.params.movieName}'.` });
 
       resp.status(200).json({
-        status: `Returned ${max} results for '${req.params.movieName}'.`,
+        status: `Returned ${search.results.length} results for '${req.params.movieName}'.`,
         results: search.results,
       });
     } catch {
@@ -90,9 +89,11 @@ export default function(services) {
 
   async function listGroupsInternal(req, resp) {
     try {
+
       let userGroups = await services.listUserGroups(req.userToken);
-      resp.status().json({
-        status: `Retured all ${userGroups.groups.size} <${userGroups.name}>'s groups`,
+      
+      resp.status(200).json({
+        status: `Retured all ${userGroups.groups.length} <${userGroups.name}>'s groups`,
         "user-groups": userGroups.groups,
       });
     } catch (error) {
@@ -108,7 +109,7 @@ export default function(services) {
       req.params.groupId
     );
     resp.status(200).json({
-      status: `The group <${group.name}>, with id <${req.params.id}>, was successfully retrieved.`,
+      status: `The group <${group.name}>, with id <${req.params.groupId}>, was successfully retrieved.`,
       "group-info": group,
     });
   } catch (error) {
@@ -156,14 +157,21 @@ export default function(services) {
   /* --------------------------- [MOVIE] ---------------------------------------------------------------------------------------------------- */
   async function addMovieInternal(req, resp) {
     try {
-      let addedMovie = await services.addMovie(req.userToken,req.params.groupId,req.params.movieId);
+
+      let movieInfo = await services.addMovie(req.userToken, req.params.groupId, req.params.movieId);
+      if (!movieInfo){
+        resp.status(400).json({ error: "This movie alredy exists" });
+        return;
+      } 
+
+      let groupInfo = await services.getGroupById(req.userToken,req.params.groupId)
+
       resp.status(200).json({
-        status: `<${movieInfo.name}>, with id <${movieInfo.id}>, was successfully added to <${group.name}>.`,
+        status: `<${movieInfo.title}>, with id <${movieInfo.id}>, was successfully added to <${groupInfo.name}>.`,
         "movie-info": movieInfo
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      console.error(error().code + ":" + error().error)
     }
   }
 
@@ -175,8 +183,7 @@ export default function(services) {
         req.params.movieId
       );
       resp.status(200).json({
-        status: `${deletedMovie.title} was successfully removed from <${deletedMovie.group}>.`,
-        content: undefined,
+        status: `${deletedMovie.title} was successfully removed from <${deletedMovie.group.name}>.`,
       });
     } catch (error) {
       // const httpError = convertToHttpError(error);
@@ -192,13 +199,13 @@ export default function(services) {
     createUser,
 
     // Each handler requires a user token, token is validated on 'services' module
-    createGroup: verifyAuthentication(createGroupInternal()),
-    updateGroup: verifyAuthentication(updateGroupInternal()),
-    listGroups: verifyAuthentication(listGroupsInternal()),
-    deleteGroup: verifyAuthentication(deleteGroupInternal()),
-    deleteMovie: verifyAuthentication(deleteMovieInternal()),
-    addMovie: verifyAuthentication(addMovieInternal()),
-    getGroupById: verifyAuthentication(getGroupByIdInternal()),
+    createGroup: verifyAuthentication(createGroupInternal),
+    updateGroup: verifyAuthentication(updateGroupInternal),
+    listGroups: verifyAuthentication(listGroupsInternal),
+    deleteGroup: verifyAuthentication(deleteGroupInternal),
+    deleteMovie: verifyAuthentication(deleteMovieInternal),
+    addMovie: verifyAuthentication(addMovieInternal),
+    getGroupById: verifyAuthentication(getGroupByIdInternal),
   };
 }
 

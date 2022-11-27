@@ -2,12 +2,13 @@ const apiKey = "k_iw34bd1e";
 const top250Url = `https://imdb-api.com/en/API/Top250Movies/${apiKey}`;
 const searchMovieByNameUrl = `https://imdb-api.com/en/API/SearchMovie/${apiKey}/`;
 const getMovieByIdUrl = `https://imdb-api.com/en/API/Title/${apiKey}/`;
-import fetch from "node-fetch";
+import fetch, { FetchError } from "node-fetch";
+// import { errors } from "../errors/http-errors.mjs";
 
 
 async function getTop250() {
   try {
-    let top = await (await fetch(top250Url)).json();
+    let top = await parseFetch(top250Url);
 
     return {
       results: top.items.map(
@@ -21,17 +22,16 @@ async function getTop250() {
           })
       ),
     };
-  } catch (error) {console.error(error)}
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // TODO: add error
 async function searchMovieByName(movieName) {
   try {
-    let search = await await fetch(
-      `${searchMovieByNameUrl}${movieName}`
-    ).json();
+    let search = await parseFetch(`${searchMovieByNameUrl}${movieName}`)
     return {
-      expression: movieName,
       results: search.results.map(
         (elem) =>
           (elem = {
@@ -48,7 +48,7 @@ async function searchMovieByName(movieName) {
 
 async function getMovieById(movieId) {
   try {
-    let movie = await (await fetch(`${getMovieByIdUrl}${movieId}`)).json();
+    let movie = await parseFetch(`${getMovieByIdUrl}${movieId}`);
 
     return {
       id: movie.id,
@@ -65,3 +65,24 @@ export default {
   getTop250,
   getMovieById,
 };
+
+async function parseFetch(url){
+  try{
+    const response = await fetch(url)
+
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const data = isJson ? await response.json() : null;
+  
+    if (!response.ok) {
+      // get error message from body or default to response status
+      const error = (data && data.message) || response.status;
+      return Promise.reject(error);
+  }
+  return data
+
+  }catch(error){
+    if(error.code == 'ENOTFOUND')
+      console.error("[IMDB] 502: BAD GATEWAY - check your network.")
+    console.error()
+  } 
+}

@@ -1,1 +1,22 @@
-{}
+{
+  "a4471241-6a4a-4f66-bac8-558cc6125d35": {
+    "token": "a4471241-6a4a-4f66-bac8-558cc6125d35",
+    "name": "manuel",
+    "groups": [
+      {
+        "name": "Filmes de inverno",
+        "description": "filmes para serem visto num inverno quente cheio de frio",
+        "total-duration": 142,
+        "movies": {
+          "tt0111161": {
+            "id": "tt0111161",
+            "title": "The Shawshank Redemption",
+            "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+            "runtime": "142",
+            "year": "1994"
+          }
+        }
+      }
+    ]
+  }
+}

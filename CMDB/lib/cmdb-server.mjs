@@ -16,7 +16,7 @@ const webapi = webApiInit(services)
 app.use(express.json());
 // GENERAL
 app.get("/popular", webapi.getPopularMovies);
-app.get("/search", webapi.searchMovie);
+app.get("/search/:movieName", webapi.searchMovie);
 
 // USER
 app.post("/user", webapi.createUser);
@@ -29,9 +29,9 @@ app.post("/groups", webapi.createGroup);
 
 app.put("/groups/:groupId", webapi.updateGroup);
 
-app.delete("/groups/:groupId/", webapi.deleteGroup);
+app.delete("/groups/:groupId", webapi.deleteGroup);
 
-app.put("groups/:groupId/:movieId",webapi.addMovie)
+app.put("/groups/:groupId/:movieId", webapi.addMovie)
 
 app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
 

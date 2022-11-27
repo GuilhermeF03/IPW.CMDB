@@ -1,12 +1,20 @@
-import { convertToHttpError } from "../errors/http-errors.mjs";
+// import { convertToHttpError } from "../errors/http-errors.mjs";
+import crypto from "node:crypto"
 
 
 const MAX_LIMIT = 250;
 const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
 
+export default function(data, mem) {
+
 // [AUXILLIARY VALIDATORS]
   async function validateUser(token){
-    await mem.validateUser(token)
+    try{
+      await mem.validateUser(token)
+    }catch(error){
+        console.error(error)
+    }
+    
   }
 
   async function validateId(id) {
@@ -24,9 +32,6 @@ const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
       throw `Invalid string <${value}>`;
   }
 
-
-
-export default function(data, mem) {
 
   if (!data) throw new Error("[s] Data module not provided");
   if (!mem) throw new Error("[s] Mem module not provided");
@@ -61,9 +66,6 @@ export default function(data, mem) {
 
     let uInfo = { token: crypto.randomUUID(), name: userInfo.name };
 
-    if(mem.getUserInfo(uInfo.token))
-      throw new Error("Invalid")
-
     await mem.createUser(uInfo);
 
     return uInfo;
@@ -81,7 +83,6 @@ export default function(data, mem) {
 
     let groups = await mem.listUserGroups(userToken); // {name, groups : [{name, description, number-of-movies}]}
 
-    // TODO: verificar
     if (!groups)
       throw new Error("No groups found");
     
@@ -136,6 +137,7 @@ export default function(data, mem) {
 
   /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
   async function addMovie(userToken, groupId, movieId) {
+
     groupId = Number(groupId);
 
     await validateId(groupId);
@@ -146,12 +148,7 @@ export default function(data, mem) {
     if (!mInfo)
       throw new Error("Movie not found");
     
-    let gInfo = await mem.addMovie(userToken, groupId, mInfo); // {groupName, id, movieInfo :{movie-info}} -> groupName and id for status message
-    
-    if (!gInfo)
-      throw new Error("Group not found");
-
-    return gInfo;
+    return await mem.addMovie(userToken, groupId, mInfo); // {groupName, id, movieInfo :{movie-info}} -> groupName and id for status message
   }
 
   async function deleteMovie(userToken, groupId, movieId) {
@@ -161,8 +158,8 @@ export default function(data, mem) {
     await validateUser(userToken);
 
     let info = {
-      title : await mem.getMovieById(userToken, groupId, movieId).title,
-      group : await mem.getGroupById(userToken, groupId)
+      title : (await data.getMovieById(movieId)).title,
+      group : (await mem.getGroupById(userToken, groupId))
     }
 
     if (!info.title)

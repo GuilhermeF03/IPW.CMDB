@@ -3,7 +3,7 @@ import { errors } from "../errors/http-errors.mjs";
 
 const dataPath = "CMDB/data/data.json";
 
-// Auxilliary Functions
+/* ------------------------------ [FILE] ------------------------------------------------------------------------------------------------------- */
 function checkFileExists(file) {
   return fs
     .access(file, fs.constants.F_OK)
@@ -15,7 +15,6 @@ checkFileExists(dataPath)
   .then((exists) => {
     if (!exists) {
       writeData(dataPath, {});
-      console.log("File Created");
     }
   })
   .catch((error) => console.error(error));
@@ -36,15 +35,16 @@ const writeData = (path, data) => {
 function validateUser(token) {
   return readData(dataPath)
     .then((data) => {
-      if (!data[token]) Promise.reject(errors.NOT_AUTHORIZED);
+      if (!data[token]) return Promise.reject(errors.NOT_AUTHORIZED);
     })
     .catch((error) => console.error(error));
 }
 
-Array.prototype.last = () => {
+Array.prototype.last = function () {
   return this[this.length - 1];
 };
-Array.prototype.lastIndex = () => {
+
+Array.prototype.lastIndex = function () {
   return this.length - 1;
 };
 
@@ -70,6 +70,7 @@ function createGroup(userToken, groupInfo) {
       groupInfo.movies = {}; // create movie
 
       data[userToken].groups.push(groupInfo); // name groups[]
+
       let group = data[userToken].groups.last();
       writeData(dataPath, data);
 
@@ -85,11 +86,15 @@ function createGroup(userToken, groupInfo) {
 function listUserGroups(userToken) {
   return readData(dataPath)
     .then((data) => {
-      let groups = data[userToken].groups.map((elem) => {
-        elem["number of movies"] = Object.keys(elem.movies).length;
-        delete elem.movies;
-      });
-      return { name: `${data[userToken].name}'s groups`, groups };
+      let groups = data[userToken].groups
+        .map((elem) => elem = {
+          name: elem.name,
+          description: elem.description,
+          "number of movies" : Object.keys(elem.movies).length,
+          "total-duration": elem["total-duration"],
+       });
+      console.log(groups);
+      return { name: data[userToken].name, groups };
     })
     .catch((error) => console.error(error));
 }
@@ -105,13 +110,15 @@ function getGroupById(userToken, groupId) {
 function updateGroup(userToken, groupId, updateInfo) {
   return readData(dataPath)
     .then((data) => {
-      let group = getGroupById(userToken, groupId);
-      group = updateInfo;
+      const group = data[userToken].groups[groupId];
+
+      group.name = updateInfo.name;
+      group.description = updateInfo.description;
+
       writeData(dataPath, data);
 
       delete group.movies;
       delete group["total-duration"];
-
       return group;
     })
     .catch((error) => console.error(error));
@@ -120,7 +127,7 @@ function updateGroup(userToken, groupId, updateInfo) {
 function deleteGroup(userToken, groupId) {
   return readData(dataPath)
     .then((data) => {
-      data[userToken].groups.slice(groupId, 1);
+      data[userToken].groups.splice(groupId, 1);
       writeData(dataPath, data);
     })
     .catch((error) => console.error(error));
@@ -128,31 +135,32 @@ function deleteGroup(userToken, groupId) {
 
 /* --------------------------------- [MOVIE] ------------------------------------------------------------------------------------------------ */
 function addMovie(userToken, groupId, mInfo) {
-  return readData(dataPath).then((data) => {
-    let group = getGroupById(userToken, groupId);
-    let movie = group.movies[mInfo.id];
+  return readData(dataPath)
+    .then((data) => {
+      let group = data[userToken].groups[groupId];
+      let movie = group.movies[mInfo.id];
 
-    if (movie) throw Promise.reject(errors.BAD_REQUEST);
+      if (movie) return Promise.reject(errors.BAD_REQUEST);
 
-    movie = mInfo;
+      group.movies[mInfo.id] = mInfo
+      group["total-duration"] += parseInt(mInfo.runtime);
+      
+      writeData(dataPath, data);
 
-    group["total-duration"] += movie.runtime;
-
-    writeData(dataPath, data);
-
-    return { groupName: group.name, id: groupId, movieInfo: movie };
-  });
+      return mInfo;
+    })
+    .catch((error) => console.error(error));
 }
 
 function deleteMovie(userToken, groupId, movieId) {
   return readData(dataPath)
     .then((data) => {
-      let group = getGroupById(userToken, groupId);
+      let group = data[userToken].groups[groupId];
       let movie = group.movies[movieId];
 
-      if (!movie) throw Promise.reject(errors.BAD_REQUEST);
+      if (!movie) return Promise.reject(errors.BAD_REQUEST);
 
-      group["total-duration"] -= movie.runtime;
+      group["total-duration"] -= parseInt(movie.runtime);
 
       delete group.movies[movieId];
       writeData(dataPath, data);

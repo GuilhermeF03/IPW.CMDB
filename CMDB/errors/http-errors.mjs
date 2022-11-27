@@ -1,4 +1,5 @@
 const ERRORS_MAPPER = {
+    e1: 500,// BAD GATEWAY
     e1: 400,//BAD REQUEST
     e2: 404,//NOT FOUND
     e3: 401 //UNAUTHORIZED
@@ -34,11 +35,18 @@ function getTasks(token){
 
 
 export const errors = {
+    BAD_GATEWAY: badGateway,
     BAD_REQUEST: badRequest,
     NOT_FOUND: notFound,
     NOT_AUTHORIZED: notAuthorized
 }
 
+function badGateway(){
+    return {
+       code : e0,
+       error : 'Was unable to connect to server, check your connection'
+    }
+}
 
 function badRequest(id) {
     return {
