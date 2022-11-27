@@ -1,0 +1,56 @@
+{
+  "searchType": "Movie",
+  "expression": "avatar",
+  "results": [
+    {
+      "id": "tt0499549",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BNjA3NGExZDktNDlhZC00NjYyLTgwNmUtZWUzMDYwMTZjZWUyXkEyXkFqcGdeQXVyMTU1MDM3NDk0._V1_Ratio0.7273_AL_.jpg",
+      "title": "Avatar",
+      "description": "(2009)"
+    },
+    {
+      "id": "tt0120347",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BMTM1MTk2ODQxNV5BMl5BanBnXkFtZTcwOTY5MDg0NA@@._V1_Ratio0.7273_AL_.jpg",
+      "title": "Tomorrow Never Dies",
+      "description": "(1997) aka \"Avatar\""
+    },
+    {
+      "id": "tt1630029",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BZTk1OTgxNzItOTVmZi00NzFmLWIwNWUtZWM2MDU1ZDEwYThlXkEyXkFqcGdeQXVyNzYyOTM1ODI@._V1_Ratio0.7273_AL_.jpg",
+      "title": "Avatar: The Way of Water",
+      "description": "(2022)"
+    },
+    {
+      "id": "tt1133985",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BZjQ1YTIxNzEtMzcxNC00NTUzLThkZjktMmJlYTcyMjBhMGUyXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_Ratio0.7273_AL_.jpg",
+      "title": "Green Lantern",
+      "description": "(2011) aka \"Avatar 2011\""
+    },
+    {
+      "id": "tt0938283",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BMTM1NjE0NDA0MV5BMl5BanBnXkFtZTcwODE4NDg1Mw@@._V1_Ratio0.7273_AL_.jpg",
+      "title": "The Last Airbender",
+      "description": "(2010) aka \"Avatar: Son Hava Bükücü\""
+    },
+    {
+      "id": "tt1757678",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BNmM1NmY4N2QtNmVkOS00MjMyLWI5ZGUtYWYxMDRjY2MzNDdiXkEyXkFqcGdeQXVyMTAwMDAwMA@@._V1_Ratio1.0000_AL_.jpg",
+      "title": "Avatar 3",
+      "description": "(2024)"
+    },
+    {
+      "id": "tt5637536",
+      "resultType": "Title",
+      "image": "https://m.media-amazon.com/images/M/MV5BNmM1NmY4N2QtNmVkOS00MjMyLWI5ZGUtYWYxMDRjY2MzNDdiXkEyXkFqcGdeQXVyMTAwMDAwMA@@._V1_Ratio1.0000_AL_.jpg",
+      "title": "Avatar 5",
+      "description": "(2028)"
+    }
+  ],
+  "errorMessage": ""
+}

@@ -1,0 +1,317 @@
+{
+    "id": "tt0468569",
+    "title": "The Dark Knight",
+    "originalTitle": "",
+    "fullTitle": "The Dark Knight (2008)",
+    "type": "Movie",
+    "year": "2008",
+    "image": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6762_AL_.jpg",
+    "releaseDate": "2008-07-18",
+    "runtimeMins": "152",
+    "runtimeStr": "2h 32min",
+    "plot": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+    "plotLocal": "",
+    "plotLocalIsRtl": false,
+    "awards": "Top rated movie #3 | Won 2 Oscars, 160 wins & 163 nominations total",
+    "directors": "Christopher Nolan",
+    "directorList": [
+      {
+        "id": "nm0634240",
+        "name": "Christopher Nolan"
+      }
+    ],
+    "writers": "Jonathan Nolan, Christopher Nolan, David S. Goyer",
+    "writerList": [
+      {
+        "id": "nm0634300",
+        "name": "Jonathan Nolan"
+      },
+      {
+        "id": "nm0634240",
+        "name": "Christopher Nolan"
+      },
+      {
+        "id": "nm0275286",
+        "name": "David S. Goyer"
+      }
+    ],
+    "stars": "Christian Bale, Heath Ledger, Aaron Eckhart",
+    "starList": [
+      {
+        "id": "nm0000288",
+        "name": "Christian Bale"
+      },
+      {
+        "id": "nm0005132",
+        "name": "Heath Ledger"
+      },
+      {
+        "id": "nm0001173",
+        "name": "Aaron Eckhart"
+      }
+    ],
+    "actorList": [
+      {
+        "id": "nm0000288",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTkxMzk4MjQ4MF5BMl5BanBnXkFtZTcwMzExODQxOA@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Christian Bale",
+        "asCharacter": "Bruce Wayne"
+      },
+      {
+        "id": "nm0005132",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTI2NTY0NzA4MF5BMl5BanBnXkFtZTYwMjE1MDE0._V1_Ratio1.0000_AL_.jpg",
+        "name": "Heath Ledger",
+        "asCharacter": "Joker"
+      },
+      {
+        "id": "nm0001173",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTc4MTAyNzMzNF5BMl5BanBnXkFtZTcwMzQ5MzQzMg@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Aaron Eckhart",
+        "asCharacter": "Harvey Dent"
+      },
+      {
+        "id": "nm0000323",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjAwNzIwNTQ4Ml5BMl5BanBnXkFtZTYwMzE1MTUz._V1_Ratio1.0000_AL_.jpg",
+        "name": "Michael Caine",
+        "asCharacter": "Alfred"
+      },
+      {
+        "id": "nm0350454",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTM1MjY3NzA4NF5BMl5BanBnXkFtZTcwNzE4MjMyMw@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Maggie Gyllenhaal",
+        "asCharacter": "Rachel"
+      },
+      {
+        "id": "nm0000198",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTc3NTM4MzQ5MV5BMl5BanBnXkFtZTcwOTE4MDczNw@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Gary Oldman",
+        "asCharacter": "Gordon"
+      },
+      {
+        "id": "nm0000151",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Morgan Freeman",
+        "asCharacter": "Lucius Fox"
+      },
+      {
+        "id": "nm1010931",
+        "image": "https://m.media-amazon.com/images/M/MV5BOGUzODlhNDEtYzFiMS00YjIyLWFkYjItOGVjYWZhN2Q2MDkxXkEyXkFqcGdeQXVyMTI4MzU0Mg@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Monique Gabriela Curnen",
+        "asCharacter": "Ramirez"
+      },
+      {
+        "id": "nm0212939",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTM5MTc5MjE3OF5BMl5BanBnXkFtZTcwNzg1MjQyOA@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Ron Dean",
+        "asCharacter": "Wuertz"
+      },
+      {
+        "id": "nm0614165",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTUzMjg1NzIyOV5BMl5BanBnXkFtZTYwMzg2Mjgy._V1_Ratio1.0000_AL_.jpg",
+        "name": "Cillian Murphy",
+        "asCharacter": "Scarecrow"
+      },
+      {
+        "id": "nm1977856",
+        "image": "https://m.media-amazon.com/images/M/MV5BNDA5NDc1NTAwNV5BMl5BanBnXkFtZTgwNDA4Mjk5MjE@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Chin Han",
+        "asCharacter": "Lau"
+      },
+      {
+        "id": "nm0004801",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjg5NGIwZDMtNTkwMy00MjVlLWI4OWUtNWEzYWY2NmRkNGVlXkEyXkFqcGdeQXVyMTk3MzM4NDU@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Nestor Carbonell",
+        "asCharacter": "Mayor"
+      },
+      {
+        "id": "nm0000616",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTQ2MTk3OTgwM15BMl5BanBnXkFtZTcwODE1OTIwMw@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Eric Roberts",
+        "asCharacter": "Maroni"
+      },
+      {
+        "id": "nm0182662",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTMxMjE2MTU5M15BMl5BanBnXkFtZTYwNTM2ODM0._V1_Ratio1.0000_AL_.jpg",
+        "name": "Ritchie Coster",
+        "asCharacter": "Chechen"
+      },
+      {
+        "id": "nm0001309",
+        "image": "https://m.media-amazon.com/images/M/MV5BOTdhZmJlMmUtZjdhYi00MDVjLWFhZmMtNTY4MDU5OWIyMTU5XkEyXkFqcGdeQXVyODUwMjgxNDU@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Anthony Michael Hall",
+        "asCharacter": "Engel"
+      },
+      {
+        "id": "nm0843775",
+        "image": "https://m.media-amazon.com/images/M/MV5BODlkNjRlODYtMzNkNi00YzdmLTlmMGItNzUxNGI0MTgyZTAyXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Keith Szarabajka",
+        "asCharacter": "Stephens"
+      },
+      {
+        "id": "nm0568801",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTIzNDI4NzQzMF5BMl5BanBnXkFtZTYwMDQyNDcy._V1_Ratio1.0000_AL_.jpg",
+        "name": "Colin McFarlane",
+        "asCharacter": "Loeb"
+      },
+      {
+        "id": "nm0367176",
+        "image": "https://m.media-amazon.com/images/M/MV5BYjVlMDk3MTMtMDc0Ni00ZmQxLTg1MWQtYTUzYWNhMWU2NjdjXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_Ratio1.5000_AL_.jpg",
+        "name": "Joshua Harto",
+        "asCharacter": "Reese"
+      }
+    ],
+    "fullCast": null,
+    "genres": "Action, Crime, Drama",
+    "genreList": [
+      {
+        "key": "Action",
+        "value": "Action"
+      },
+      {
+        "key": "Crime",
+        "value": "Crime"
+      },
+      {
+        "key": "Drama",
+        "value": "Drama"
+      }
+    ],
+    "companies": "Warner Bros., Legendary Entertainment, Syncopy",
+    "companyList": [
+      {
+        "id": "co0002663",
+        "name": "Warner Bros."
+      },
+      {
+        "id": "co0159111",
+        "name": "Legendary Entertainment"
+      },
+      {
+        "id": "co0147954",
+        "name": "Syncopy"
+      }
+    ],
+    "countries": "USA, UK",
+    "countryList": [
+      {
+        "key": "USA",
+        "value": "USA"
+      },
+      {
+        "key": "UK",
+        "value": "UK"
+      }
+    ],
+    "languages": "English, Mandarin",
+    "languageList": [
+      {
+        "key": "English",
+        "value": "English"
+      },
+      {
+        "key": "Mandarin",
+        "value": "Mandarin"
+      }
+    ],
+    "contentRating": "PG-13",
+    "imDbRating": "9",
+    "imDbRatingVotes": "2632496",
+    "metacriticRating": "84",
+    "ratings": null,
+    "wikipedia": null,
+    "posters": null,
+    "images": null,
+    "trailer": null,
+    "boxOffice": {
+      "budget": "$185,000,000 (estimated)",
+      "openingWeekendUSA": "$158,411,483",
+      "grossUSA": "$534,987,076",
+      "cumulativeWorldwideGross": "$1,006,234,167"
+    },
+    "tagline": null,
+    "keywords": "dc comics,psychopath,moral dilemma,clown,superhero",
+    "keywordList": [
+      "dc comics",
+      "psychopath",
+      "moral dilemma",
+      "clown",
+      "superhero"
+    ],
+    "similars": [
+      {
+        "id": "tt1345836",
+        "title": "The Dark Knight Rises",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTk4ODQzNDY3Ml5BMl5BanBnXkFtZTcwODA0NTM4Nw@@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.4"
+      },
+      {
+        "id": "tt0372784",
+        "title": "Batman Begins",
+        "image": "https://m.media-amazon.com/images/M/MV5BOTY4YjI2N2MtYmFlMC00ZjcyLTg3YjEtMDQyM2ZjYzQ5YWFkXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.2"
+      },
+      {
+        "id": "tt1375666",
+        "title": "Inception",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt0111161",
+        "title": "The Shawshank Redemption",
+        "image": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "9.3"
+      },
+      {
+        "id": "tt7286456",
+        "title": "Joker",
+        "image": "https://m.media-amazon.com/images/M/MV5BNGVjNWI4ZGUtNzE0MS00YTJmLWE0ZDctN2ZiYTk2YmI3NTYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.4"
+      },
+      {
+        "id": "tt0137523",
+        "title": "Fight Club",
+        "image": "https://m.media-amazon.com/images/M/MV5BNDIzNDU0YzEtYzE5Ni00ZjlkLTk5ZjgtNjM3NWE4YzA3Nzk3XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt0816692",
+        "title": "Interstellar",
+        "image": "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.6"
+      },
+      {
+        "id": "tt0109830",
+        "title": "Forrest Gump",
+        "image": "https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_Ratio0.6957_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt0167260",
+        "title": "The Lord of the Rings: The Return of the King",
+        "image": "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "9.0"
+      },
+      {
+        "id": "tt0110912",
+        "title": "Pulp Fiction",
+        "image": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6860_AL_.jpg",
+        "imDbRating": "8.9"
+      },
+      {
+        "id": "tt0068646",
+        "title": "The Godfather",
+        "image": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.7053_AL_.jpg",
+        "imDbRating": "9.2"
+      },
+      {
+        "id": "tt0114369",
+        "title": "Se7en",
+        "image": "https://m.media-amazon.com/images/M/MV5BOTUwODM5MTctZjczMi00OTk4LTg3NWUtNmVhMTAzNTNjYjcyXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.6"
+      }
+    ],
+    "tvSeriesInfo": null,
+    "tvEpisodeInfo": null,
+    "errorMessage": null
+  }

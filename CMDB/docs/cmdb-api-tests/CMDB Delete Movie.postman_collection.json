@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "7f56ce86-c0e8-424f-9ce5-53583a2945e1",
+		"name": "CMDB Delete Movie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24129698"
+	},
+	"item": [
+		{
+			"name": "Delete a Movie from Rodrigo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7565d56c-eb80-4393-a648-07d5d66a618e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0/tt0111161",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0",
+						"tt0111161"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Movie without token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0/tt0111161",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0",
+						"tt0111161"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Movie with nonexistente token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0/tt0111161",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0",
+						"tt0111161"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Movie from Manuel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0/tt0068646",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0",
+						"tt0068646"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Movie from Manuel with wrong id movie",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0/tt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0",
+						"tt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Movie from Manuel with wrong id group",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/20/tt0068646",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"20",
+						"tt0068646"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

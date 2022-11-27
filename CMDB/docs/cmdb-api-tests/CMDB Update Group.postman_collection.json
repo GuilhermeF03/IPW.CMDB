@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "76946697-4400-4b81-bd9a-6a3a0d5a696d",
+		"name": "CMDB Update Group",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24129698"
+	},
+	"item": [
+		{
+			"name": "Update Group from Manuel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n       \"name\": \"Filmes de Inverno\",\r\n        \"description\": \"Filmes para serem visto num Inverno frio e chuvoso\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/groups/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Group from Manuel with wrong group id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n       \"name\": \"Filmes de Inverno\",\r\n        \"description\": \"Filmes para serem visto num Inverno frio e chuvoso\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/groups/20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Group from Rodrigo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7565d56c-eb80-4393-a648-07d5d66a618e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n       \"name\": \"Filmes de Inverno\",\r\n        \"description\": \"Filmes para serem visto num Inverno frio e chuvoso\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/groups/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Group without token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"name\": \"Filmes de inverno\",\r\n        \"description\": \"filmes para serem visto num inverno quente cheio de frio\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/groups/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Group with an nonexistent token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"name\": \"Filmes de inverno\",\r\n        \"description\": \"filmes para serem visto num inverno quente cheio de frio\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/groups/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

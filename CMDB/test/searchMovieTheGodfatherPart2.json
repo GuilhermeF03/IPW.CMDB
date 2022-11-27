@@ -1,0 +1,49 @@
+{
+    "searchType": "Movie",
+    "expression": "The Godfather Part II",
+    "results": [
+      {
+        "id": "tt0071562",
+        "resultType": "Title",
+        "image": "https://m.media-amazon.com/images/M/MV5BMWMwMGQzZTItY2JlNC00OWZiLWIyMDctNDk2ZDQ2YjRjMWQ0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.7273_AL_.jpg",
+        "title": "The Godfather Part II",
+        "description": "(1974)"
+      },
+      {
+        "id": "tt17566342",
+        "resultType": "Title",
+        "image": "https://imdb-api.com/images/original/nopicture.jpg",
+        "title": "The Godfather Part II",
+        "description": "(2021) (Podcast Episode) - Locked on Marlins - Daily Podcast on the Miami Marlins (2020) (Podcast Series)"
+      },
+      {
+        "id": "tt0099674",
+        "resultType": "Title",
+        "image": "https://m.media-amazon.com/images/M/MV5BNWFlYWY2YjYtNjdhNi00MzVlLTg2MTMtMWExNzg4NmM5NmEzXkEyXkFqcGdeQXVyMDk5Mzc5MQ@@._V1_Ratio0.7273_AL_.jpg",
+        "title": "The Godfather Part III",
+        "description": "(1990)"
+      },
+      {
+        "id": "tt19829922",
+        "resultType": "Title",
+        "image": "https://imdb-api.com/images/original/nopicture.jpg",
+        "title": "The Godfather Part III âEUR¢ The Next Reel",
+        "description": "(2016) (Podcast Episode) - The Next Reel Film Podcast Master Feed (2011) (Podcast Series)"
+      },
+      {
+        "id": "tt19830088",
+        "resultType": "Title",
+        "image": "https://imdb-api.com/images/original/nopicture.jpg",
+        "title": "The Godfather Part II âEUR¢ The Next Reel",
+        "description": "(2016) (Podcast Episode) - The Next Reel Film Podcast Master Feed (2011) (Podcast Series)"
+      },
+      {
+        "id": "tt16077562",
+        "resultType": "Title",
+        "image": "https://m.media-amazon.com/images/M/MV5BZjBmMzE5MDItYTkwNy00ZjZhLWEwMjQtYjRmZmJjMzk5NDc5XkEyXkFqcGdeQXVyMzc5NDY2OTI@._V1_Ratio1.0000_AL_.jpg",
+        "title": "The Godfather Part II",
+        "description": "(2023) (Podcast Episode) - Season 5 | Episode 22 - Replay Value (2018) (Podcast Series)"
+      }
+    ],
+    "errorMessage": ""
+  }

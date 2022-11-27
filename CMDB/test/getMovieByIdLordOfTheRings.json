@@ -1,0 +1,325 @@
+{
+    "id": "tt0167260",
+    "title": "The Lord of the Rings: The Return of the King",
+    "originalTitle": "",
+    "fullTitle": "The Lord of the Rings: The Return of the King (2003)",
+    "type": "Movie",
+    "year": "2003",
+    "image": "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6762_AL_.jpg",
+    "releaseDate": "2003-12-17",
+    "runtimeMins": "201",
+    "runtimeStr": "3h 21min",
+    "plot": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+    "plotLocal": "",
+    "plotLocalIsRtl": false,
+    "awards": "Top rated movie #7 | Won 11 Oscars, 209 wins & 124 nominations total",
+    "directors": "Peter Jackson",
+    "directorList": [
+      {
+        "id": "nm0001392",
+        "name": "Peter Jackson"
+      }
+    ],
+    "writers": "J.R.R. Tolkien, Fran Walsh, Philippa Boyens",
+    "writerList": [
+      {
+        "id": "nm0866058",
+        "name": "J.R.R. Tolkien"
+      },
+      {
+        "id": "nm0909638",
+        "name": "Fran Walsh"
+      },
+      {
+        "id": "nm0101991",
+        "name": "Philippa Boyens"
+      }
+    ],
+    "stars": "Elijah Wood, Viggo Mortensen, Ian McKellen",
+    "starList": [
+      {
+        "id": "nm0000704",
+        "name": "Elijah Wood"
+      },
+      {
+        "id": "nm0001557",
+        "name": "Viggo Mortensen"
+      },
+      {
+        "id": "nm0005212",
+        "name": "Ian McKellen"
+      }
+    ],
+    "actorList": [
+      {
+        "id": "nm0000704",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTM0NDIxMzQ5OF5BMl5BanBnXkFtZTcwNzAyNTA4Nw@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Elijah Wood",
+        "asCharacter": "Frodo"
+      },
+      {
+        "id": "nm0001557",
+        "image": "https://m.media-amazon.com/images/M/MV5BNDQzOTg4NzA2Nl5BMl5BanBnXkFtZTcwMzkwNjkxMg@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Viggo Mortensen",
+        "asCharacter": "Aragorn"
+      },
+      {
+        "id": "nm0005212",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTQ2MjgyNjk3MV5BMl5BanBnXkFtZTcwNTA3NTY5Mg@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Ian McKellen",
+        "asCharacter": "Gandalf"
+      },
+      {
+        "id": "nm0089217",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjE1MDkxMjQ3NV5BMl5BanBnXkFtZTcwMzQ3Mjc4MQ@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Orlando Bloom",
+        "asCharacter": "Legolas"
+      },
+      {
+        "id": "nm0032370",
+        "image": "https://imdb-api.com/images/original/nopicture.jpg",
+        "name": "Noel Appleby",
+        "asCharacter": "Everard Proudfoot"
+      },
+      {
+        "id": "nm0040012",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTYzYzBmZDQtYjRmZi00YTBjLWE0OGItZTAxYzQxZjg2NDBhXkEyXkFqcGdeQXVyMTEyMTY0MTE2._V1_Ratio1.0000_AL_.jpg",
+        "name": "Ali Astin",
+        "asCharacter": "Elanor Gamgee"
+      },
+      {
+        "id": "nm0000276",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjEzMjczOTQ1NF5BMl5BanBnXkFtZTcwMzI2NzYyMQ@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Sean Astin",
+        "asCharacter": "Sam"
+      },
+      {
+        "id": "nm0040058",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjA2Njc4Nzk2OV5BMl5BanBnXkFtZTcwMjExODIwOA@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "David Aston",
+        "asCharacter": "Gondorian Soldier 3"
+      },
+      {
+        "id": "nm0045324",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTg1Mjg2MzM0OV5BMl5BanBnXkFtZTcwMDQ2NzMwOA@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "John Bach",
+        "asCharacter": "Madril"
+      },
+      {
+        "id": "nm0000293",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTkzMzc4MDk5OF5BMl5BanBnXkFtZTcwODg3MjUxNw@@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Sean Bean",
+        "asCharacter": "Boromir"
+      },
+      {
+        "id": "nm0000949",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTc1MDI0MDg1NV5BMl5BanBnXkFtZTgwMDM3OTAzMTE@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Cate Blanchett",
+        "asCharacter": "Galadriel"
+      },
+      {
+        "id": "nm0101710",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTQzOTEyMTQ3OF5BMl5BanBnXkFtZTYwNzkzMDk1._V1_Ratio1.0000_AL_.jpg",
+        "name": "Billy Boyd",
+        "asCharacter": "Pippin"
+      },
+      {
+        "id": "nm1480092",
+        "image": "https://imdb-api.com/images/original/nopicture.jpg",
+        "name": "Sadwyn Brophy",
+        "asCharacter": "Eldarion"
+      },
+      {
+        "id": "nm0115143",
+        "image": "https://m.media-amazon.com/images/M/MV5BYjhmMzUwMWQtZGEzOC00YzM2LWFhYmEtNDBiOTZmYThiYmEyXkEyXkFqcGdeQXVyMTExNDQ2MTI@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Alistair Browning",
+        "asCharacter": "Damrod"
+      },
+      {
+        "id": "nm0190744",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjQxOTcyNDEyMV5BMl5BanBnXkFtZTgwMjMzMzYyNTE@._V1_Ratio1.0000_AL_.jpg",
+        "name": "Marton Csokas",
+        "asCharacter": "Celeborn"
+      },
+      {
+        "id": "nm1480102",
+        "image": "https://imdb-api.com/images/original/nopicture.jpg",
+        "name": "Richard Edge",
+        "asCharacter": "Gondorian Soldier 1"
+      },
+      {
+        "id": "nm1480106",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTkyMjAzMDM3Nl5BMl5BanBnXkFtZTgwODUyNzA4OTE@._V1_Ratio1.5000_AL_.jpg",
+        "name": "Jason Fitch",
+        "asCharacter": "Uruk 2"
+      },
+      {
+        "id": "nm0384060",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjA0MTI3MzE1M15BMl5BanBnXkFtZTYwODgzMDk1._V1_Ratio1.0000_AL_.jpg",
+        "name": "Bernard Hill",
+        "asCharacter": "Theoden"
+      }
+    ],
+    "fullCast": null,
+    "genres": "Action, Adventure, Drama",
+    "genreList": [
+      {
+        "key": "Action",
+        "value": "Action"
+      },
+      {
+        "key": "Adventure",
+        "value": "Adventure"
+      },
+      {
+        "key": "Drama",
+        "value": "Drama"
+      }
+    ],
+    "companies": "New Line Cinema, WingNut Films, The Saul Zaentz Company",
+    "companyList": [
+      {
+        "id": "co0046718",
+        "name": "New Line Cinema"
+      },
+      {
+        "id": "co0046203",
+        "name": "WingNut Films"
+      },
+      {
+        "id": "co0061706",
+        "name": "The Saul Zaentz Company"
+      }
+    ],
+    "countries": "New Zealand, USA",
+    "countryList": [
+      {
+        "key": "New Zealand",
+        "value": "New Zealand"
+      },
+      {
+        "key": "USA",
+        "value": "USA"
+      }
+    ],
+    "languages": "English, Quenya, Old English, Sindarin",
+    "languageList": [
+      {
+        "key": "English",
+        "value": "English"
+      },
+      {
+        "key": "Quenya",
+        "value": "Quenya"
+      },
+      {
+        "key": "Old English",
+        "value": "Old English"
+      },
+      {
+        "key": "Sindarin",
+        "value": "Sindarin"
+      }
+    ],
+    "contentRating": "PG-13",
+    "imDbRating": "9",
+    "imDbRatingVotes": "1834641",
+    "metacriticRating": "94",
+    "ratings": null,
+    "wikipedia": null,
+    "posters": null,
+    "images": null,
+    "trailer": null,
+    "boxOffice": {
+      "budget": "$94,000,000 (estimated)",
+      "openingWeekendUSA": "$72,629,713",
+      "grossUSA": "$378,251,207",
+      "cumulativeWorldwideGross": "$1,146,436,214"
+    },
+    "tagline": null,
+    "keywords": "epic,orc,middle earth,journey,hobbit",
+    "keywordList": [
+      "epic",
+      "orc",
+      "middle earth",
+      "journey",
+      "hobbit"
+    ],
+    "similars": [
+      {
+        "id": "tt0167261",
+        "title": "The Lord of the Rings: The Two Towers",
+        "image": "https://m.media-amazon.com/images/M/MV5BZGMxZTdjZmYtMmE2Ni00ZTdkLWI5NTgtNjlmMjBiNzU2MmI5XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt0120737",
+        "title": "The Lord of the Rings: The Fellowship of the Ring",
+        "image": "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt0468569",
+        "title": "The Dark Knight",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "9.0"
+      },
+      {
+        "id": "tt0109830",
+        "title": "Forrest Gump",
+        "image": "https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_Ratio0.6957_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt1375666",
+        "title": "Inception",
+        "image": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.8"
+      },
+      {
+        "id": "tt0903624",
+        "title": "The Hobbit: An Unexpected Journey",
+        "image": "https://m.media-amazon.com/images/M/MV5BMTcwNTE4MTUxMl5BMl5BanBnXkFtZTcwMDIyODM4OA@@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "7.8"
+      },
+      {
+        "id": "tt0133093",
+        "title": "The Matrix",
+        "image": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.7"
+      },
+      {
+        "id": "tt0111161",
+        "title": "The Shawshank Redemption",
+        "image": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "9.3"
+      },
+      {
+        "id": "tt0080684",
+        "title": "Star Wars: Episode V - The Empire Strikes Back",
+        "image": "https://m.media-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.7"
+      },
+      {
+        "id": "tt1170358",
+        "title": "The Hobbit: The Desolation of Smaug",
+        "image": "https://m.media-amazon.com/images/M/MV5BMzU0NDY0NDEzNV5BMl5BanBnXkFtZTgwOTIxNDU1MDE@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "7.8"
+      },
+      {
+        "id": "tt0110912",
+        "title": "Pulp Fiction",
+        "image": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6860_AL_.jpg",
+        "imDbRating": "8.9"
+      },
+      {
+        "id": "tt0816692",
+        "title": "Interstellar",
+        "image": "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6763_AL_.jpg",
+        "imDbRating": "8.6"
+      }
+    ],
+    "tvSeriesInfo": null,
+    "tvEpisodeInfo": null,
+    "errorMessage": null
+  }

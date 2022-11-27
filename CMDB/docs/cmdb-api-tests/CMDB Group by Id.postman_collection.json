@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "a3d72fe9-0bac-4c7e-b3b9-7bdffecbf1b6",
+		"name": "CMDB Group by Id",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24129698"
+	},
+	"item": [
+		{
+			"name": "Get a Group by id from Rodrigo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7565d56c-eb80-4393-a648-07d5d66a618e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a Group by wrong id from Rodrigo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7565d56c-eb80-4393-a648-07d5d66a618e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a Group by id from Manuel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a Group by wrong id from Manuel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "fd633868-bfa7-4b64-8893-d1138ef5a074",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/groups/20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"20"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

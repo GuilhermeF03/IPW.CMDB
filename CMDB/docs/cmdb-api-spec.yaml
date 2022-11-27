@@ -1,150 +1,13 @@
 openapi: 3.0.0
 servers:
   # Added by API Auto Mocking Plugin
-  - description: CMDB Server
-    url: https://virtserver.swaggerhub.com/GuilhermeF03/CMDB/1.0.0
+  - description: Local CMDB Server
+    url: http://localhost:8080
 info:
-  version: "1.0.0"
+  version: "1.0.5"
   title: CMDB-API
-  description: This API allows smooth movie services, such as listing popular movies, movie search or grouping movies and managing such groups.
+  description: This API allows smooth movie and group management services, such as listing popular movies, movie-search or managing movie groups. To note that group management requires valid user-token.
 paths:
-  /groups:
-    get:
-      tags:
-        - Groups
-      description: Lists all user defined groups
-      operationId: listGroups 
-      security:
-        - bearToken: [] 
-      responses:
-        '401':
-          description: Invalid user token
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/UserInfo'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/UserInfo'
-        '204':
-          description: No groups found for user
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/UserInfo'
-        '200':
-          description: Valid user and group list
-          content:
-            application/json:
-              schema:
-                $ref : '#/components/schemas/UserInfo'
-              example: 
-                status : "All Filipe's 2 list were successfully retrieved."
-                groups:
-                  - name: "Group 1"
-                    description: "First group"
-                    movies :
-                      - name: Interstellar
-                        description : "A movie about space."
-                        duration : 247
-                      - name : Dark Knight
-                        description : "A movie about a guy in a bat costume"
-                        duration : 144
-                  - name: "Group 2"
-                    description : "Second group"
-                    movies : []
-    post:
-      tags:
-        - Groups
-      operationId: createGroup
-      responses:
-        '200':
-          description: successfully created group
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GroupInfo'
-  '/groups/{groupId}':
-    get:
-      tags:
-        - Groups
-      description: returns group info
-      operationId: getGroup
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserInfo'
-    put:
-      tags:
-        - Groups
-      operationId: updateGroup
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserInfo'
-    delete:
-      tags:
-        - Groups
-      operationId: deleteGroup
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserInfo'
-  '/groups/{groupId}/{movieId}':
-    put:
-      tags:
-        - Movies
-      description: adds a movie to a given group
-      operationId: addMovie
-      parameters:
-        - name: groupId 
-          in: path 
-          required: true
-          schema:
-            type: string
-        - name: movieId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GroupInfo'
   /popular:
     get:
       tags:
@@ -155,29 +18,27 @@ paths:
           in: query
           schema:
             type: string
+            maximum: 250
+            minimum : 0
       responses:
-        '200':
-          description: response
+        "200":
+          description: Normal response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserInfo'
-  /user:
-    post: 
-      tags:
-        - User
-      operationId: createUser
-      responses:
-        '200':
-          description: response
+                $ref: "#/components/schemas/Popular-Response"
+        "400":
+          description: Invalid value was given to max.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserInfo'
-  '/search/{movieName}':
+                $ref: "#/components/schemas/Popular-Response"
+              example:
+                message: "Invalid max limit <0> -> must be an integer in [1..250]"  
+  "/search/{movieName}":
     get:
       tags:
-        - Movies
+        - Search Movie
       description: searches for given movie name.
       operationId: searchMovie
       parameters:
@@ -186,16 +47,285 @@ paths:
           required: true
           schema:
             type: string
+        - name: max
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: Normal response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Search-Response"
+  /user:
+    post:
+      tags:
+        - Create-User
+      operationId: createUser
+      security:
+        - bearToken: []
+      responses:
+        "201":
+          description: User was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create-User-Response"
+        "400":
+          description: "An empty body/ invalid user-info format was provided."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create-User-Response"
+              example:
+                message: "No user info was provided. Try again"
+  /groups:
+    get:
+      tags:
+        - Groups
+      description: Lists all user defined groups
+      operationId: listGroups
+      security:
+        - bearToken: []
+      responses:
+        "200":
+          description: ok-status response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List-Groups-Response"
+              example:
+                status: "All Filipe's 2 list were successfully retrieved."
+                groups:
+                  - name: "Group 1"
+                    description: "First group"
+                    number-of-movies: 5
+                    total-duration: 187
+
+                  - name : "Group 2"
+                    description: "Second group"
+                    number-of-movies: 10
+                    total-duration: 217
+        "401":
+          description: "The request was issued with an invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List-Groups-Response"
+              example:
+                error: "User token not provided"
+    post:
+      tags:
+        - Groups
+      operationId: createGroup
+      security:
+        - bearToken: []
+     
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create-Group-Response"
+            example:
+              name: Filmes de verão
+              description: Filmes para se ver no verão
+      responses:
+        "200":
+          description: Successfully created group
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create-Group-Response"
+              example:
+                status: "Group created with id <0>, name : <Filmes de verão>, description: <Filmes para se ver no verão."   
+        "400":
+          description: Invalid request format/empty body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create-Group-Response"
+              example:
+                status: Invalid request format, check <docs/cmdb-api-spec> for valid format.
+        "401":
+          description: Invalid user token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create-Group-Response"
+              example:
+                message: "An invalid token was provided, try again with a valid token."               
+  "/groups/{groupId}":
+    get:
+      tags:
+        - Groups
+      description: returns group info
+      operationId: getGroup
+      security:
+        - bearToken: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
           description: response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieInfo'
+                $ref: "#/components/schemas/Get-Group-Response"
+              example:
+                status: "The group <Filmes de verão>, with id <0> was successfully retreived."
+                "group-info":
+                  name: Filmes de verão
+                  description: "Filomes paras erem vistos no verão"
+                  total-duration: 0
+                  movies: []
+        "401":
+          description: Invalid user token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Get-Group-Response"
+              example:
+                message: "An invalid token was provided. Try again with a valid token" 
+        "404":
+          description: Invalid group id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Get-Group-Response"
+              example:
+                message: "[mem] Group with id <20> could not be found."
+    put:
+      tags:
+        - Groups
+      description:  Updates a given group
+      operationId: updateGroup
+      security:
+        - bearToken: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Group created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Update-Group-Response"
+              example:
+                status: "Group with id <0> was successfully updated."
+                updated-info: 
+                    name: "Filmes de Inverno"
+                    description: "Filmes para serem visto num Inverno frio e chuvoso"
+        "400":
+          description: Invalid body format / user token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Update-Group-Response"
+              example:
+                error: "Invalid body request, check valid format."
+    delete:
+      tags:
+        - Groups
+      operationId: deleteGroup
+      security:
+        - bearToken: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Group deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Delete-Group-Response"
+              example:
+                status: "Filmes de verão was successfully removed from groups list."
+        "401":
+          description: Invalid user token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Delete-Group-Response"
+              example: 
+                status: "An invalid token was provided. Try again with a valid token."
+        "404":
+          description: Invalid group id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Delete-Group-Response"
+              example:
+                status: "[mem] Group with id <20> could not be found."
+                
+  "/groups/{groupId}/{movieId}":
+    put:
+      tags:
+        - Movies
+      description: adds a movie to a given group
+      operationId: addMovie
+      security:
+        - bearToken: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Normal response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Add-Movie-Response"
+    delete:
+      tags:
+        - Movies
+      description: removes a movie rom a given group
+      operationId: deleteMovie
+      security:
+        - bearToken: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              example:
+                status: "The Godfather was successfully removed from <Filmes de verão>."
+
 components:
   securitySchemes:
-    bearToken:            # arbitrary name for the security scheme
+    bearToken: # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -205,34 +335,155 @@ components:
       properties:
         token:
           type: string
-          format: password
-          example : "123-456-789"
+          format: UIID
+          example: "862d4180-2e2a-45f2-9824-2736b674e658"
         name:
-          type : string
-          example : "Filipe"
+          type: string
+          example: "José"
         groups:
           type: array
           items:
-            $ref: '#/components/schemas/GroupInfo'
-    GroupInfo :
+            $ref: "#/components/schemas/GroupInfo"
+    GroupInfo:
       type: object
       properties:
-          name:
-            type: string
-          description :
-            type: string
-          movies :
-            type : array
-            items:
-              $ref: '#/components/schemas/MovieInfo'
-    MovieInfo :
+        name:
+          type: string
+          example: "Filmes da marvel"
+        description:
+          type: string
+          example: "Todos os filmes da marvel."
+        total-duration:
+          type: string
+          example: "570"
+        movies:
+          description: "each movie-id corresponds to a key"
+          type: object
+          properties:
+            movieId:
+              $ref: "#/components/schemas/MovieInfo"
+
+    MovieInfo:
       type: object
       properties:
         title:
           type: string
+          example: "Interstellar"
         description:
           type: string
-        run-time:
-          type : string
+          example: |
+            As reservas naturais da Terra estão chegando ao fim e um grupo de astronautas recebe a missão de verificar possíveis planetas para receberem a população mundial, possibilitando a continuação da espécie. Cooper é chamado para liderar o grupo e aceita a missão sabendo que pode nunca mais ver os filhos…
         year:
-          type : string
+          type: string
+          example: "2014"
+        runtime:
+          type: string
+          example: "169"
+
+    Popular-Response:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              rank:
+                type: string
+                example: "1"
+              id:
+                type: string
+                example: "tt0111161"
+              title:
+                type: string
+                example: "Shawshank Redemption"
+              year:
+                type: string
+                example: "1994"
+              imdbRating:
+                type: string
+                example: "9.2"
+    Create-User-Response:
+      type: object
+      properties:
+        token:
+          type: string
+          format: UIID
+          example: "862d4180-2e2a-45f2-9824-2736b674e658"
+        name:
+          type: string
+          example: "Miguel"
+    Search-Response:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              description:
+                type: string
+    Create-Group-Response:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    Update-Group-Response:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    Delete-Group-Response:
+      type: object
+      properties:
+        status: 
+          type: string
+    List-Groups-Response:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Miguel's groups"
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Filmes nacionais"
+              description:
+                type: string
+                example: "Neste grupo ficam os melhores filmes portugueses"
+              number-of-movies:
+                type: number
+              total-duration:
+                type: number
+    Add-Movie-Response:
+      type: object
+      properties:
+        status:
+          type: string
+          format: |
+            <name>, with id 
+            Get<id>, was successfully added to <group.name>.'
+          example: "<Interstellar>, with id <1234>, was successfully added to <filmes>."
+        movie-info:
+          $ref: "#/components/schemas/MovieInfo"
+    Get-Group-Response:
+      type: object
+      properties:
+        status:
+          type: string
+          format: "The group <group-name>, with id <id>, was successfully retrieved."
+          example: "The group <Filmes> with id <2> was successsfully retreived."

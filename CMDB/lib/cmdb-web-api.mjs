@@ -1,4 +1,4 @@
-// import { convertToHttpError } from "../errors/http-errors.mjs";
+import { convertToHttpError } from "../errors/http-errors.mjs";
 
 // AUX FUNCTION
 function verifyAuthentication(handlerFunction) {
@@ -14,23 +14,23 @@ function verifyAuthentication(handlerFunction) {
   };
 }
 
+export default function (services) {
+  if (!services) throw new Error("[wa] Services module not provided");
 
-export default function(services) {
-  if (!services)
-    throw new Error("[wa] Services module not provided");
-
-/* ----------------------------- [GENERAL] -------------------------------------------------------------------------------------------------- */
+  /* ----------------------------- [GENERAL] -------------------------------------------------------------------------------------------------- */
   async function getPopularMovies(req, resp) {
     try {
-      
-      let max = Object.values(req.query)[0] || 250 ;
+      let max = Object.values(req.query)[0] || 250;
       const popularMovies = await services.getPopularMovies(max);
       resp.status(200).json({
         status: `Retrieved top ${max} movies.`,
         movies: popularMovies,
       });
     } catch (error) {
-      console.error(error)
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -40,41 +40,51 @@ export default function(services) {
       const search = await services.searchMovie(req.params.movieName, max);
 
       if (search.results.size == 0)
-        resp
-          .status(204)
+        return resp
+          .status(200)
           .json({ error: `No results for '${req.params.movieName}'.` });
 
       resp.status(200).json({
         status: `Returned ${search.results.length} results for '${req.params.movieName}'.`,
         results: search.results,
       });
-    } catch {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+    } catch (error) {
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
   async function createUser(req, resp) {
     try {
-      if (req.body == undefined) resp.status(204).json({ error: "No content" });
+      if (Object.keys(req.body).length == 0)
+        return resp
+          .status(400)
+          .json({ message: "No user info was provided. Try again." });
 
       let newUser = await services.createUser(req.body);
 
       resp.status(201).json({
-        status: `User <${newUser.name}> created with token <${newUser.token}>`,
+        status: `User <${newUser.name}> was successfully created with token <${newUser.token}>`,
         "user-info": newUser,
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
-
   /* --------------------------- [GROUP] ---------------------------------------------------------------------------------------------------- */
   async function createGroupInternal(req, resp) {
-    // if(req.body == undefined) resp.status(204).json({error: "No content"})
     try {
+      if (!req.body.name || !req.body.description)
+        return resp
+          .status(400)
+          .json({ error: "Invalid body request, check valid format." });
+
       let newGroup = await services.createGroup(req.userToken, req.body);
 
       resp.status(201).json({
@@ -82,44 +92,48 @@ export default function(services) {
         content: undefined,
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
   async function listGroupsInternal(req, resp) {
     try {
-
       let userGroups = await services.listUserGroups(req.userToken);
-      
+
       resp.status(200).json({
         status: `Retured all ${userGroups.groups.length} <${userGroups.name}>'s groups`,
         "user-groups": userGroups.groups,
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
- async function getGroupByIdInternal(req, resp) {
-  try {
-    let group = await services.getGroupById(
-      req.userToken,
-      req.params.groupId
-    );
-    resp.status(200).json({
-      status: `The group <${group.name}>, with id <${req.params.groupId}>, was successfully retrieved.`,
-      "group-info": group,
-    });
-  } catch (error) {
-    // const httpError = convertToHttpError(error);
-    // resp.status(httpError.status).json(httpError.body);
-  }
+  async function getGroupByIdInternal(req, resp) {
+    try {
+      let group = await services.getGroupById(
+        req.userToken,
+        req.params.groupId
+      );
+      resp.status(200).json({
+        status: `The group <${group.name}>, with id <${req.params.groupId}>, was successfully retrieved.`,
+        "group-info": group,
+      });
+    } catch (error) {
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
+    }
   }
 
   async function updateGroupInternal(req, resp) {
-    // if(req.body == undefined) resp.status(204).json({error: "No content"})
     try {
       let updatedGroup = await services.updateGroup(
         req.userToken,
@@ -132,8 +146,10 @@ export default function(services) {
         "updated-info": updatedGroup,
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -148,30 +164,36 @@ export default function(services) {
         content: undefined,
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
-
 
   /* --------------------------- [MOVIE] ---------------------------------------------------------------------------------------------------- */
   async function addMovieInternal(req, resp) {
     try {
+      let movieInfo = await services.addMovie(
+        req.userToken,
+        req.params.groupId,
+        req.params.movieId
+      );
 
-      let movieInfo = await services.addMovie(req.userToken, req.params.groupId, req.params.movieId);
-      if (!movieInfo){
-        resp.status(400).json({ error: "This movie alredy exists" });
-        return;
-      } 
-
-      let groupInfo = await services.getGroupById(req.userToken,req.params.groupId)
+      let groupInfo = await services.getGroupById(
+        req.userToken,
+        req.params.groupId
+      );
 
       resp.status(200).json({
         status: `<${movieInfo.title}>, with id <${movieInfo.id}>, was successfully added to <${groupInfo.name}>.`,
-        "movie-info": movieInfo
+        "movie-info": movieInfo,
       });
     } catch (error) {
-      console.error(error().code + ":" + error().error)
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
 
@@ -186,11 +208,12 @@ export default function(services) {
         status: `${deletedMovie.title} was successfully removed from <${deletedMovie.group.name}>.`,
       });
     } catch (error) {
-      // const httpError = convertToHttpError(error);
-      // resp.status(httpError.status).json(httpError.body);
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
     }
   }
-
 
   return {
     // This handlers don't require any user token
@@ -208,40 +231,3 @@ export default function(services) {
     getGroupById: verifyAuthentication(getGroupByIdInternal),
   };
 }
-
-
-/** DATA
- * @var {
- *  token1 : {user-info},
- *  token2 : {user-info}
- * }
- */
-
-/** USER-INFO
- * @var {
- * token,
- *  name,
- *  groups : [{group-info}]
- * }
- */
-
-/** GROUP-INFO
- * @var {
- *   name,
- *   description,
- *   total-duration:
- *   movies : {id1 : {movie-info}}
- * }
- *
- *
- * @return {id : array.size - 1,name,description,movie} -> anonymous response
- */
-
-/** MOVIE-INFO
- * @var {
- *   title,
- *   description,
- *   year,
- *   runtime,
- * }
- */

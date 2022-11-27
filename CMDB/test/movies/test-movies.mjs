@@ -1,15 +1,13 @@
 // const apiKey = "k_iw34bd1e"; acabou
 // const apiKey = "k_agj13wln"; acabou
-const apiKey = "k_nibrgm60";
-const top250Url = `https://imdb-api.com/en/API/Top250Movies/${apiKey}`;
-const searchMovieByNameUrl = `https://imdb-api.com/en/API/SearchMovie/${apiKey}/`;
-const getMovieByIdUrl = `https://imdb-api.com/en/API/Title/${apiKey}/`;
+const top250Path = `CMDB/test/movies/top250.json`;
+const searchMovieByNamePath = `CMDB/test/movies/search.json/`;
+const getMovieByIdPath = `CMDB/test/movies/movies-test.json`;
 
-import fetch, { FetchError } from "node-fetch";
 import { errors } from "../errors/http-errors.mjs";
 
 async function getTop250() {
-  let top = await parseFetch(top250Url);
+  let top = await mockFetch(top250Path);
   return {
     results: top.items.map(
       (mov) =>
@@ -24,8 +22,9 @@ async function getTop250() {
   };
 }
 
+// TODO: add error
 async function searchMovieByName(movieName) {
-  let search = await parseFetch(`${searchMovieByNameUrl}${movieName}`);
+  let search = await mockFetch(`${searchMovieByNameUrl}${movieName}`);
   return {
     results: search.results.map(
       (elem) =>
@@ -39,7 +38,7 @@ async function searchMovieByName(movieName) {
 }
 
 async function getMovieById(movieId) {
-  let movie = await parseFetch(`${getMovieByIdUrl}${movieId}`);
+  let movie = await mockFetch(`${getMovieByIdUrl}${movieId}`);
 
   if (!movie.title)
     return Promise.reject(
@@ -63,7 +62,7 @@ export default {
   getMovieById,
 };
 
-async function parseFetch(url) {
+async function mockFetch(path) {
   try {
     const response = await fetch(url);
 
@@ -73,6 +72,7 @@ async function parseFetch(url) {
     const data = isJson ? await response.json() : null;
 
     if (!response.ok) {
+      // get error message from body or default to response status
       const error = (data && data.message) || response.status;
       return Promise.reject(error);
     }
