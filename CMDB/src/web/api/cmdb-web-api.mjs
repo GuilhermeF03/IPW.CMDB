@@ -1,6 +1,6 @@
-import { convertToHttpError } from "../errors/http-errors.mjs";
+import { convertToHttpError } from "../../../errors/http-errors.mjs";
 
-// AUX FUNCTION
+// AUX FUNCTIONS
 function verifyAuthentication(handlerFunction) {
   return function (req, resp) {
     let userToken = req.get("Authorization");

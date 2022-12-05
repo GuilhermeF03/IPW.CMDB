@@ -1,4 +1,4 @@
-import { errors } from "../errors/http-errors.mjs";
+import { errors } from "../../errors/http-errors.mjs";
 import crypto from "node:crypto"
 
 
