@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { errors } from "../errors/http-errors.mjs";
+import { errors } from "../../errors/http-errors.mjs";
 
 const dataPath = "CMDB/data/data.json";
 

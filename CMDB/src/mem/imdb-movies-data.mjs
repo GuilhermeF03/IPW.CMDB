@@ -6,7 +6,7 @@ const searchMovieByNameUrl = `https://imdb-api.com/en/API/SearchMovie/${apiKey}/
 const getMovieByIdUrl = `https://imdb-api.com/en/API/Title/${apiKey}/`;
 
 import fetch, { FetchError } from "node-fetch";
-import { errors } from "../errors/http-errors.mjs";
+import { errors } from "../../errors/http-errors.mjs";
 
 async function getTop250() {
   let top = await parseFetch(top250Url);
