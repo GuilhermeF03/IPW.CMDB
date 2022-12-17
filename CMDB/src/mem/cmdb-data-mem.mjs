@@ -85,8 +85,11 @@ function listUserGroups(userToken) {
           "total-duration": elem["total-duration"],
         })
     );
-    
+
+    if (!groups) throw new Error("[Mem] No groups found");
+  
     return { name: data[userToken].name, groups };
+
   });
 }
 
@@ -94,9 +97,14 @@ function getGroupById(userToken, groupId) {
   return readData(dataPath)
     .then((data) => {
       if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
-      if (groupId >= data[userToken].groups.length) return Promise.reject(errors.NOT_FOUND(`[mem] Group with id <${groupId}> could not be found.`));
+      if (groupId >= data[userToken].groups.length) return Promise.reject(errors.NOT_FOUND(`[Mem] Group with id <${groupId}> could not be found.`));
 
-      return data[userToken].groups[groupId];
+      let group = data[userToken].groups[groupId]  
+
+      if (!group)
+      return Promise.reject(errors.NOT_FOUND("[Mem] The group you were trying to find does not exist."))
+
+      return group;
     })
 }
 
@@ -104,10 +112,12 @@ function updateGroup(userToken, groupId, updateInfo) {
   return readData(dataPath)
     .then((data) => {
       if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
-      if (groupId >= data[userToken].groups.length) return Promise.reject(errors.NOT_FOUND(`[mem] Group with id <${groupId}> could not be found.`));
+      if (groupId >= data[userToken].groups.length) return Promise.reject(errors.NOT_FOUND(`[Mem] Group with id <${groupId}> could not be found.`));
 
 
       const group = data[userToken].groups[groupId];
+      if (!group) return Promise.reject(errors.NOT_FOUND())
+
 
       group.name = updateInfo.name;
       group.description = updateInfo.description;
@@ -125,7 +135,9 @@ function deleteGroup(userToken, groupId) {
     .then((data) => {
       if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
       if (groupId >= data[userToken].groups.length)
-        return Promise.reject(errors.NOT_FOUND(`[mem] Group with id <${groupId}> could not be found.`));
+        return Promise.reject(errors.NOT_FOUND(`[Mem] Group with id <${groupId}> could not be found.`));
+
+      if(groupId >= data[userToken].groups.length) throw new Error("[Mem] Group not found");
 
       data[userToken].groups.splice(groupId, 1);
       writeData(dataPath, data);
@@ -138,14 +150,14 @@ function addMovie(userToken, groupId, mInfo) {
     if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
 
     if (groupId >= data[userToken].groups.length)
-      return Promise.reject(errors.NOT_FOUND(`[mem] Group with id <${groupId}> could not be found.`));
+      return Promise.reject(errors.NOT_FOUND(`[Mem] Group with id <${groupId}> could not be found.`));
 
     let group = data[userToken].groups[groupId];
     let movie = group.movies[mInfo.id];
 
     if (movie)
       return Promise.reject(
-        errors.BAD_REQUEST("The movie you're trying to add was already added.")
+        errors.BAD_REQUEST("[Mem] The movie you're trying to add was already added.")
       );
 
     group.movies[mInfo.id] = mInfo;
@@ -162,7 +174,7 @@ function deleteMovie(userToken, groupId, movieId) {
     .then((data) => {
       if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
       if (groupId >= data[userToken].groups.length)
-        return Promise.reject(errors.NOT_FOUND(`[mem] Group with id <${groupId}> could not be found.`));
+        return Promise.reject(errors.NOT_FOUND(`[Mem] Group with id <${groupId}> could not be found.`));
 
       let group = data[userToken].groups[groupId];
       let movie = group.movies[movieId];

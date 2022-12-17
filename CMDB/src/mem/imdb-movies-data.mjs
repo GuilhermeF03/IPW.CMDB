@@ -44,7 +44,7 @@ async function getMovieById(movieId) {
   if (!movie.title)
     return Promise.reject(
       errors.NOT_FOUND(
-        "[imdb] The movie you're trying to access could not be found."
+        "[Imdb] The movie you're trying to access could not be found."
       )
     );
 
@@ -79,7 +79,7 @@ async function parseFetch(url) {
     return data;
   } catch (error) {
     if (error.code == "ENOTFOUND")
-      console.error("[imdb] 502: BAD GATEWAY - check your network.");
+      console.error("[E] 502: BAD GATEWAY - check your network.");
     console.error();
   }
 }
