@@ -1,0 +1,29 @@
+<html>
+    <head>
+    <title>Handlebar test</title>
+    </head>
+    <body>
+        <div>
+            <h1>Handlebar test</h1>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Self</th>
+                        <th>Key</th>
+
+                    </tr>
+                {{#each people}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{age}}</td>
+                        <td>{{.}}</td>
+
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

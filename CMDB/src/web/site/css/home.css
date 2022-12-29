@@ -1,0 +1,207 @@
+ 
+ @font-face {
+  font-family: 'Roboto', sans-serif;
+  src: url('https://fonts.googleapis.com/css2?family=Roboto&display=swap')
+ }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+}
+
+/* NAV BAR -----------------------------------------------------------*/
+nav {
+  height: 8vh;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  /* margin-bottom: 702px; */
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1%;
+}
+
+nav li{
+  list-style: none;
+  display: inline-block;
+  margin-right: 1vh;
+  margin-left: 1vh;
+  background-color: rgba(0,0,0,0);
+  transition: 0.2s;
+}
+
+nav li:hover{
+  padding-bottom: 4%;
+  padding-top: 4%;
+  padding-right: 16%;
+  padding-left: 18%;
+  /* width: 10%; */
+  /* height: 10%; */
+  background-color: rgb(172 49 255 / 43%);
+  border-radius: 15px;
+  transition: 0.2s;
+}
+
+nav li a{
+  text-decoration: none;
+  color: #f0f0f0;
+  font-size: 1.7vh;
+  
+}
+
+/* Search bar --------------------------------- */
+.search-bar{
+  width: 1.6vw;
+  height: 3.3vh;
+  background-image: url(../../resources/search-icon.svg);
+  background-color: rgb(172 49 255 / 43%);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-y: 3px;
+  background-position-x: 2.5px;
+  border-radius: 50px;
+  transition: width,height, 0.25s ease;
+}
+
+.search-bar:hover{
+  width: 19vw;
+  height: 3.2vh;
+  background-image: url(../../resources/search-icon.svg);
+  background-repeat: no-repeat;
+  background-position-y: 1.5px;
+  background-position-x: 5px;
+  background-size: contain;
+  border-radius: 20px;
+  transition: 0.25s ease;
+  padding: 0%;
+}
+
+#searc-icon{
+  background: url(../../resources//Cover.png);
+  background-size: 5px;
+  width: 2vh;
+  height: 2vh;
+}
+
+
+/* CONTENT ----------------------------------------------------------------*/
+header {
+  width: 100%;
+  height: 100vh;
+}
+
+.bg{
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(
+    rgba(0,0,0,0.7), rgba(0,0,0,0.5)),
+    url(../../resources//bg-test4.jpg);
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container{
+  margin: 0 auto;
+  width: 90%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel{
+  margin: 12px;
+  width: 30%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom right,
+   rgb(20 0 255 / 63%),
+   rgb(146 26 165 / 87%));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.4s ease;
+}
+
+.panel:hover{
+  margin: 12px;
+  background: linear-gradient( to bottom right,
+  rgba(21, 0, 255, 0.89),rgba(146, 26, 165, 0.89));
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.4s ease;
+}
+
+.panel:hover a{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8vh;
+  text-decoration: none;
+  color: #f0f0f0;
+}
+.panel a{
+  display: none;
+}
+
+
+
+/* Panels ---------------------------------------------------- */
+#popular-movies{
+  background:url(../../resources/popular-cover.jpg);
+  background-size: cover;
+  transition: filter 0 0s;
+  transition: background 1 0.25s;
+}
+
+
+#popular-movies:hover{
+  height: 100%;
+  width: 60%;
+  background: linear-gradient( to bottom right,
+  rgba(0,0,0,0.7),rgba(0,0,0,0.5)),
+  url(../../resources/popular-cover.jpg);
+  background-size: cover;
+  transition: 0.25s ease;
+}
+
+#about{
+  background: url(../../resources/about-bg.jpeg);
+  background-size: cover;
+  transition: filter 0 0s;
+  transition: background 1 0.25s;
+}
+#about:hover{
+  height: 130%;
+  width: 50%;
+  background: linear-gradient( to bottom right,
+  rgba(0,0,0,0.7),rgba(0,0,0,0.5)),
+  url(../../resources/about-bg.jpeg);
+  background-size: cover;
+  transition: 0.25s ease;
+}
+
+
+#column-text{
+  display: inline-block;
+  filter:none;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}

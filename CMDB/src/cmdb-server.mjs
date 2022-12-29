@@ -28,7 +28,7 @@ app.use(cors());
 
 // View setup
 app.set('view engine', 'hbs');
-app.set('views', __dirname + '/views');
+app.set('views', path.join(__dirname,'/views'));
 
 // [API Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
@@ -51,26 +51,26 @@ app.delete("api/groups/:groupId/:movieId", webapi.deleteMovie);
 
 // [WEB Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
-/*app.get("/popular", webapi.getPopularMovies);
-app.get("/search/:movieName", webapi.searchMovie);
+app.get("/popular", website.getPopularMovies);
+app.get("/search/:movieName", website.searchMovie);
 // USER
-app.post("/users", webapi.createUser);
+app.post("/users", website.createUser);
 // GROUPS
-app.get("dashboard/groups", webapi.listGroups);
-app.post("/groups", webapi.createGroup);
+app.get("dashboard/groups", website.listGroups);
+app.post("/groups", website.createGroup);
 
-app.get("dashboard/groups/:groupId", webapi.getGroupById);
-app.put("/groups/:groupId", webapi.updateGroup);
-app.delete("/groups/:groupId", webapi.deleteGroup);
+app.get("dashboard/groups/:groupId", website.getGroupById);
+app.put("/groups/:groupId", website.updateGroup);
+app.delete("/groups/:groupId", website.deleteGroup);
 
-app.get("dashboard/movies/:movieId", webapi.getMovie)
-app.put("/groups/:groupId/:movieId", webapi.addMovie);
-app.delete("/groups/:groupId/:movieId", webapi.deleteMovie);
+app.get("dashboard/movies/:movieId", website.getMovie)
+app.put("/groups/:groupId/:movieId", website.addMovie);
+app.delete("/groups/:groupId/:movieId", website.deleteMovie);
 
-*/
+
 // Server boot-up
-console.log("[>] Setting up server...");
-console.log(`Error labeling : 
+console.log(`[>] Setting up server...\n
+           Error labeling : 
            [Imdb] -> Imdb API
            [WA] -> Web API
            [Els] -> Elasticsearch API

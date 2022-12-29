@@ -119,8 +119,8 @@ export default function (services) {
       console.log(`[>] Successfully retrieved all user's groups.`)
 
       resp.status(200).json({
-        status: `Retured all ${userGroups.groups.length} <${userGroups.name}>'s groups`,
-        "user-groups": userGroups.groups,
+        status: `Returned all user's ${userGroups.length} groups`,
+        "user-groups": userGroups,
       });
     } catch (error) {
       if (!error.code) console.error(error);

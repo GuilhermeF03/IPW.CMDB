@@ -17,19 +17,19 @@ function createUser(userInfo) {
 /* ---------------------- [GROUP] -------------------------------------------------------------------------------------------------------- */
 function createGroup(userToken, groupInfo) {
   return fetch(baseURL + `groups/_doc?refresh=wait_for`, {
-    method: "POST",
-    body: JSON.stringify({
+      method: "POST",
+      body: JSON.stringify({
       userToken: userToken,
       name: groupInfo.name,
       description: groupInfo.description,
-    }),
-    headers: {
+      }),
+      headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-    },
+      },
   }).then((response) => response.json())
-    //TODO: CHECK
-    .then(result => { return groupInfo })
+      //TODO: CHECK
+      .then(result => { return {id: result._id, name: groupInfo.name, description: groupInfo.description } })
 }
 
 function listUserGroups(userToken) {
@@ -37,16 +37,20 @@ function listUserGroups(userToken) {
     headers: { "Accept": "application/json" },
   })
     .then(response => response.json())
-    .then(body => body.hits.hits.map(t => t._source))
-    // .then(groups => console.log(groups)); undifeined
-  // TODO: retorno
+    .then(body => 
+      body.hits.hits.map(t => 
+        t = {id: t._id,
+            name: t._source.name,
+            description: t._source.description,
+            "number of movies":----,
+            "total duration": }))
 }
 
 function getGroupById(groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`)
     // TODO: VERIFY
     .then(response => response.json())
-    .then(body => body._source);
+    .then(body => body = {name: body.name, description: body.description});
 }
 
 function updateGroup(groupId, updateInfo) {
