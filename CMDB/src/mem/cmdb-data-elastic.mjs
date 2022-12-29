@@ -32,19 +32,20 @@ function createGroup(userToken, groupInfo) {
       .then(result => { return {id: result._id, name: groupInfo.name, description: groupInfo.description } })
 }
 
-function listUserGroups(userToken) {
-  return fetch(baseURL + `groups/_search?q=userToken:"${userToken}"`, {
-    headers: { "Accept": "application/json" },
-  })
-    .then(response => response.json())
-    .then(body => 
-      body.hits.hits.map(t => 
-        t = {id: t._id,
-            name: t._source.name,
-            description: t._source.description,
-            "number of movies":----,
-            "total duration": }))
-}
+// TODO
+// function listUserGroups(userToken) {
+//   return fetch(baseURL + `groups/_search?q=userToken:"${userToken}"`, {
+//     headers: { "Accept": "application/json" },
+//   })
+//     .then(response => response.json())
+//     .then(body => 
+//       body.hits.hits.map(t => 
+//         t = {id: t._id,
+//             name: t._source.name,
+//             description: t._source.description,
+//             "number of movies":----,
+//             "total duration": }))
+// }
 
 function getGroupById(groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`)
@@ -68,7 +69,7 @@ function updateGroup(groupId, updateInfo) {
 function deleteGroup(groupId) { 
   return fetch(baseURL + `groups/_doc/${groupId}`, { method: "DELETE" })
     .then(response => response.json())
-    .then( removeGroupMovies(groupId))
+    .then(removeGroupMovies(groupId))
 }
 
 function removeGroupMovies(groupId) {
@@ -78,7 +79,7 @@ function removeGroupMovies(groupId) {
 }
 
 /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
-// TODO: CHECKED
+// TODO: rever
 function addMovie(groupId, movieInfo) {
   return fetch(baseURL + `movies/_doc?refresh=wait_for`, {
     method: "POST",
@@ -98,7 +99,8 @@ function addMovie(groupId, movieInfo) {
       "Accept": "application/json",
     },
   }).then(response => response.json())
- }
+      .then(body => body = { id: body._id, status: body.result});
+}
 
 function getMovieById(movieId){
   return fetch(baseURL + `movies/_doc/${movieId}`)
