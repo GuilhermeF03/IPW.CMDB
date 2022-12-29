@@ -195,6 +195,28 @@ export default function (services) {
   }
 
   /* --------------------------- [MOVIE] ---------------------------------------------------------------------------------------------------- */
+  
+  async function getMovieById(req,resp){
+    try{
+      let movieInfo = await services.getMovieById(req.params.movieId)
+
+      resp.status(200).json({
+        status: `<${movie.title}> successfully retrieved.`,
+        "movie-info": movieInfo
+      })
+      
+
+    }catch(error) {
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
+    }
+  }
+  
+  
+  
+  
   async function addMovieInternal(req, resp) {
     try {
       let movieInfo = await services.addMovie(
@@ -247,8 +269,8 @@ export default function (services) {
     // This handlers don't require any user token
     getPopularMovies,
     searchMovie,
+    getMovieById,
     createUser,
-
     // Each handler requires a user token, token is validated on 'services' module
     createGroup: verifyAuthentication(createGroupInternal),
     updateGroup: verifyAuthentication(updateGroupInternal),

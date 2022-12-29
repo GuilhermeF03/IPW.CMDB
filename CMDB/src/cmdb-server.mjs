@@ -34,6 +34,7 @@ app.set('views', __dirname + '/views');
 // GENERAL
 app.get("api/popular", webapi.getPopularMovies);
 app.get("api/search/:movieName", webapi.searchMovie);
+app.get("api/movie/:movieId", webapi.getMovieById);
 // USER
 app.post("api/users", webapi.createUser);
 // GROUPS

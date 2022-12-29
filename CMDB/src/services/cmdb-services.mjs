@@ -102,6 +102,11 @@ export default function(data, mem) {
  
 
   /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
+  async function getMovieById(movieId) {return await data.getMovieById(movieId);}
+  
+  
+  
+  
   async function addMovie(userToken, groupId, movieId) {
 
     groupId = Number(groupId);
@@ -131,6 +136,7 @@ export default function(data, mem) {
   return {
     getPopularMovies,
     searchMovie,
+    getMovieById,
     createUser,
     createGroup,
     updateGroup,

@@ -19,6 +19,7 @@ async function getTop250() {
           title: mov.title,
           year: mov.year,
           imDbRating: mov.imDbRating,
+          image: mov.image,
         })
     ),
   };
@@ -33,6 +34,7 @@ async function searchMovieByName(movieName) {
           id: elem.id,
           title: elem.title,
           description: elem.description,
+          image: elem.image,
         })
     ),
   };
@@ -54,7 +56,11 @@ async function getMovieById(movieId) {
     description: movie.plot,
     runtime: movie.runtimeMins,
     year: movie.year,
+    image: movie.image,
+    directors: movie.directors,
+    actors: movie.actorsList.map((actor) => (elem = { name: actor.name, Character: actor.asCharacter})),
   };
+
 }
 
 export default {
