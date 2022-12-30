@@ -54,7 +54,7 @@ async function getMovieById(movieId) {
     id: movie.id,
     title: movie.title,
     description: movie.plot,
-    runtime: movie.runtimeMins,
+    runtime: parseInt(movie.runtimeMins),
     year: movie.year,
     image: movie.image,
     directors: movie.directors,

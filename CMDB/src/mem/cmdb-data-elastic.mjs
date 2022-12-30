@@ -1,3 +1,4 @@
+import { response } from "express";
 import fetch from "node-fetch";
 
 const baseURL = "http://localhost:9200/";
@@ -33,19 +34,28 @@ function createGroup(userToken, groupInfo) {
 }
 
 // TODO
-// function listUserGroups(userToken) {
-//   return fetch(baseURL + `groups/_search?q=userToken:"${userToken}"`, {
-//     headers: { "Accept": "application/json" },
-//   })
-//     .then(response => response.json())
-//     .then(body => 
-//       body.hits.hits.map(t => 
-//         t = {id: t._id,
-//             name: t._source.name,
-//             description: t._source.description,
-//             "number of movies":----,
-//             "total duration": }))
-// }
+function listUserGroups(userToken) {
+  return fetch(baseURL + `groups/_search?q=userToken:"${userToken}"`, {
+    headers: { Accept: "application/json" },
+  })
+    .then((response) => response.json())
+    .then(async (body) => {
+      let hits = body.hits.hits;
+      let array = [];
+      for (const i in hits) {
+        let moviesInfo = await getGroupMoviesInfo(hits[i]._id);
+        array.push({
+          id: hits[i]._id,
+          name: hits[i]._source.name,
+          description: hits[i]._source.description,
+          "number of movies": moviesInfo.numberOfMovies,
+          "total duration": moviesInfo.totalDuration,
+        });
+      }
+      return array;
+    });
+}
+
 
 function getGroupById(groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`)
@@ -54,6 +64,7 @@ function getGroupById(groupId) {
     .then(body => body = {name: body.name, description: body.description});
 }
 
+// TODO: add userToken
 function updateGroup(groupId, updateInfo) {
   return fetch(baseURL + `groups/_doc/${groupId}`, {
     method: "PUT",
@@ -63,6 +74,11 @@ function updateGroup(groupId, updateInfo) {
       "Accept": "application/json",
     },
   }).then(response => response.json())
+    .then(body => body = {
+      status: body.result,
+      name: updateInfo.name,
+      description: updateInfo.description
+    });
 }
 
 // TODO: CHECKED
@@ -70,12 +86,6 @@ function deleteGroup(groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`, { method: "DELETE" })
     .then(response => response.json())
     .then(removeGroupMovies(groupId))
-}
-
-function removeGroupMovies(groupId) {
-  return fetch(baseURL + `movies/_delete_by_query?q=groupId:"${groupId}"`, {
-    method: "POST"})
-    .then(response => response.json())
 }
 
 /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
@@ -99,7 +109,17 @@ function addMovie(groupId, movieInfo) {
       "Accept": "application/json",
     },
   }).then(response => response.json())
-      .then(body => body = { id: body._id, status: body.result});
+    .then(body => body = {
+      status: body.result,
+      id: body._id,
+      title: movieInfo.title,
+      description: movieInfo.description,
+      runtime: movieInfo.runtimeMins,
+      year: movieInfo.year,
+      image: movieInfo.image,
+      directors: movieInfo.directors,
+      actors : movieInfo.actors
+    });
 }
 
 function getMovieById(movieId){
@@ -108,11 +128,32 @@ function getMovieById(movieId){
   .then(body => body._source);
 }
 
-function deleteMovie(movieId) {
-  return fetch(baseURL + `movies/_doc/${movieId}`, {method: "DELETE"})
-    .then(response => response.json())
- }
+/* --------------------- [AUX] ---------------------------------------------------------------------------------------------------- */
+function getGroupMoviesInfo(groupId){
+  return fetch(baseURL + `movies/_search?q=groupId=${groupId}`)
+  .then(response => response.json())
+  .then(body => {
+      let totalDuration = 0;
+    let movies = body.hits.hits.map(hits => hits._source)
+    for (const mov in movies) {
+        totalDuration += movies[mov].runtime
+      }
+      return {numberOfMovies : body.hits.total.value, totalDuration: totalDuration}
+  })
+}
 
+
+function removeGroupMovies(groupId) {
+  return fetch(baseURL + `movies/_delete_by_query?q=groupId:"${groupId}"`, {
+    method: "POST"})
+    .then(response => response.json())
+  }
+  
+  function deleteMovie(movieId) {
+    return fetch(baseURL + `movies/_doc/${movieId}`, {method: "DELETE"})
+    .then(response => response.json())
+  }
+    
 export default {
   createUser,
   createGroup,
