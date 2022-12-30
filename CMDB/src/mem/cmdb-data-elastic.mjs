@@ -1,4 +1,3 @@
-import { response } from "express";
 import fetch from "node-fetch";
 
 const baseURL = "http://localhost:9200/";
@@ -10,27 +9,36 @@ function createUser(userInfo) {
     body: JSON.stringify(userInfo),
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     },
   }).then((response) => response.json());
 }
 
 /* ---------------------- [GROUP] -------------------------------------------------------------------------------------------------------- */
 function createGroup(userToken, groupInfo) {
-  return fetch(baseURL + `groups/_doc?refresh=wait_for`, {
+  return (
+    fetch(baseURL + `groups/_doc?refresh=wait_for`, {
       method: "POST",
       body: JSON.stringify({
-      userToken: userToken,
-      name: groupInfo.name,
-      description: groupInfo.description,
+        userToken: userToken,
+        name: groupInfo.name,
+        description: groupInfo.description,
       }),
       headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
-  }).then((response) => response.json())
+    })
+      .then((response) => response.json())
       //TODO: CHECK
-      .then(result => { return {id: result._id, name: groupInfo.name, description: groupInfo.description } })
+      .then((result) => {
+        return {
+          id: result._id,
+          name: groupInfo.name,
+          description: groupInfo.description,
+        };
+      })
+  );
 }
 
 // TODO
@@ -56,12 +64,16 @@ function listUserGroups(userToken) {
     });
 }
 
-
 function getGroupById(groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`)
-    // TODO: VERIFY
-    .then(response => response.json())
-    .then(body => body = {name: body.name, description: body.description});
+    .then((response) => response.json())
+    .then(
+      (body) =>
+        (body = {
+          name: body._source.name,
+          description: body._source.description,
+        })
+    );
 }
 
 // TODO: add userToken
@@ -71,21 +83,27 @@ function updateGroup(groupId, updateInfo) {
     body: JSON.stringify(updateInfo),
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     },
-  }).then(response => response.json())
-    .then(body => body = {
-      status: body.result,
-      name: updateInfo.name,
-      description: updateInfo.description
-    });
+  })
+    .then((response) => response.json())
+    .then(
+      (body) =>
+        (body = {
+          status: body.result,
+          name: updateInfo.name,
+          description: updateInfo.description,
+        })
+    );
 }
 
 // TODO: CHECKED
-function deleteGroup(groupId) { 
+function deleteGroup(groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`, { method: "DELETE" })
-    .then(response => response.json())
-    .then(removeGroupMovies(groupId))
+    .then((response) => response.json())
+    .then(result => result = {status: result.result, groupId: groupId})
+    .then(removeGroupMovies(groupId));
+    
 }
 
 /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
@@ -100,60 +118,67 @@ function addMovie(groupId, movieInfo) {
       description: movieInfo.description,
       runtime: movieInfo.runtimeMins,
       year: movieInfo.year,
-      image :movieInfo.image,
-      directors : movieInfo.directors,
-      actors : movieInfo.actors
+      image: movieInfo.image,
+      directors: movieInfo.directors,
+      actors: movieInfo.actors,
     }),
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     },
-  }).then(response => response.json())
-    .then(body => body = {
-      status: body.result,
-      id: body._id,
-      title: movieInfo.title,
-      description: movieInfo.description,
-      runtime: movieInfo.runtimeMins,
-      year: movieInfo.year,
-      image: movieInfo.image,
-      directors: movieInfo.directors,
-      actors : movieInfo.actors
-    });
+  })
+    .then((response) => response.json())
+    .then(
+      (body) =>
+        (body = {
+          status: body.result,
+          id: body._id,
+          title: movieInfo.title,
+          description: movieInfo.description,
+          runtime: movieInfo.runtimeMins,
+          year: movieInfo.year,
+          image: movieInfo.image,
+          directors: movieInfo.directors,
+          actors: movieInfo.actors,
+        })
+    );
 }
 
-function getMovieById(movieId){
+function getMovieById(movieId) {
   return fetch(baseURL + `movies/_doc/${movieId}`)
-  .then(response => response.json())
-  .then(body => body._source);
+    .then((response) => response.json())
+    .then((body) => body._source);
 }
 
 /* --------------------- [AUX] ---------------------------------------------------------------------------------------------------- */
-function getGroupMoviesInfo(groupId){
+function getGroupMoviesInfo(groupId) {
   return fetch(baseURL + `movies/_search?q=groupId=${groupId}`)
-  .then(response => response.json())
-  .then(body => {
+    .then((response) => response.json())
+    .then((body) => {
       let totalDuration = 0;
-    let movies = body.hits.hits.map(hits => hits._source)
-    for (const mov in movies) {
-        totalDuration += movies[mov].runtime
+      let movies = body.hits.hits.map((hits) => hits._source);
+      for (const mov in movies) {
+        totalDuration += movies[mov].runtime;
       }
-      return {numberOfMovies : body.hits.total.value, totalDuration: totalDuration}
-  })
+      return {
+        numberOfMovies: body.hits.total.value,
+        totalDuration: totalDuration,
+      };
+    });
 }
-
 
 function removeGroupMovies(groupId) {
   return fetch(baseURL + `movies/_delete_by_query?q=groupId:"${groupId}"`, {
-    method: "POST"})
-    .then(response => response.json())
-  }
-  
-  function deleteMovie(movieId) {
-    return fetch(baseURL + `movies/_doc/${movieId}`, {method: "DELETE"})
-    .then(response => response.json())
-  }
-    
+    method: "POST",
+  }).then((response) => response.json());
+}
+
+function deleteMovie(movieId) {
+  return fetch(baseURL + `movies/_doc/${movieId}`, { method: "DELETE" }).then(
+    (response) => response.json()
+  );
+}
+
 export default {
   createUser,
   createGroup,
