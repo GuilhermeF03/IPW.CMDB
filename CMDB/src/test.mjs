@@ -1,5 +1,8 @@
 import fetch from "node-fetch";
 
+
+
+/*
 const baseURL = "http://localhost:9200/";
 
 
@@ -30,4 +33,4 @@ let movieInfo = {
 }
 
 let updateInfo = {userToken: userToken, name: "bananas", description: "bananas fazem bem à saúde"} 
-console.log(await deleteGroup("lUEMYIUBC0x3lnHVgaWF"))
+console.log(await deleteGroup("lUEMYIUBC0x3lnHVgaWF"))*/

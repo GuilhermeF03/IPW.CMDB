@@ -1,21 +1,57 @@
 export default function (services){
-    async function getPopularMovies(max){}
-    async function searchMovie(movieName){}
-    async function getMovieById(movieId)
+
+    async function getHome(req, resp) {
+        sendFile('index.html', resp);
+    }
+  
+    async function getCss(req, resp) {
+        sendFile('site.css', resp);
+    }
+
+    async function getPopularMovies(req,resp){
+        
+    }
+
+    async function searchMovie(req, resp){
+
+    }
+
+    async function getMovieById(req, resp){
+
+    }
     // USER
-    async function createUser(){ 
+    async function createUser(req, resp){ 
 
     }
     // GROUPS
-    async function listGroups(userToken){}
-    async function createGroup(userToken, groupInfo){}
+    async function listGroups(req, resp){
+
+    }
+
+    async function createGroup(req, resp){
+
+    }
     
-    async function getGroupById(id){}
-    async function updateGroup(){}
-    async function deleteGroup(){}
+    async function getGroupById(req, resp){
+
+    }
+
+    async function updateGroup(req, resp){
+
+    }
+
+    async function deleteGroup(req, resp){
+
+    }
+
     // MOVIES
-    async function addMovie(){}
-    async function deleteMovie(){}
+    async function addMovie(req, resp){
+
+    }
+
+    async function deleteMovie(req, resp){
+
+    }
     
     return {
         getPopularMovies,

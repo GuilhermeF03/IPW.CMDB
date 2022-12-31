@@ -16,11 +16,10 @@ function createUser(userInfo) {
 
 /* ---------------------- [GROUP] -------------------------------------------------------------------------------------------------------- */
 function createGroup(userToken, groupInfo) {
-  return (
-    fetch(baseURL + `groups/_doc?refresh=wait_for`, {
+  return fetch(baseURL + `groups/_doc?refresh=wait_for`, {
       method: "POST",
       body: JSON.stringify({
-        userToken: userToken,
+        userId: userToken,
         name: groupInfo.name,
         description: groupInfo.description,
       }),
@@ -30,85 +29,64 @@ function createGroup(userToken, groupInfo) {
       },
     })
       .then((response) => response.json())
-      //TODO: CHECK
-      .then((result) => {
-        return {
-          id: result._id,
-          name: groupInfo.name,
-          description: groupInfo.description,
-        };
-      })
-  );
+      .then(result => result = {id: result._id, name: groupInfo.name, description: groupInfo.description,})
 }
 
-// TODO
 function listUserGroups(userToken) {
-  return fetch(baseURL + `groups/_search?q=userToken:"${userToken}"`, {
+  return fetch(baseURL + `groups/_search?q=userId:"${userToken}"`, {
     headers: { Accept: "application/json" },
   })
     .then((response) => response.json())
-    .then(async (body) => {
-      let hits = body.hits.hits;
+    // filter properties
+    .then(async (body) => 
+    {
+      let hits = body.hits.hits; // search results
       let array = [];
       for (const i in hits) {
         let moviesInfo = await getGroupMoviesInfo(hits[i]._id);
-        array.push({
-          id: hits[i]._id,
-          name: hits[i]._source.name,
-          description: hits[i]._source.description,
-          "number of movies": moviesInfo.numberOfMovies,
-          "total duration": moviesInfo.totalDuration,
-        });
-      }
-      return array;
+        let tmp = { id : hits[i]._id, name : hits[i]._source.name, description: hits[i]._source.description };
+        hits[i] = {
+          id : tmp.id,
+          name : tmp.name,
+          description: tmp.description, 
+          "number of movies" : moviesInfo.numberOfMovies, 
+          "total duration" : moviesInfo.totalDuration};
+      }  
+      return hits;
     });
 }
 
-function getGroupById(groupId) {
+function getGroupById(userToken, groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`)
     .then((response) => response.json())
-    .then(
-      (body) =>
-        (body = {
-          name: body._source.name,
-          description: body._source.description,
-        })
-    );
+    .then((body) => body = { name: body._source.name, description: body._source.description,});
 }
 
-// TODO: add userToken
-function updateGroup(groupId, updateInfo) {
+function updateGroup(userToken, groupId, updateInfo) {
   return fetch(baseURL + `groups/_doc/${groupId}`, {
     method: "PUT",
-    body: JSON.stringify(updateInfo),
+    body: JSON.stringify({
+      userId: userToken,
+      name: updateInfo.name,
+      description: updateInfo.description,
+    }),
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-    },
-  })
+    },})
     .then((response) => response.json())
-    .then(
-      (body) =>
-        (body = {
-          status: body.result,
-          name: updateInfo.name,
-          description: updateInfo.description,
-        })
-    );
+    .then((body) => body = {status: body.result, name: updateInfo.name, description: updateInfo.description,});
 }
 
-// TODO: CHECKED
-function deleteGroup(groupId) {
+function deleteGroup(userToken, groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`, { method: "DELETE" })
     .then((response) => response.json())
     .then(result => result = {status: result.result, groupId: groupId})
     .then(removeGroupMovies(groupId));
-    
 }
 
 /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
-// TODO: rever
-function addMovie(groupId, movieInfo) {
+function addMovie(userToken, groupId, movieInfo) {
   return fetch(baseURL + `movies/_doc?refresh=wait_for`, {
     method: "POST",
     body: JSON.stringify({
@@ -128,9 +106,8 @@ function addMovie(groupId, movieInfo) {
     },
   })
     .then((response) => response.json())
-    .then(
-      (body) =>
-        (body = {
+    .then((body) =>
+        body = {
           status: body.result,
           id: body._id,
           title: movieInfo.title,
@@ -140,7 +117,7 @@ function addMovie(groupId, movieInfo) {
           image: movieInfo.image,
           directors: movieInfo.directors,
           actors: movieInfo.actors,
-        })
+        }
     );
 }
 
@@ -150,7 +127,15 @@ function getMovieById(movieId) {
     .then((body) => body._source);
 }
 
+
+function deleteMovie(userToken, groupId, movieId) {
+  return fetch(baseURL + `movies/_doc/${movieId}`, { method: "DELETE" }).then(
+    (response) => response.json()
+  );
+}
 /* --------------------- [AUX] ---------------------------------------------------------------------------------------------------- */
+
+// Get all <groupId> movies
 function getGroupMoviesInfo(groupId) {
   return fetch(baseURL + `movies/_search?q=groupId=${groupId}`)
     .then((response) => response.json())
@@ -172,12 +157,7 @@ function removeGroupMovies(groupId) {
     method: "POST",
   }).then((response) => response.json());
 }
-
-function deleteMovie(movieId) {
-  return fetch(baseURL + `movies/_doc/${movieId}`, { method: "DELETE" }).then(
-    (response) => response.json()
-  );
-}
+//-----------------------------------------------------------------------------------------------------------------------------------
 
 export default {
   createUser,
