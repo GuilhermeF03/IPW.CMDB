@@ -11,13 +11,15 @@
 // Internal imports
 import getServices from "./services/cmdb-services.mjs";
 import getApi from "./web/api/cmdb-web-api.mjs";
+import getWebsite from"./web/site/cmdb-web-site.mjs";
 import data from "./mem/imdb-movies-data.mjs";
-import mem from "./mem/cmdb-data-mem.mjs";
+import mem from "./mem/cmdb-data-elastic.mjs";
 
 // Constants
-const PORT = 8081;
+const PORT = 8080;
 const services = getServices(data, mem);
 const webapi = getApi(services);
+const website = getWebsite(services);
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const app = express();
 
@@ -28,7 +30,7 @@ app.use(cors());
 
 // View setup
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname,'/views'));
+app.set('views', path.join(__dirname,'/web', '/site','/views'));
 
 // [API Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
@@ -51,6 +53,10 @@ app.delete("api/groups/:groupId/:movieId", webapi.deleteMovie);
 
 // [WEB Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
+
+app.get("/site.css", website.getCss);
+
+app.get("/", website.getHome);
 app.get("/popular", website.getPopularMovies);
 app.get("/search/:movieName", website.searchMovie);
 // USER
@@ -66,7 +72,6 @@ app.delete("/groups/:groupId", website.deleteGroup);
 app.get("dashboard/movies/:movieId", website.getMovie)
 app.put("/groups/:groupId/:movieId", website.addMovie);
 app.delete("/groups/:groupId/:movieId", website.deleteMovie);
-
 
 // Server boot-up
 console.log(`[>] Setting up server...\n

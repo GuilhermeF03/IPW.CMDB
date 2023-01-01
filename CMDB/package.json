@@ -8,7 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "nodemon ./src/cmdb-server.mjs "
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "handlebars": "^4.7.7",
     "hbs": "^4.2.0",
     "node-fetch": "^3.2.10",
+    "nodemon": "^2.0.20",
     "swagger-ui-express": "^4.6.0",
     "yamljs": "^0.3.0"
   }

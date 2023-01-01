@@ -1,11 +1,17 @@
+
+import url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 export default function (services){
 
     async function getHome(req, resp) {
-        sendFile('index.html', resp);
+        resp.render('index')
+        //sendFile('index.html', resp);
     }
   
     async function getCss(req, resp) {
-        sendFile('site.css', resp);
+        resp.sendFile(__dirname + "css/site.css",resp);
+        //let data = f
     }
 
     async function getPopularMovies(req,resp){
@@ -48,12 +54,15 @@ export default function (services){
     async function addMovie(req, resp){
 
     }
+    async function getMovie(req, resp){}
 
     async function deleteMovie(req, resp){
 
     }
     
     return {
+        getHome,
+        getCss,
         getPopularMovies,
         searchMovie,
         getMovieById,
@@ -64,6 +73,7 @@ export default function (services){
         updateGroup,
         deleteGroup,
         addMovie,
+        getMovie,
         deleteMovie,
     }
 }
