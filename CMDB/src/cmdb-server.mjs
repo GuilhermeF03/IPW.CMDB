@@ -66,13 +66,13 @@ app.post("/users", website.createUser);
 app.get("/groups", website.listGroups);
 app.post("/groups", website.createGroup);
 
-app.get("dashboard/groups/:groupId", website.getGroupById);
+app.get("/groups/:groupId", website.getGroupById);
 app.put("/groups/:groupId", website.updateGroup);
 // app.delete("/groups/:groupId", website.deleteGroup);
 app.post("/groups/:groupId/delete", website.deleteGroup);
 
 
-app.get("dashboard/movies/:movieId", website.getMovieById)
+app.get("/movies/:movieId", website.getMovieById)
 app.put("/groups/:groupId/:movieId", website.addMovie);
 // app.delete("/groups/:groupId/:movieId", website.deleteMovie);
 // já não é preciso o groupId

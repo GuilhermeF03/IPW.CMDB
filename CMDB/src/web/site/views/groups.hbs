@@ -3,11 +3,11 @@
 
 <h2>Create new Group</h2>
 <form action="./groups" method="POST">
-  <p>Group name: <input type="text" name="name" /></p>
+  <p>Group name: <input type="text" name="name"required /></p>
   <p>Group description:
     <textarea name="description">
     </textarea></p>
-  <input type="submit" value="Create Group" />
+  <input type="submit" value="Create Group" value="" />
 </form>
 
 <h2>User Groups</h2>
@@ -15,7 +15,7 @@
   {{#each groups}}
     <li>
       {{! verify name }}
-      <h2><a href=".dashboard/groups/{{id}}">{{name}}</a></h2>
+      <h2><a href="/groups/{{id}}">{{name}}</a></h2>
       <p>{{description}}</p>
       <p>{{number of movies}}</p>
       <p>{{total duration}}</p>
