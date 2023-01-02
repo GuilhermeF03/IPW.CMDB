@@ -1,10 +1,14 @@
 <header>
+    <div class="bg-search"></div>
     <div class ="container-column">
-        {{#each results}}
-        <div class="dynamic-panel">{{title}}
-
+            {{#each results}}
+            <div class="dynamic-panel-col">
+                {{#if image}}
+                <img src={{image}} alt={{title}} class="dynamic-panel-col">
+                <a >{{title}}</a>
+                {{/if}}
+            </div>
+            {{/each}}
         </div>
-        {{/each}}
-    </div>
     
 </header>

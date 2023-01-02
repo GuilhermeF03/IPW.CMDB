@@ -1,23 +1,21 @@
 import fs from "node:fs/promises";
 import { errors } from "../../errors/http-errors.mjs";
-
-const dataPath = "CMDB/data/data.json";
+import path from "path";
+import url from "url";
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const dataPath = __dirname+"../../data/data.json";
 
 /* ------------------------------ [FILE] ------------------------------------------------------------------------------------------------------- */
 function checkFileExists(file) {
   return fs
     .access(file, fs.constants.F_OK)
     .then(() => true)
-    .catch(() => false);
+    .catch((error) => console.log(error))
+    .catch(() => false)
+    
 }
 
-checkFileExists(dataPath)
-  .then((exists) => {
-    if (!exists) {
-      writeData(dataPath, {});
-    }
-  })
-  .catch((error) => console.error(error));
+
 
 const readData = (path) => {
   return fs
@@ -187,6 +185,10 @@ function deleteMovie(userToken, groupId, movieId) {
       writeData(dataPath, data);
     })
 }
+
+checkFileExists(dataPath)
+  .then(exists => {if(!exists) writeData(dataPath, {})})
+  .catch((error) => console.error(error));
 
 export default {
   createUser,

@@ -5,9 +5,23 @@
  }
 
 body {
+  height: 100vh;
+  width: 100%;
   font-family: 'Roboto', sans-serif;
+  display: flex;
   background: #f0f0f0;
   margin: 0;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+  height: 0vh;
+  background-color: blue;
+  padding: 0% 0% 5% 0%;
 }
 
 /* NAV BAR -----------------------------------------------------------*/
@@ -154,9 +168,9 @@ form:hover form input {
 form:hover #search-max{
   text-align: center;
   color: white;
-  margin: 3%;
-  width: 20vw;
-  height: 88%;
+  margin: -1% -1% -1.2%;
+  width: 11vw;
+  height: 89%;
   border-radius: 15px;
   background-color: rgb(120, 120, 120);
   outline: none;
@@ -188,19 +202,19 @@ header {
   justify-content: center;
 }
 .container-column{
-  margin: 0 auto;
-  width: 90%;
-  height: 50%;
-  display: flex;
-  flex-direction: column;
+  margin: 0 0% 0% 0%;
+  width: 100%;
+  display: grid;
   align-items: center;
-  justify-content: center;
+  padding: 6% 0% 0% 0%;
+  align-content: center;
+  justify-items: center;
 }
-
+/* DYNAMIC PANEL ROW -----------*/
 .dynamic-panel-row{
   margin: 3%;
-  width: 30%;
-  height: 100%;
+  width: 50%;
+  height: 33%;
   background: linear-gradient(
     to bottom right,
    rgb(20 0 255 / 63%),
@@ -240,6 +254,68 @@ header {
   text-decoration: none;
   color: #f0f0f0;
 }
+
+/* DYNAMIC PANEL COLUMN ---------------- */
+.dynamic-panel-col{
+  margin: 1% 0% 1% 0%;
+  width: 55%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 30px;
+  overflow: hidden;
+  transition: 0.4s ease;
+  padding: 0%;
+  flex-direction: row;
+  /* align-content: center; */
+}
+
+.dynamic-panel-col > * {
+  grid-column: 1 /-1;
+}
+
+.dynamic-panel-col:hover{
+  margin: 0% 0% 1% 0%;
+  width: 55%;
+  height: 100%;
+  display: grid;
+  border-radius: 30px;
+  overflow: hidden;
+  transition: 0.4s ease;
+  padding: 0%;
+}
+
+.dynamic-panel-col a{
+  display: none;
+}
+
+.dynamic-panel-col:hover a{
+  overflow-wrap: break-word;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5em;
+  text-decoration: none;
+  color: #f0f0f0;
+  inline-size: 20%;
+  align-content: center;
+}
+
+
+
+#column-text{
+  display: inline-block;
+  filter:none;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 
 /* INDEX ===================================================================================================================== */
 
@@ -317,11 +393,37 @@ header {
   transition: 0.25s ease;
 }
 
-#column-text{
-  display: inline-block;
-  filter:none;
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
+/* RESULTS */
+.dynamic-panel-col img {
+  position: relative;
+  z-index: 0;
+  width: 49%;
+  height: 100%;
+  border-radius: 30px;
+  object-fit: cover;
+  margin: 0%;
+  margin-right: 72px;
 }
+.dynamic-panel-col img:hover {
+  background: linear-gradient( to bottom right,
+  rgba(0,0,0,0.7),rgba(0,0,0,0.5));
+  width: 49%;
+  height: 100%;
+  border-radius: 30px;
+  object-fit: cover;
+  margin: 0%;
+  margin-right: 72px;
+}
+
+/*Search ------------*/
+.bg-search{
+  height: 100vh;
+  position: fixed;
+  z-index: -1;
+  background: linear-gradient(
+    rgba(0,0,0,0.7), rgba(0,0,0,0.5)),
+    url(https://i.ibb.co/V9SdjjV/bg-test1.jpg);
+  background-size: cover;
+  width: 100%;
+}
+
