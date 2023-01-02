@@ -11,7 +11,7 @@ const DEFAULT_ERROR = {
  }
  
 
-export function convertToHttpError(error) {
+export default function convertToHttpError(error) {
     const status = ERRORS_MAPPER[error.code]
     return status ?  {
             status: status, 
@@ -19,17 +19,6 @@ export function convertToHttpError(error) {
         } 
         : DEFAULT_ERROR
 }
-
-function getTasks(token){
-    //TODO verify if userToken is not undefined
-    //TODO verify if userToken is associated to user
-    //TODO tasks of user
-    return data.getUserByToken(token)
-            .then(user => data.getTasksByUserId(user.id))
-            .catch(error => Promise.reject(errors.NOT_AUTHORIZED())) 
-            //Verify if is NOT_FOUND error from getUserByToken 
-}
-
 
 export const errors = {
     BAD_GATEWAY: badGateway,

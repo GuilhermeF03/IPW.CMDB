@@ -1,11 +1,16 @@
     <header>
-        <div class="bg">
-            <div class="container">
-                <div class="panel" id="popular-movies">
-                    <a href="">Popular</a>
+        <div class="bg-index">
+            <div class="container-row">
+                <div class="dynamic-panel-row" id="popular-movies">
+                    
+                    <a>Popular
+                        <form action = "/popular" id="popular-search-bar" >
+                            <input type = "number" name = "max" min="0" max="250"></input>
+                        </form>
+                    </a>
                 </div>
-                <div class="panel">
-                    <a href="">Dashboard</a>
+                <div class="dynamic-panel-row" id="my-groups">
+                    <a href="/groups" >My groups</a>
                 </div>
             </div>
         </div>

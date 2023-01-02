@@ -13,7 +13,8 @@ import getServices from "./services/cmdb-services.mjs";
 import getApi from "./web/api/cmdb-web-api.mjs";
 import getWebsite from"./web/site/cmdb-web-site.mjs";
 import data from "./mem/imdb-movies-data.mjs";
-import mem from "./mem/cmdb-data-elastic.mjs";
+//import mem from "./mem/cmdb-data-elastic.mjs";
+import mem from "./mem/cmdb-data-mem.mjs"
 
 // Constants
 const PORT = 8080;
@@ -35,7 +36,7 @@ app.set('views', path.join(__dirname,'/web', '/site','/views'));
 // [API Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
 app.get("api/popular", webapi.getPopularMovies);
-app.get("api/search/:movieName", webapi.searchMovie);
+app.get("api/search/", webapi.searchMovie);
 app.get("api/movie/:movieId", webapi.getMovieById);
 // USER
 app.post("api/users", webapi.createUser);
@@ -58,20 +59,25 @@ app.get("/site.css", website.getCss);
 
 app.get("/", website.getHome);
 app.get("/popular", website.getPopularMovies);
-app.get("/search/:movieName", website.searchMovie);
+app.get("/search/", website.searchMovie);
 // USER
 app.post("/users", website.createUser);
 // GROUPS
-app.get("dashboard/groups", website.listGroups);
+app.get("/groups", website.listGroups);
 app.post("/groups", website.createGroup);
 
 app.get("dashboard/groups/:groupId", website.getGroupById);
 app.put("/groups/:groupId", website.updateGroup);
-app.delete("/groups/:groupId", website.deleteGroup);
+// app.delete("/groups/:groupId", website.deleteGroup);
+app.post("/groups/:groupId/delete", website.deleteGroup);
 
-app.get("dashboard/movies/:movieId", website.getMovie)
+
+app.get("dashboard/movies/:movieId", website.getMovieById)
 app.put("/groups/:groupId/:movieId", website.addMovie);
-app.delete("/groups/:groupId/:movieId", website.deleteMovie);
+// app.delete("/groups/:groupId/:movieId", website.deleteMovie);
+// já não é preciso o groupId
+app.post("/groups/:groupId/:movieId/delete", website.deleteMovie);
+
 
 // Server boot-up
 console.log(`[>] Setting up server...\n

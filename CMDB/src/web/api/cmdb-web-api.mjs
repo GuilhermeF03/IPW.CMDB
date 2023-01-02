@@ -1,4 +1,4 @@
-import { convertToHttpError } from "../../../errors/http-errors.mjs";
+import  convertToHttpError  from "../../../errors/http-errors.mjs";
 
 // Autorization verification -> closure
 function verifyAuthentication(handlerFunction) {
@@ -40,18 +40,18 @@ export default function (services) {
   async function searchMovie(req, resp) {
     try {
       const max = req.query.max || 250;
-      const search = await services.searchMovie(req.params.movieName, max);
+      const search = await services.searchMovie(req.query.movieName, max);
 
       
-      console.log(`[>] Successfully retrived top ${max} results for ${req.params.movieName}.`)
+      console.log(`[>] Successfully retrived top ${max} results for ${req.query.movieName}.`)
 
       if (search.results.size == 0)
         return resp
           .status(200)
-          .json({ status: `No results for '${req.params.movieName}'.` });
+          .json({ status: `No results for '${req.query.movieName}'.` });
 
       resp.status(200).json({
-        status: `Returned ${search.results.length} results for '${req.params.movieName}'.`,
+        status: `Returned ${search.results.length} results for '${req.query.movieName}'.`,
         results: search.results,
       });
 
@@ -195,28 +195,6 @@ export default function (services) {
   }
 
   /* --------------------------- [MOVIE] ---------------------------------------------------------------------------------------------------- */
-  
-  async function getMovieById(req,resp){
-    try{
-      let movieInfo = await services.getMovieById(req.params.movieId)
-
-      resp.status(200).json({
-        status: `<${movie.title}> successfully retrieved.`,
-        "movie-info": movieInfo
-      })
-      
-
-    }catch(error) {
-      if (!error.code) console.error(error);
-
-      const httpError = convertToHttpError(error);
-      resp.status(httpError.status).json(httpError.body);
-    }
-  }
-  
-  
-  
-  
   async function addMovieInternal(req, resp) {
     try {
       let movieInfo = await services.addMovie(
@@ -237,6 +215,24 @@ export default function (services) {
         "movie-info": movieInfo,
       });
     } catch (error) {
+      if (!error.code) console.error(error);
+
+      const httpError = convertToHttpError(error);
+      resp.status(httpError.status).json(httpError.body);
+    }
+  }
+
+  async function getMovieById(req,resp){
+    try{
+      let movieInfo = await services.getMovieById(req.params.movieId)
+
+      resp.status(200).json({
+        status: `<${movie.title}> successfully retrieved.`,
+        "movie-info": movieInfo
+      })
+      
+
+    }catch(error) {
       if (!error.code) console.error(error);
 
       const httpError = convertToHttpError(error);

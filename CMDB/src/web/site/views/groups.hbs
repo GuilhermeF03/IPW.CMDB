@@ -1,0 +1,27 @@
+<header></header>
+<h1>Groups</h1>
+
+<h2>Create new Group</h2>
+<form action="./groups" method="POST">
+  <p>Group name: <input type="text" name="name" /></p>
+  <p>Group description:
+    <textarea name="description">
+    </textarea></p>
+  <input type="submit" value="Create Group" />
+</form>
+
+<h2>User Groups</h2>
+<ul>
+  {{#each groups}}
+    <li>
+      {{! verify name }}
+      <h2><a href=".dashboard/groups/{{id}}">{{name}}</a></h2>
+      <p>{{description}}</p>
+      <p>{{number of movies}}</p>
+      <p>{{total duration}}</p>
+      <form action="groups/{{id}}/delete" method="POST">
+        <input type="submit" value="Delete Group" />
+      </form>
+    </li>
+  {{/each}}
+</ul>

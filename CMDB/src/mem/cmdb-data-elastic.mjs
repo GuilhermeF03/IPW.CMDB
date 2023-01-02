@@ -59,7 +59,17 @@ function listUserGroups(userToken) {
 function getGroupById(userToken, groupId) {
   return fetch(baseURL + `groups/_doc/${groupId}`)
     .then((response) => response.json())
-    .then((body) => body = { name: body._source.name, description: body._source.description,});
+    .then(async (body) => {
+      let moviesInfo = await getGroupMoviesInfo(groupId);
+      return {
+        id: body._id,
+        name: body._source.name,
+        description: body._source.description,
+        "number of movies": moviesInfo.numberOfMovies,
+        "total duration": moviesInfo.totalDuration,
+        movies: moviesInfo.movies,
+      };
+    });
 }
 
 function updateGroup(userToken, groupId, updateInfo) {
@@ -137,7 +147,7 @@ function deleteMovie(userToken, groupId, movieId) {
 
 // Get all <groupId> movies
 function getGroupMoviesInfo(groupId) {
-  return fetch(baseURL + `movies/_search?q=groupId=${groupId}`)
+  return fetch(baseURL + `movies/_search?q=groupId:"${groupId}"`)
     .then((response) => response.json())
     .then((body) => {
       let totalDuration = 0;
@@ -146,6 +156,7 @@ function getGroupMoviesInfo(groupId) {
         totalDuration += movies[mov].runtime;
       }
       return {
+        movies: movies.map((movie) => movie = {id: movie.id, title: movie.title, image: movie.image}),
         numberOfMovies: body.hits.total.value,
         totalDuration: totalDuration,
       };
