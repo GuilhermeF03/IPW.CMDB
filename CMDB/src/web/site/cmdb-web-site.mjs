@@ -208,9 +208,9 @@ export default function (services){
         let movie = await services.addMovie(req.userToken, req.params.groupId, req.body.movieId);
   
         console.log(`[>] Successfully added movie to group.`);
-  
+        
         resp.redirect(`/groups/${req.params.groupId}`)
-        return movie
+        // return movie
       } catch (error) {
         if (!error.code) console.error(error);
   

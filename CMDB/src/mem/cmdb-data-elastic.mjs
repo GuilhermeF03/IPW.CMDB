@@ -42,19 +42,19 @@ function listUserGroups(userToken) {
     .then(async (body) => 
     {
       if( body.status == 404) return []
-      let hits = body.hits.hits; // search results
+      let bodyInfo = body.hits.hits; // search results
       //let array = [];
-      for (const i in hits) {
-        let moviesInfo = await getGroupMoviesInfo(hits[i]._id);
-        let tmp = { id : hits[i]._id, name : hits[i]._source.name, description: hits[i]._source.description };
-        hits[i] = {
+      for (const i in bodyInfo) {
+        let moviesInfo = await getGroupMoviesInfo(bodyInfo[i]._id);
+        let tmp = { id : bodyInfo[i]._id, name : bodyInfo[i]._source.name, description: bodyInfo[i]._source.description };
+        bodyInfo[i] = {
           id : tmp.id,
           name : tmp.name,
           description: tmp.description, 
           "number of movies" : moviesInfo.numberOfMovies, 
           "total duration" : moviesInfo.totalDuration};
       }  
-      return hits;
+      return bodyInfo;
     });
 }
 
@@ -153,12 +153,13 @@ function getGroupMoviesInfo(groupId) {
     .then((response) => response.json())
     .then((body) => {
       let totalDuration = 0;
-      let movies = body.hits.hits.map((hits) => hits._source);
+      let bodyInfo = body.hits.hits;
+      let movies = bodyInfo.map((hits) => hits._source);
       for (const mov in movies) {
         totalDuration += movies[mov].runtime;
       }
       return {
-        movies: movies.map((movie, index) => movie = {_id: body.hits.hits[index]._id, groupId: movie.groupId, id: movie.id, title: movie.title, image: movie.image}),
+        movies: movies.map((movie, index) => movie = {_id: bodyInfo[index]._id, groupId: movie.groupId, id: movie.id, title: movie.title, image: movie.image}),
         numberOfMovies: body.hits.total.value,
         totalDuration: totalDuration,
       };
