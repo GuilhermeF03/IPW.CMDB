@@ -10,7 +10,7 @@ import { errors } from "../../errors/http-errors.mjs";
 
 async function getTop250() {
   let top = await parseFetch(top250Url);
-  console.log(top.items[0])
+  // console.log(top.items[0])
   return {
     
     results: top.items.map(
@@ -51,7 +51,6 @@ async function getMovieById(movieId) {
         "[Imdb] The movie you're trying to access could not be found."
       )
     );
-
   return {
     id: movie.id,
     title: movie.title,

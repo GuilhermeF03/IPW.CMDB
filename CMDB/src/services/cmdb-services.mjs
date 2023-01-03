@@ -69,50 +69,50 @@ export default function(data, mem) {
   async function listUserGroups(userToken){ return await mem.listUserGroups(userToken); }
 
   async function getGroupById(userToken, groupId) {
-    groupId = Number(groupId);
+    // groupId = Number(groupId);
 
-    await validateId(groupId);
+    // await validateId(groupId);
 
     return await mem.getGroupById(userToken, groupId); 
 
   }
 
   async function updateGroup(userToken, groupId, updateInfo) {
-    groupId = Number(groupId);
+    // groupId = Number(groupId);
 
     // Validate Info
     await validateString(updateInfo.name);
     await validateString(updateInfo.description);
-    await validateId(groupId);
+    // await validateId(groupId);
 
     return await mem.updateGroup(userToken, groupId, updateInfo);
   }
 
   async function deleteGroup(userToken, groupId) {
-    groupId = Number(groupId);
-    await validateId(groupId);
+    // groupId = Number(groupId);
+    // await validateId(groupId);
 
     await mem.deleteGroup(userToken, groupId);
 
-    return { name: (await mem.getGroupById(userToken, groupId)).name }; 
+    // return { name: (await mem.getGroupById(userToken, groupId)).name }; 
   }
  
   /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
   
   async function addMovie(userToken, groupId, movieId) {
 
-    groupId = Number(groupId);
+    // groupId = Number(groupId);
 
-    await validateId(groupId);
+    // await validateId(groupId);
     let mInfo = await data.getMovieById(movieId);
 
     return await mem.addMovie(userToken, groupId, mInfo); 
   }
 
   async function deleteMovie(userToken, groupId, movieId) {
-    groupId = Number(groupId);
+    // groupId = Number(groupId);
 
-    await validateId(groupId);
+    // await validateId(groupId);
 
     let info = {
       title : await (await data.getMovieById(movieId)).title,
@@ -126,7 +126,7 @@ export default function(data, mem) {
 
 
 
-  //mem.createUser("276381264wgdgw72361-1");
+
 
   return {
     getPopularMovies,

@@ -13,8 +13,8 @@ import getServices from "./services/cmdb-services.mjs";
 import getApi from "./web/api/cmdb-web-api.mjs";
 import getWebsite from"./web/site/cmdb-web-site.mjs";
 import data from "./mem/imdb-movies-data.mjs";
-//import mem from "./mem/cmdb-data-elastic.mjs";
-import mem from "./mem/cmdb-data-mem.mjs"
+import mem from "./mem/cmdb-data-elastic.mjs";
+// import mem from "./mem/cmdb-data-mem.mjs"
 
 // Constants
 const PORT = 8080;
@@ -93,4 +93,4 @@ console.log(`[>] Setting up server...\n
            [Mem] {deprecated} -> File memory
            [E] -> Other errors
           `)
-app.listen(PORT, () => console.log(`[>] Server listening @ http://localhost:${PORT}`) );
+app.listen(PORT, () => console.log(`[>] Server listening @ http://localhost:${PORT}`) )

@@ -1,20 +1,40 @@
-<div class = "fixed-bg">
-    <img src = "https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg">
+<div class="fixed-bg">
+  <img src="https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg" />
 </div>
 <h1 style="margin: 6% 3% 2% 1%">{{name}}</h1>
 <p>{{description}}</p>
-    <p>Total movies: {{number}}</p>
-    <p>Total duration: {{dur}}</p>
+<p>Total movies: {{number}}</p>
+<p>Total duration: {{dur}}</p>
 
-{{!-- upsdate field todo --}}
-  {{#each movies}}
-   <li>
+{{! upsdate field todo }}
+{{#each movies}}
+  <li>
     <a href="/movies/{{id}}">
-        <img src="{{image}}" alt="{{title}}">
+      <img src="{{image}}" alt="{{title}}" />
     </a>
     <p>{{duration}}</p>
-    {{!-- verificar --}}
-    <from action="/groups/:groupId/{{id}}/delete" method="POST">
-        <input type="submit" value="Delete movie"/>
-   </li>
-  {{/each}}
+    {{! verificar }}
+    {{!-- <from action="/groups/:groupId/{{id}}/delete" method="POST">
+        <input type="submit" value="Delete movie"/> --}}
+    <form action="/groups/:groupId/{{id}}/delete" method="POST">
+      <button
+        type="submit"
+        on
+        onClick="updateValue()"
+        style="
+                    border:0;
+                    outline:0;
+                    background: linear-gradient(
+                    to bottom right,
+                  rgb(20 0 255 / 63%),
+                  rgb(146 26 165 / 87%));
+                "
+      >Delete Movie</button>
+      <script>function updateValue() { const id =
+        document.querySelector(".opt").value
+        document.getElementById('form').action = `/groups/${id}` }
+      </script>
+      <input type="hidden" name="groupId" value="{{id}}">
+    </form>
+  </li>
+{{/each}}

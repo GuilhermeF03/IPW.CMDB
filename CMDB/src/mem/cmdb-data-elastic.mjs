@@ -33,7 +33,7 @@ function createGroup(userToken, groupInfo) {
 }
 
 function listUserGroups(userToken) {
-  console.log()
+
   return fetch(baseURL + `groups/_search?q=userId:"${userToken}"`, {
     headers: { Accept: "application/json" },
   })
@@ -91,7 +91,7 @@ function updateGroup(userToken, groupId, updateInfo) {
 }
 
 function deleteGroup(userToken, groupId) {
-  return fetch(baseURL + `groups/_doc/${groupId}`, { method: "DELETE" })
+  return fetch(baseURL + `groups/_doc/${groupId}?refresh=wait_for`, { method: "DELETE" })
     .then((response) => response.json())
     .then(result => result = {status: result.result, groupId: groupId})
     .then(removeGroupMovies(groupId));
@@ -106,7 +106,7 @@ function addMovie(userToken, groupId, movieInfo) {
       id: movieInfo.id,
       title: movieInfo.title,
       description: movieInfo.description,
-      runtime: movieInfo.runtimeMins,
+      runtime: movieInfo.runtime,
       year: movieInfo.year,
       image: movieInfo.image,
       directors: movieInfo.directors,
@@ -128,7 +128,7 @@ function addMovie(userToken, groupId, movieInfo) {
           year: movieInfo.year,
           image: movieInfo.image,
           directors: movieInfo.directors,
-          actors: movieInfo.actors,
+          actors: movieInfo.actors
         }
     );
 }
@@ -141,7 +141,7 @@ function getMovieById(movieId) {
 
 
 function deleteMovie(userToken, groupId, movieId) {
-  return fetch(baseURL + `movies/_doc/${movieId}`, { method: "DELETE" }).then(
+  return fetch(baseURL + `movies/_doc/${movieId}?refresh=wait_for`, { method: "DELETE" }).then(
     (response) => response.json()
   );
 }
@@ -166,7 +166,7 @@ function getGroupMoviesInfo(groupId) {
 }
 
 function removeGroupMovies(groupId) {
-  return fetch(baseURL + `movies/_delete_by_query?q=groupId:"${groupId}"`, {
+  return fetch(baseURL + `movies/_delete_by_query?q=groupId:"${groupId}"?refresh=wait_for`, {
     method: "POST",
   }).then((response) => response.json());
 }

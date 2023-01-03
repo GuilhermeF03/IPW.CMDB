@@ -72,9 +72,9 @@ export default function (services){
         let movieInfo = await services.getMovieById(req.params.movieId)
         let groups = await services.listUserGroups(req.userToken).catch()
        
-        return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups.groups, movieInfo:movieInfo}}
-       
-    
+        // return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups.groups, movieInfo:movieInfo}}
+        return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups, movieInfo:movieInfo}}
+
         
       } catch(error) {
         if (!error.code) console.error(error);
@@ -115,8 +115,10 @@ export default function (services){
         let userGroups = await services.listUserGroups(req.userToken);
   
         console.log(`[>] Successfully retrieved all user's groups.`)
+        console.log(userGroups)
+        // return { name: "groups", data: { title: "My groups", groups: userGroups.groups } }
+        return {name: "groups", data: {title:"My groups",groups: userGroups}}
         
-        return {name: "groups", data: {title:"My groups",groups: userGroups.groups}}
       } catch (error) {
         if (!error.code) console.error(error);
   
@@ -160,7 +162,7 @@ export default function (services){
   
         console.log(`[>] Successfully retrieved group info.`)
   
-        return {name:'groupInfo',data:{title:group.name,name:group.name,movies:group.movies}}
+        return {name:'groupInfo',data:{title:group.name,name:group.name, movies:group.movies}}
       } catch (error) {
         if (!error.code) console.error(error);
   
