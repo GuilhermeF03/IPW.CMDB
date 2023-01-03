@@ -16,11 +16,9 @@
     {{! verificar }}
     {{!-- <from action="/groups/:groupId/{{id}}/delete" method="POST">
         <input type="submit" value="Delete movie"/> --}}
-    <form action="/groups/:groupId/{{id}}/delete" method="POST">
+    <form action="/groups/{{groupId}}/{{_id}}/delete" method="POST">
       <button
         type="submit"
-        on
-        onClick="updateValue()"
         style="
                     border:0;
                     outline:0;
@@ -30,11 +28,6 @@
                   rgb(146 26 165 / 87%));
                 "
       >Delete Movie</button>
-      <script>function updateValue() { const id =
-        document.querySelector(".opt").value
-        document.getElementById('form').action = `/groups/${id}` }
-      </script>
-      <input type="hidden" name="groupId" value="{{id}}">
     </form>
   </li>
 {{/each}}

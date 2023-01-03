@@ -77,7 +77,6 @@ app.post("/groups/:groupId/delete", website.deleteGroup);
 app.get("/movies/:movieId", website.getMovieById) // done
 app.post("/groups/:groupId", website.addMovie);
 // app.delete("/groups/:groupId/:movieId", website.deleteMovie);
-// já não é preciso o groupId
 app.post("/groups/:groupId/:movieId/delete", website.deleteMovie);
 
 

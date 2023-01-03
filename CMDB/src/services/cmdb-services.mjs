@@ -114,14 +114,14 @@ export default function(data, mem) {
 
     // await validateId(groupId);
 
-    let info = {
-      title : await (await data.getMovieById(movieId)).title,
-      group : (await mem.getGroupById(userToken, groupId))
-    }  
+    // let info = {
+    //   title : await (await data.getMovieById(movieId)).title,
+    //   group : (await mem.getGroupById(userToken, groupId))
+    // }  
 
     await mem.deleteMovie(userToken, groupId, movieId);
     
-    return info;
+    // return info;
   }
 
 

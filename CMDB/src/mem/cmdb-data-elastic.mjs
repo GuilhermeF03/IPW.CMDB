@@ -158,7 +158,7 @@ function getGroupMoviesInfo(groupId) {
         totalDuration += movies[mov].runtime;
       }
       return {
-        movies: movies.map((movie) => movie = {id: movie.id, title: movie.title, image: movie.image}),
+        movies: movies.map((movie, index) => movie = {_id: body.hits.hits[index]._id, groupId: movie.groupId, id: movie.id, title: movie.title, image: movie.image}),
         numberOfMovies: body.hits.total.value,
         totalDuration: totalDuration,
       };
