@@ -525,6 +525,24 @@ input {
   color:black
 }
 
+.group-text{
+  text-transform: capitalize;
+  color: white;
+  text-align: center;
+  background-color:transparent;
+  border:none;
+  outline:none;
+}
+
+.custom-button{
+  border:0;
+  outline:0;
+  background: linear-gradient(
+  to bottom right,
+rgb(20 0 255 / 63%),
+rgb(146 26 165 / 87%));
+}
+
  ::-webkit-scrollbar{
   width: 0%;
 }

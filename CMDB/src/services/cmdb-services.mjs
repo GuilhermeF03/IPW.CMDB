@@ -1,28 +1,33 @@
 import { errors } from "../../errors/http-errors.mjs";
-import crypto from "node:crypto"
+import crypto from "node:crypto";
 
 const MAX_LIMIT = 250;
 const range = (max) => Array.from(Array(max + 1).keys()).slice(1, max + 1);
 
-export default function(data, mem) {
-
+export default function (data, mem) {
   /* ----------------- [AUX] ------------------------------------------------------------------------------------------------------------------- */
-  if (!data) throw new Error ("[Ser] Data module not provided");
-  if (!mem) throw new Error ("[Ser] Mem module not provided");
+  if (!data) throw new Error("[Ser] Data module not provided");
+  if (!mem) throw new Error("[Ser] Mem module not provided");
 
-  async function validateId(id) {
-    if (isNaN(id) || id < 0)
-      return Promise.reject(errors.BAD_REQUEST(`[Ser] Invalid group id <${id}>.`))
-  }
+  // async function validateId(id) {
+  //   if (isNaN(id) || id < 0)
+  //     return Promise.reject(
+  //       errors.BAD_REQUEST(`[Ser] Invalid group id <${id}>.`)
+  //     );
+  // }
 
   async function validateMaxMovies(max) {
     if (isNaN(max) || !range(MAX_LIMIT).includes(max))
-      return Promise.reject(errors.BAD_REQUEST(`[Ser] Invalid max limit <${max}> -> must be a integer in [1..250]`))
+      return Promise.reject(
+        errors.BAD_REQUEST(
+          `[Ser] Invalid max limit <${max}> -> must be a integer in [1..250]`
+        )
+      );
   }
 
   async function validateString(value) {
     if (!(typeof value == "string" && value != ""))
-      return Promise.reject(errors.BAD_REQUEST())
+      return Promise.reject(errors.BAD_REQUEST());
   }
 
   /* ---------------------- [GENERAL] ------------------------------------------------------------------------------------------------------- */
@@ -32,10 +37,10 @@ export default function(data, mem) {
 
     let topMovies = await data.getTop250();
     topMovies.results.splice(max, MAX_LIMIT - max);
-  
-    if (topMovies.results.length == 0) 
-      return Promise.reject(errors.NOT_FOUND())
-    
+
+    if (topMovies.results.length == 0)
+      return Promise.reject(errors.NOT_FOUND());
+
     return topMovies;
   }
 
@@ -49,11 +54,13 @@ export default function(data, mem) {
     return movies;
   }
 
-  async function getMovieById(movieId) {return await data.getMovieById(movieId);}
-  
+  async function getMovieById(movieId) {
+    return await data.getMovieById(movieId);
+  }
+
   async function createUser(userInfo) {
     await validateString(userInfo.name);
-    
+
     let uInfo = { token: crypto.randomUUID(), name: userInfo.name };
 
     await mem.createUser(uInfo);
@@ -63,70 +70,41 @@ export default function(data, mem) {
 
   /* ---------------------- [GROUPS] -------------------------------------------------------------------------------------------------------- */
   async function createGroup(userToken, groupInfo) {
-    return await mem.createGroup(userToken, groupInfo);
+    await mem.createGroup(userToken, groupInfo);
   }
 
-  async function listUserGroups(userToken){ return await mem.listUserGroups(userToken); }
+  async function listUserGroups(userToken) {
+    return await mem.listUserGroups(userToken);
+  }
 
   async function getGroupById(userToken, groupId) {
-    // groupId = Number(groupId);
-
-    // await validateId(groupId);
-
-    return await mem.getGroupById(userToken, groupId); 
-
+    return await mem.getGroupById(userToken, groupId);
   }
 
   async function updateGroup(userToken, groupId, updateInfo) {
-    // groupId = Number(groupId);
-
     // Validate Info
     await validateString(updateInfo.name);
     await validateString(updateInfo.description);
-    // await validateId(groupId);
 
-    return await mem.updateGroup(userToken, groupId, updateInfo);
+    await mem.updateGroup(userToken, groupId, updateInfo);
+    // talvez
   }
 
   async function deleteGroup(userToken, groupId) {
-    // groupId = Number(groupId);
-    // await validateId(groupId);
-
     await mem.deleteGroup(userToken, groupId);
-
-    // return { name: (await mem.getGroupById(userToken, groupId)).name }; 
   }
- 
+
   /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
-  
+
   async function addMovie(userToken, groupId, movieId) {
-
-    // groupId = Number(groupId);
-
-    // await validateId(groupId);
     let mInfo = await data.getMovieById(movieId);
 
-    return await mem.addMovie(userToken, groupId, mInfo); 
+    await mem.addMovie(userToken, groupId, mInfo);
   }
 
   async function deleteMovie(userToken, groupId, movieId) {
-    // groupId = Number(groupId);
-
-    // await validateId(groupId);
-
-    // let info = {
-    //   title : await (await data.getMovieById(movieId)).title,
-    //   group : (await mem.getGroupById(userToken, groupId))
-    // }  
-
     await mem.deleteMovie(userToken, groupId, movieId);
-    
-    // return info;
   }
-
-
-
-
 
   return {
     getPopularMovies,

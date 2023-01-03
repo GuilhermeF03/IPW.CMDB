@@ -3,26 +3,29 @@ import mem from "../src/mem/cmdb-data-elastic.mjs";
 
 const baseURL = "http://localhost:9200/";
 const userToken = "276381264wgdgw72361-1";
-function createDummyGroup() {
+
+
+async function createDummyGroup() {
   let groupInfo = { name: "testGroup", description: "testDescription" };
-  return mem.createGroup(userToken, groupInfo);
+  return await mem.createGroup(userToken, groupInfo);
 }
 
-function createDummyMovie() {
+async function createDummyMovie() {
     let movieInfo = {
         id: "testMovieId",
         title: "testMovie",
         description: "testDescription",
-        runtimeMins: 100,
+        runtime: 100,
         year: 2021,
         image: "testImage",
         directors: "testDirector",
         actors: "testActor",
       };
-  return mem.addMovie(userToken, 1, movieInfo);
+  return await mem.addMovie(userToken, 1, movieInfo);
 }
 
 describe("CMDB Data Elastic Tests", () => {
+  
   describe("#createUser Tests", () => {
     it("Should create a user", async () => {
       let userInfo = { name: "testUser", token: userToken };

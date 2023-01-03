@@ -75,7 +75,7 @@ function getGroupById(userToken, groupId) {
 }
 
 function updateGroup(userToken, groupId, updateInfo) {
-  return fetch(baseURL + `groups/_doc/${groupId}`, {
+  return fetch(baseURL + `groups/_doc/${groupId}?refresh=wait_for`, {
     method: "PUT",
     body: JSON.stringify({
       userId: userToken,
@@ -133,12 +133,11 @@ function addMovie(userToken, groupId, movieInfo) {
     );
 }
 
-function getMovieById(movieId) {
-  return fetch(baseURL + `movies/_doc/${movieId}`)
-    .then((response) => response.json())
-    .then((body) => body._source);
-}
-
+// function getMovieById(movieId) {
+//   return fetch(baseURL + `movies/_doc/${movieId}`)
+//     .then((response) => response.json())
+//     .then((body) => body._source);
+// }
 
 function deleteMovie(userToken, groupId, movieId) {
   return fetch(baseURL + `movies/_doc/${movieId}?refresh=wait_for`, { method: "DELETE" }).then(

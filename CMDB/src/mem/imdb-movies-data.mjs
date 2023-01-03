@@ -10,7 +10,6 @@ import { errors } from "../../errors/http-errors.mjs";
 
 async function getTop250() {
   let top = await parseFetch(top250Url);
-  // console.log(top.items[0])
   return {
     
     results: top.items.map(

@@ -70,13 +70,11 @@ app.post("/groups", website.createGroup);
 
 app.get("/groups/:groupId", website.getGroupById);
 app.post("/groups/:groupId/update", website.updateGroup);
-// app.delete("/groups/:groupId", website.deleteGroup);
 app.post("/groups/:groupId/delete", website.deleteGroup);
 
 
 app.get("/movies/:movieId", website.getMovieById) // done
 app.post("/groups/:groupId", website.addMovie);
-// app.delete("/groups/:groupId/:movieId", website.deleteMovie);
 app.post("/groups/:groupId/:movieId/delete", website.deleteMovie);
 
 
@@ -92,4 +90,6 @@ console.log(`[>] Setting up server...\n
            [Mem] {deprecated} -> File memory
            [E] -> Other errors
           `)
+
+console.log(`IN ORDER TO USE THE API, YOU NEED TO CREATE A USER FIRST WITH createHammerToken.mjs.`)
 app.listen(PORT, () => console.log(`[>] Server listening @ http://localhost:${PORT}`) )

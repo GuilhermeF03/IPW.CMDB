@@ -10,9 +10,9 @@ function handlerMiddleware(handler){
     return async function(req, resp){
         req.userToken = HAMMER_TOKEN
         try {
-          console.log(handler)
+          
             let view = await handler(req, resp)
-            console.log(view)
+            
             if (view){
               resp.render(view.name , view.data) 
             } 
@@ -115,8 +115,6 @@ export default function (services){
         let userGroups = await services.listUserGroups(req.userToken);
   
         console.log(`[>] Successfully retrieved all user's groups.`)
-        console.log(userGroups)
-        // return { name: "groups", data: { title: "My groups", groups: userGroups.groups } }
         return {name: "groups", data: {title:"My groups",groups: userGroups}}
         
       } catch (error) {
@@ -129,21 +127,17 @@ export default function (services){
 
     async function createGroup(req, resp){
       try {
-        
-      
         if (!req.body.name || !req.body.description){
           resp
             .status(400)
             .json({ error: "[WA] Invalid body request, check valid format ahahah." });
             return;
         }
-          
-  
-        let groupInfo = await services.createGroup(req.userToken, req.body);
+        await services.createGroup(req.userToken, req.body);
   
         console.log(`[>] Successfully created new group.`);
   
-       resp.redirect("/groups")
+        resp.redirect("/groups")
   
       } catch (error) {
         if (!error.code) console.error(error);
@@ -161,8 +155,11 @@ export default function (services){
         );
   
         console.log(`[>] Successfully retrieved group info.`)
-  
-        return { name: 'groupInfo', data: {group: group.id, title:group.name, name:group.name, movies:group.movies}}
+          /*
+            _id:
+
+          */
+        return { name: 'groupInfo', data: {title:group.name, group}}
       } catch (error) {
         if (!error.code) console.error(error);
   
@@ -172,8 +169,10 @@ export default function (services){
     }
 
     async function updateGroup(req, resp) {
-      try {conso
-        let group = await services.updateGroup(req.userToken, req.params.groupId, req.body)
+      try {
+        console.log("-- Updating Group --")
+        console.log(req)
+        await services.updateGroup(req.userToken, req.params.groupId, req.body)
 
         console.log(`[>] Successfully updated group info.`)
 
@@ -188,7 +187,7 @@ export default function (services){
    
     async function deleteGroup(req, resp){
       try {
-        let group = await services.deleteGroup(req.userToken, req.params.groupId);
+        await services.deleteGroup(req.userToken, req.params.groupId);
   
         console.log(`[>] Successfully deleted group.`);
   
@@ -205,7 +204,7 @@ export default function (services){
     async function addMovie(req, resp){
       try {
         
-        let movie = await services.addMovie(req.userToken, req.params.groupId, req.body.movieId);
+        await services.addMovie(req.userToken, req.params.groupId, req.body.movieId);
   
         console.log(`[>] Successfully added movie to group.`);
         
@@ -216,11 +215,8 @@ export default function (services){
   
         const httpError = convertToHttpError(error);
         resp.status(httpError.status).json(httpError.body);
-        console.log(2)
       }
     }
-
-
 
     async function deleteMovie(req, resp){
       try {

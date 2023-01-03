@@ -1,6 +1,6 @@
-const top250Path = `CMDB/test/movies/top250.json`;
-const searchMovieByNamePath = `CMDB/test/movies/search.json/`;
-const getMovieByIdPath = `CMDB/test/movies/movies-test.json`;
+const top250Url = `CMDB/test/movies/top250.json`;
+const searchMovieByNameUrl = `CMDB/test/movies/search.json/`;
+const getMovieByIdUrl = `CMDB/test/movies/movies-test.json`;
 
 import fs from "node:fs/promises"
 import { errors } from "../errors/http-errors.mjs";

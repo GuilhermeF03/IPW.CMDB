@@ -1,33 +1,46 @@
 <div class="fixed-bg">
   <img src="https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg" />
 </div>
-<h1 style="margin: 6% 3% 2% 1%">{{name}}</h1>
-<p>{{description}}</p>
-<p>Total movies: {{number}}</p>
-<p>Total duration: {{dur}}</p>
-
-{{! upsdate field todo }}
-{{#each movies}}
-  <li>
-    <a href="/movies/{{id}}">
-      <img src="{{image}}" alt="{{title}}" />
-    </a>
-    <p>{{duration}}</p>
-    {{! verificar }}
-    {{!-- <from action="/groups/:groupId/{{id}}/delete" method="POST">
-        <input type="submit" value="Delete movie"/> --}}
-    <form action="/groups/{{groupId}}/{{_id}}/delete" method="POST">
-      <button
-        type="submit"
-        style="
-                    border:0;
-                    outline:0;
-                    background: linear-gradient(
-                    to bottom right,
-                  rgb(20 0 255 / 63%),
-                  rgb(146 26 165 / 87%));
-                "
-      >Delete Movie</button>
+<div class="container-column">
+  {{#with group}}
+  <form action="/groups/LOGqeYUBc30WVh2YuxkW/update" method="POST" style="
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    ">
+      <input name="name" type="text" class="group-text" style="font-size: 2em;" value="{{name}}" required>
+    <p class="popular-search">
+      <input name="description" type="text" class="group-text" style="font-size: 1em;" value="{{description}}"required>
+    </p>
+    <button type="submit" class="custom-button">Update</button>
     </form>
-  </li>
-{{/each}}
+    <p class="popular-search">Total movies: {{"number of movies"}} movies</p>
+    <p class="popular-search">Total duration: {{"total duration"}} mins</p>
+</div>
+    <div class="container-collumn" style="
+    display: grid;
+    place-items: center;
+    gap: 0%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,47%);
+    justify-content: start;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+">
+    {{#if movies}}
+      {{#each movies}}
+        <div style="width:35%;" class="dynamic-panel-col" >
+          <img src="{{image}}" alt="{{title}}">
+          <a href="/movies/{{id}}" style="position:absolute;"></a>
+          <form action="/groups/{{groupId}}/{{_id}}/delete" method="POST"
+            style="position:absolute; align-self:flex-end;">
+            <button type="submit" class="custom-button">Delete Movie</button>
+          </form>
+        </div>
+        {{/each}}
+      {{/if}}
+  {{/with}}
+  </div>
