@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title> {{title}} </title>
+    <link rel="stylesheet"  href="../css/site.css">
+    <link rel="icon" type="image/icon" href="../resources/Cover.png">
+    <link rel="stylesheet" href ="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.css">
+</head>
+<body>
+    <!-- Nav bar -->
+    <nav>
+        <a href="/"> Start </a> </li>
+        <a href=""> About </a> </li>
+        <form action ="/search">
+            <button class="fa-solid fa-magnifying-glass" id = "search-icon"></button>
+            <input type="text" name="movieName" id="search-bar" required >
+            <input type ="number" min = 0 max="250" value="250" id = "search-max">
+        </form>     
+    </nav>
+    <!-- Page content -->
+    {{#with movieInfo}}
+    <header>
+        <div class = "fixed-bg">
+            <img src = {{image}}>
+        </div>
+        <div class = "container-column">
+            <div class ="info-panel">
+                <img src = {{image}} class="fixed-bg">
+                <div class = info-panel-content-container>
+                    <h1 style="
+                    width: fit-content;
+                    background: linear-gradient(to bottom right,rgb(20 0 255 / 63%),rgb(146 26 165 / 87%));
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    margin: 0% 0% -10% 0%;
+                    ">{{title}}
+                    </h1>
+                    <i style="color: black;width: 90%;height: 1%;background-color: white;"></i>
+                    <p style="color:white">{{description}}</p>
+                    <p>Runtime: {{runtime}}</p>
+                    <p>Directors: {{directors}}</p>
+                    <p>Main actors: {{actors}}</p>
+                    <p>Year : {{year}}</p>
+                    <div>Add to group</div>
+                    <button id="btn-request">Add to group</button>
+                    <script>
+                      const baseUrl = "https://www.example.com/api/items/";
+                      const itemId = 123;
+                      const fullUrl = baseUrl + itemId;
+                  
+                      document.getElementById("item-id").innerHTML = itemId;
+                  
+                      document.getElementById("btn-request").addEventListener("click", function() {
+                        fetch(fullUrl)
+                          .then(response => response.json())
+                          .then(data => {
+                            console.log(data);
+                            // Process the data here...
+                          });
+                      });
+                    </script>
+                   
+                    
+                </div>
+            </div>
+        </div>
+    </header> 
+    <footer> Hello</footer>
+</body>
+</html>
+
+
+
+

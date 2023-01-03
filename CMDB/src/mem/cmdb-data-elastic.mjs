@@ -33,6 +33,7 @@ function createGroup(userToken, groupInfo) {
 }
 
 function listUserGroups(userToken) {
+  console.log()
   return fetch(baseURL + `groups/_search?q=userId:"${userToken}"`, {
     headers: { Accept: "application/json" },
   })
@@ -40,8 +41,9 @@ function listUserGroups(userToken) {
     // filter properties
     .then(async (body) => 
     {
+      if( body.status == 404) return []
       let hits = body.hits.hits; // search results
-      let array = [];
+      //let array = [];
       for (const i in hits) {
         let moviesInfo = await getGroupMoviesInfo(hits[i]._id);
         let tmp = { id : hits[i]._id, name : hits[i]._source.name, description: hits[i]._source.description };

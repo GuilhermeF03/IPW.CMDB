@@ -1,0 +1,60 @@
+{{#with movieInfo}}
+<div class = "fixed-bg">
+    <img src = "https://i.ibb.co/9w5bWV8/bg-test2.jpg">
+</div>
+ <div class = "container-column">
+    <div class ="info-panel">
+        <img src = {{image}} class="fixed-bg">
+        <div class = info-panel-content-container>
+           <h1 style="
+            padding: 4% 7% 2% 8%;
+            /* width: fit-content; */
+            /* background: linear-gradient(to bottom right,rgb(20 0 255 / 63%),rgb(146 26 165 / 87%)); */
+            /* -webkit-background-clip: text; */
+            background-clip: text;
+            margin: 0% 0% -5% 0%;
+            font-size: 3em;
+            color: white;
+            ">{{title}}
+            </h1>
+            <i style="margin: 6% 0% 0% 0%;color: black;width: 90%;height: 1%;background-color: white;"></i>
+            <p class="movieInfo">Description</p>
+            <p style="  margin: 3% 0% -6% 0%;
+                        padding: 0% 10% 0% 10%;
+                        color: white;
+                        font-size: 1.3em">{{description}}</p>
+            <p class="movieInfo">Directors</p>
+            <p class="movieText">{{directors}}</p>
+            <p class="movieInfo">Main actors</p>
+             <p class="movieText">{{actors}}</p>
+            <p class="movieInfo">Runtime</p>
+             <p class="movieText">{{runtime}}</p>
+            <p class="movieInfo">Year</p>
+             <p class="movieText">{{year}}</p>
+             {{/with}}
+
+            {{#if groups}}
+                <form action="/groups/{{groups.0.id}}" method="POST" id="form">
+                    <select name="groups" onchange="updateValue()" required>
+                            <option value="" selected disabled>Choose Group</option>
+
+                         
+                            {{#each groups}}
+                            <option class="opt" value="{{id}}">{{name}}</option>
+                            {{/each}}
+                       
+                    </select>
+                    <script>function updateValue() {
+                            const id = document.querySelector(".opt").value
+                            document.getElementById('form').action = `/groups/${id}`
+                            }
+                    </script>
+                    {{#with movieInfo}}
+                        <input type="hidden" name="movieId" value="{{id}}">
+                        <button type="submit">Add to Group</button>
+                    {{/with}}
+                </form>
+            {{/if}}
+        </div>
+    </div>
+</div>

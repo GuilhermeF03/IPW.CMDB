@@ -56,8 +56,8 @@ function createGroup(userToken, groupInfo) {
     if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
     groupInfo["total-duration"] = 0;
     groupInfo.movies = {};
-
     data[userToken].groups.push(groupInfo); 
+
 
     let group = data[userToken].groups.last();
     writeData(dataPath, data);
@@ -74,9 +74,11 @@ function listUserGroups(userToken) {
   return readData(dataPath).then((data) => {
     if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
 
+
     let groups = data[userToken].groups.map(
-      (elem) =>
+      (elem, index) =>
         (elem = {
+          id:index, 
           name: elem.name,
           description: elem.description,
           "number of movies": Object.keys(elem.movies).length,
@@ -86,6 +88,7 @@ function listUserGroups(userToken) {
 
     if (!groups) throw new Error("[Mem] No groups found");
   
+    console.log(groups)
     return { name: data[userToken].name, groups };
 
   });

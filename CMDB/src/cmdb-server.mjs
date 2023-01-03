@@ -26,7 +26,8 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-//app.use(app.use(bodyParser.urlencoded({ extended: true })))
+app.use(express.urlencoded({ extended: false }))
+
 app.use(cors());
 
 // View setup
@@ -55,25 +56,26 @@ app.delete("api/groups/:groupId/:movieId", webapi.deleteMovie);
 // [WEB Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
 
-app.get("/site.css", website.getCss);
+app.get("/site.css", website.getCss); // done
 
-app.get("/", website.getHome);
-app.get("/popular", website.getPopularMovies);
-app.get("/search/", website.searchMovie);
+app.get("/", website.getHome); // done
+app.get("/popular", website.getPopularMovies); 
+app.get("/search/", website.searchMovie); // done
+app.get("/movie/:movieId", website.getMovieById); // done
 // USER
-app.post("/users", website.createUser);
+app.post("/users", website.createUser); // parte 4
 // GROUPS
 app.get("/groups", website.listGroups);
 app.post("/groups", website.createGroup);
 
 app.get("/groups/:groupId", website.getGroupById);
-app.put("/groups/:groupId", website.updateGroup);
+app.post("/groups/:groupId", website.updateGroup);
 // app.delete("/groups/:groupId", website.deleteGroup);
 app.post("/groups/:groupId/delete", website.deleteGroup);
 
 
-app.get("/movies/:movieId", website.getMovieById)
-app.put("/groups/:groupId/:movieId", website.addMovie);
+app.get("/movies/:movieId", website.getMovieById) // done
+app.post("/groups/:groupId/:movieId", website.addMovie);
 // app.delete("/groups/:groupId/:movieId", website.deleteMovie);
 // já não é preciso o groupId
 app.post("/groups/:groupId/:movieId/delete", website.deleteMovie);

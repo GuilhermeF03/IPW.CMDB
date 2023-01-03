@@ -1,27 +1,86 @@
-<header></header>
-<h1>Groups</h1>
+<br><br><br><br>
+<div style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    ">
+    <h1> My Groups</h1>
+    <div
+        style="
+            outline: transparent;
+            background: gray;
+            height: 30vh;
+            width: 30%;
+            border: transparent;
+            padding: 5%;
+            border-radius: 10px;
+        "
+        >
+        <h2
+            style="
+                color:white;
+                text-align: center; 
+                margin-top: -5%;
+            "
+            >Create new Group</h2>
+        <form action="/groups"
+            method="POST"
+            style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            "
+            >
 
-<h2>Create new Group</h2>
-<form action="./groups" method="POST">
-  <p>Group name: <input type="text" name="name"required /></p>
-  <p>Group description:
-    <textarea name="description">
-    </textarea></p>
-  <input type="submit" value="Create Group" value="" />
-</form>
+            <div>
+                <label for="name" style="color:white;">Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    style="
+                        outline: transparent;
+                        text-align: center;
+                        background-color: white;
+                        border: transparent;
+                        margin: 5%;
+                        width:100%;
+                    "
+                    required/>
+            </div>
 
-<h2>User Groups</h2>
-<ul>
-  {{#each groups}}
-    <li>
-      {{! verify name }}
-      <h2><a href="/groups/{{id}}">{{name}}</a></h2>
-      <p>{{description}}</p>
-      <p>{{number of movies}}</p>
-      <p>{{total duration}}</p>
-      <form action="groups/{{id}}/delete" method="POST">
-        <input type="submit" value="Delete Group" />
-      </form>
-    </li>
-  {{/each}}
-</ul>
+            <div>
+                <label for="description" style="color:white;">Description</label>
+                <input
+                    name="description"
+                    style="
+                        outline: transparent;
+                        resize: none;
+                        border: transparent;
+                        margin: 5%;
+                        width:100%;
+                    "
+                    required/>
+            </div>
+           
+            
+            <button type="submit" style="margin: 5%;">Create Group</button>
+        </form>
+    </div>
+    <h2>User Groups</h2>
+    <ul>
+        {{#each groups}}
+        <li class="group">
+            {{! verify name }}
+            <h2><a href="/groups/{{id}}">{{name}}</a></h2>
+            <p>{{description}}</p>
+            <p>{{"number of movies"}}</p>
+            <p>{{"total duration"}}</p>
+            <form action="groups/{{id}}/delete" method="POST">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        {{/each}}
+    </ul>
+</div>

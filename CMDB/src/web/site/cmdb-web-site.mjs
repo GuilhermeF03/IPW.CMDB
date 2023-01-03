@@ -8,14 +8,14 @@ function handlerMiddleware(handler){
     const HAMMER_TOKEN = "276381264wgdgw72361-1";
 
     return async function(req, resp){
-        req.token = HAMMER_TOKEN
+        req.userToken = HAMMER_TOKEN
         try {
             let view = await handler(req, resp)
-            if(view) 
-                resp.render(view.name , view.data) 
+            if (view){
+              console.log("+++",view.data)
+              resp.render(view.name , view.data) 
+            } 
         } catch(e) {
-            // TODO: Hammer time again. We are in an HTML response format
-            // returning errors in Json format
             const response = convertToHttpError(e)
             resp.status(response.status).json(response.body)
             console.log(e)
@@ -25,22 +25,23 @@ function handlerMiddleware(handler){
 
 export default function (services){
 
+    if(!services) throw new Error("Invalid parameter services")
+
     async function getHome(req, resp) {
         resp.render('index')
-        //sendFile('index.html', resp);
     }
   
     async function getCss(req, resp) {
         resp.sendFile(__dirname + "css/site.css",resp);
-        //let data = f
+        
     }
 
     async function getPopularMovies(req,resp){
         try {
             let max = Object.values(req.query)[0] || 250;
             const popularMovies = await services.getPopularMovies(max);
-
-            resp.render('popular', {title : `Top ${max} movies`, movies : popularMovies})
+           
+            resp.render('popular', {title : `Top ${max} movies`, movies : popularMovies.results})
           } catch (error) {
             if (!error.code) console.error(error);
       
@@ -64,6 +65,23 @@ export default function (services){
             resp.status(httpError.status).json(httpError.body);
           }
     }
+
+    async function getMovieById(req, resp){
+      try{
+        let movieInfo = await services.getMovieById(req.params.movieId)
+        let groups = await services.listUserGroups(req.userToken).catch()
+       
+        return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups.groups, movieInfo:movieInfo}}
+       
+    
+        
+      } catch(error) {
+        if (!error.code) console.error(error);
+  
+        const httpError = convertToHttpError(error);
+        resp.status(httpError.status).json(httpError.body);
+      }
+    }
    
     // USER TODO
     async function createUser(req, resp){ 
@@ -86,6 +104,7 @@ export default function (services){
             if (!error.code) console.error(error);
       
             const httpError = convertToHttpError(error);
+            
             resp.status(httpError.status).json(httpError.body);
           }
     }
@@ -95,8 +114,52 @@ export default function (services){
         let userGroups = await services.listUserGroups(req.userToken);
   
         console.log(`[>] Successfully retrieved all user's groups.`)
+        
+        return {name: "groups", data: {title:"My groups",groups: userGroups.groups}}
+      } catch (error) {
+        if (!error.code) console.error(error);
   
-        return {name: "groups", data: {title:"My groups",groups: userGroups}}
+        const httpError = convertToHttpError(error);
+        //resp.status(httpError.status).json(httpError.body);
+      }
+    }
+
+    async function createGroup(req, resp){
+      try {
+        
+      
+        if (!req.body.name || !req.body.description){
+          resp
+            .status(400)
+            .json({ error: "[WA] Invalid body request, check valid format ahahah." });
+            return;
+        }
+          
+  
+        let groupInfo = await services.createGroup(req.userToken, req.body);
+  
+        console.log(`[>] Successfully created new group.`);
+  
+       resp.redirect("/groups")
+  
+      } catch (error) {
+        if (!error.code) console.error(error);
+  
+        const httpError = convertToHttpError(error);
+        resp.status(httpError.status).json(httpError.body);
+      }
+    }
+    
+    async function getGroupById(req, resp){
+      try {
+        let group = await services.getGroupById(
+          req.userToken,
+          req.params.groupId
+        );
+  
+        console.log(`[>] Successfully retrieved group info.`)
+  
+        return {name:'groupInfo',data:{title:group.name,name:group.name,movies:group.movies}}
       } catch (error) {
         if (!error.code) console.error(error);
   
@@ -105,33 +168,67 @@ export default function (services){
       }
     }
 
-    async function createGroup(req, resp){
+    async function updateGroup(req, resp) {
+      try {
+        let group = await services.updateGroup(req.userToken, req.params.groupId, req.body)
 
+        console.log(`[>] Successfully updated group info.`)
+
+        resp.redirect(`/groups/${req.params.groupId}`)
+      }
+      catch (error) {
+          if (!error.code) console.error(error);
+        
+
+      }
     }
-    
-    async function getGroupById(req, resp){
-
-    }
-
-    async function updateGroup(req, resp){
-
-    }
-
+   
     async function deleteGroup(req, resp){
-
+      try {
+        let group = await services.deleteGroup(req.userToken, req.params.groupId);
+  
+        console.log(`[>] Successfully deleted group.`);
+  
+        resp.redirect("/groups")
+      } catch (error) {
+        if (!error.code) console.error(error);
+  
+        const httpError = convertToHttpError(error);
+        resp.status(httpError.status).json(httpError.body);
+      }
     }
 
     // MOVIES
     async function addMovie(req, resp){
-
+      try {
+        let movie = await services.addMovie(req.userToken, req.params.groupId, req.body);
+  
+        console.log(`[>] Successfully added movie to group.`);
+  
+        resp.redirect(`/groups/${req.params.groupId}`)
+      } catch (error) {
+        if (!error.code) console.error(error);
+  
+        const httpError = convertToHttpError(error);
+        resp.status(httpError.status).json(httpError.body);
+      }
     }
 
-    async function getMovieById(req, resp){
 
-    }
 
     async function deleteMovie(req, resp){
-
+      try {
+        let movie = await services.deleteMovie(req.userToken, req.params.groupId, req.params.movieId);
+  
+        console.log(`[>] Successfully deleted movie from group.`);
+  
+        resp.redirect(`/groups/${req.params.groupId}`)
+      } catch (error) {
+          if (!error.code) console.error(error);
+    
+          const httpError = convertToHttpError(error);
+          resp.status(httpError.status).json(httpError.body);
+      }
     }
     
     return {
@@ -139,7 +236,7 @@ export default function (services){
         getCss,
         getPopularMovies,
         searchMovie,
-        getMovieById,
+        getMovieById: handlerMiddleware(getMovieById),
         createUser,
         listGroups : handlerMiddleware(listGroups),
         createGroup: handlerMiddleware(createGroup),

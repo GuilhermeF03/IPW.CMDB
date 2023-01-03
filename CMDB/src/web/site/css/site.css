@@ -17,15 +17,17 @@ body {
 
 footer {
   position: fixed;
+  z-index: 0;
   bottom: 0px;
   width: 100vw;
   height: 0vh;
   background-color: blue;
-  padding: 0% 0% 5% 0%;
+  padding: 0% 0% 4% 0%;
 }
 
 /* NAV BAR -----------------------------------------------------------*/
 nav {
+  z-index: 1;
   background: linear-gradient(to bottom right, rgba(0,0,0,0.7),rgba(0,0,0,0.2));
   height: 8vh;
   width: 100%;
@@ -33,7 +35,6 @@ nav {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
   /* margin-bottom: 702px; */
 }
 
@@ -63,7 +64,7 @@ nav a:hover{
 
 /* Search bar --------------------------------- */
 
-form {
+.dynamic-form {
   width: 2%;
   display: flex;
   justify-content: flex-start;
@@ -74,7 +75,7 @@ form {
   transition: 0.2s;
 }
 
-form:hover {
+.dynamic-form:hover {
   width: 17%;
   display: flex;
   justify-content: flex-start;
@@ -85,7 +86,7 @@ form:hover {
   transition: 0.2s;
 }
 
-form input {
+.dynamic-form input {
   color: transparent;
   margin: 2%;
   width: 100%;
@@ -95,7 +96,7 @@ form input {
   background-color: rgba(0,0,0,0)
 }
 
-form input:focus {
+.dynamic-form input:focus {
   color: black;
   margin: 3%;
   width: 20vw;
@@ -105,7 +106,7 @@ form input:focus {
   outline: none;
 }
 
-form input:focus form {
+.dynamic-form input:focus form {
   width: 20%;
   display: flex;
   justify-content: flex-start;
@@ -116,7 +117,7 @@ form input:focus form {
   transition: 0.2s;
 }
 
-form:hover form input {
+.dynamic-form:hover form input {
   color: black;
   margin: 3%;
   width: 20vw;
@@ -165,7 +166,7 @@ form:hover form input {
   outline: none;
 }
 
-form:hover #search-max{
+.dynamic-form:hover #search-max{
   text-align: center;
   color: white;
   margin: -1% -1% -1.2%;
@@ -183,7 +184,7 @@ form:hover #search-max{
  color:white ;
 }
 
-form:hover #search-icon{
+.dynamic-form:hover #search-icon{
   color:black ;
  }
 
@@ -202,19 +203,22 @@ header {
   justify-content: center;
 }
 .container-column{
-  margin: 0 0% 0% 0%;
+  margin-top: 3%;
+  height: fit-content;
   width: 100%;
   display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax(73vw, 0fr)); */
   align-items: center;
-  padding: 6% 0% 0% 0%;
+  padding: 6% 0% 6% 0%;
   align-content: center;
   justify-items: center;
+  gap: 4vh 0vw;
 }
 /* DYNAMIC PANEL ROW -----------*/
 .dynamic-panel-row{
   margin: 3%;
   width: 50%;
-  height: 33%;
+  height: 100%;
   background: linear-gradient(
     to bottom right,
    rgb(20 0 255 / 63%),
@@ -257,8 +261,7 @@ header {
 
 /* DYNAMIC PANEL COLUMN ---------------- */
 .dynamic-panel-col{
-  margin: 1% 0% 1% 0%;
-  width: 55%;
+  width: 29%;
   height: 100%;
   display: grid;
   place-items: center;
@@ -266,8 +269,7 @@ header {
   overflow: hidden;
   transition: 0.4s ease;
   padding: 0%;
-  flex-direction: row;
-  /* align-content: center; */
+  align-content: center;
 }
 
 .dynamic-panel-col > * {
@@ -275,26 +277,30 @@ header {
 }
 
 .dynamic-panel-col:hover{
-  margin: 0% 0% 1% 0%;
-  width: 55%;
+  width: 31%;
   height: 100%;
-  display: grid;
+  display: flex;
   border-radius: 30px;
   overflow: hidden;
   transition: 0.4s ease;
   padding: 0%;
+  align-items: center;
+  justify-content: center;
 }
 
 .dynamic-panel-col a{
-  display: none;
+  text-align: center;
+  z-index: -1;
+  color:transparent;
+  position: fixed;
 }
 
 .dynamic-panel-col:hover a{
   overflow-wrap: break-word;
   position: absolute;
-  z-index: 1;
   width: 100%;
   height: 100%;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -302,10 +308,8 @@ header {
   text-decoration: none;
   color: #f0f0f0;
   inline-size: 20%;
-  align-content: center;
+  text-align: center;
 }
-
-
 
 #column-text{
   display: inline-block;
@@ -315,7 +319,6 @@ header {
   font-size: 14px;
   font-weight: 600;
 }
-
 
 /* INDEX ===================================================================================================================== */
 
@@ -394,36 +397,131 @@ header {
 }
 
 /* RESULTS */
-.dynamic-panel-col img {
+.dynamic-panel-col > img {
+  min-height: 50vh;
   position: relative;
   z-index: 0;
-  width: 49%;
+  width: 100%;
   height: 100%;
   border-radius: 30px;
   object-fit: cover;
-  margin: 0%;
-  margin-right: 72px;
 }
-.dynamic-panel-col img:hover {
-  background: linear-gradient( to bottom right,
-  rgba(0,0,0,0.7),rgba(0,0,0,0.5));
-  width: 49%;
-  height: 100%;
+.dynamic-panel-col:hover > img {
+  filter: brightness(0.3);
   border-radius: 30px;
   object-fit: cover;
-  margin: 0%;
-  margin-right: 72px;
 }
-
+.fixed-bg{
+  display: inline;
+  height: 100vh;
+  width: 100%;
+}
 /*Search ------------*/
-.bg-search{
+.fixed-bg img{
   height: 100vh;
   position: fixed;
   z-index: -1;
-  background: linear-gradient(
-    rgba(0,0,0,0.7), rgba(0,0,0,0.5)),
-    url(https://i.ibb.co/V9SdjjV/bg-test1.jpg);
+  filter: brightness(0.5);
   background-size: cover;
+}
+
+/* INFO =====================================================================================*/
+.info-panel{
+  contain: paint;
+  display: flex;
+  place-items: center;
+  width: 68%;
+  height: 80vh;
+  /* background: linear-gradient(
+    to bottom right,
+   rgb(20 0 255 / 63%),
+   rgb(146 26 165 / 87%)); */
+  justify-content: center;
+  overflow: scroll;
+  align-items: center;
+}
+
+.info-panel > * {
+  grid-column: 1 /-1;
+  position: absolute;
+}
+
+.info-panel img{
+  object-fit: cover;
   width: 100%;
+  height: 100vh;
+}
+.info-panel-content-container{
+  display: grid;
+  place-items: center;
+  width: 66%;
+  height: 68vh;
+  background: linear-gradient(
+    to bottom right,
+   rgb(0 0 0 / 63%),
+   rgb(0 0 0 / 20%));
+  overflow: hidden;
+  object-fit: contain;
+  margin: 18% 3% 3% 3%;
+  padding-bottom: 7%;
+}
+
+.popular-search{
+  color:white;
+}
+
+.movieInfo{
+  margin: 0% 0% -5% 0%;
+  color: gray;
+  font-size: 1.5em;
+}
+.movieText{
+  margin: 0% 0% -5% 0%;
+  padding: 0% 10% 0% 10%;
+  color: white;
+  font-size: 1.3em;
+}
+
+
+button {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: transparent;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  width: fit-content;
+  border-radius: 10px;
+  font-size: 2vh;
+
+  
+}
+
+input {
+  border-radius: 10px;
+  padding: 1vh;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50vh;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 2vh;
+  text-align: center;
+  margin: 2vh;
+
+}
+
+#select-group{
+  color:black
+}
+
+::-webkit-scrollbar{
+  width: 0%;
 }
 

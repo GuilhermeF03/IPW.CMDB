@@ -1,6 +1,6 @@
-// const apiKey = "k_iw34bd1e"; acabou
-// const apiKey = "k_agj13wln"; acabou
-const apiKey = "k_nibrgm60";
+const apiKey = "k_iw34bd1e"; 
+//const apiKey = "k_agj13wln";
+//const apiKey = "k_nibrgm60";
 const top250Url = `https://imdb-api.com/en/API/Top250Movies/${apiKey}`;
 const searchMovieByNameUrl = `https://imdb-api.com/en/API/SearchMovie/${apiKey}/`;
 const getMovieByIdUrl = `https://imdb-api.com/en/API/Title/${apiKey}/`;
@@ -10,7 +10,9 @@ import { errors } from "../../errors/http-errors.mjs";
 
 async function getTop250() {
   let top = await parseFetch(top250Url);
+  console.log(top.items[0])
   return {
+    
     results: top.items.map(
       (mov) =>
         (mov = {
@@ -58,7 +60,7 @@ async function getMovieById(movieId) {
     year: movie.year,
     image: movie.image,
     directors: movie.directors,
-    actors: movie.actorsList.map((actor) => (elem = { name: actor.name, Character: actor.asCharacter})),
+    actors: movie.stars,
   };
 
 }

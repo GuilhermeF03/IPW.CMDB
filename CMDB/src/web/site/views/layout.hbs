@@ -9,13 +9,14 @@
     <link rel="stylesheet"  href="/site.css">
     <link rel="icon" type="image/icon" href="../resources/Cover.png">
     <link rel="stylesheet" href ="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.css">
+
 </head>
 <body>
     <!-- Nav bar -->
     <nav>
-        <a href="/"> Start </a> </li>
+        <a type="url" href="/"> Start </a> </li>
         <a href=""> About </a> </li>
-        <form action ="/search">
+        <form action ="/search" class="dynamic-form">
             <button class="fa-solid fa-magnifying-glass" id = "search-icon"></button>
             <input type="text" name="movieName" id="search-bar" required >
             <input type ="number" min = 0 max="250" value="250" id = "search-max">
@@ -25,6 +26,6 @@
     <header>
         {{{body}}}
     </header> 
-    <footer> Hello</footer>
+    <!----<footer> Hello</footer>--->
 </body>
 </html>
