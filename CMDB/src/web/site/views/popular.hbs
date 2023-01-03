@@ -4,11 +4,17 @@
 <div class ="container-column">
 
     {{#each movies}}
+        {{#if image}}
         <div class="dynamic-panel-col">
-            {{#if image}}
+           
             <img  src={{image}} alt={{title}}>
-            <a class="popular-text" href="/movies/{{id}}" >{{title}} #{{rank}}</a>
-            {{/if}}
+            <a class="popular-text" href="/movies/{{id}}" 
+            style="display: flex;
+                   flex-direction: column;">
+                <p>#{{rank}}</p>
+                <p>{{title}}</p>
+            </a> 
         </div>
+        {{/if}}
     {{/each}}
 </div>

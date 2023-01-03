@@ -5,13 +5,9 @@
  <div class = "container-column">
     <div class ="info-panel">
         <img src = {{image}} class="fixed-bg">
-        <div class = info-panel-content-container>
+        <div class = "info-panel-content-container">
            <h1 style="
             padding: 4% 7% 2% 8%;
-            /* width: fit-content; */
-            /* background: linear-gradient(to bottom right,rgb(20 0 255 / 63%),rgb(146 26 165 / 87%)); */
-            /* -webkit-background-clip: text; */
-            background-clip: text;
             margin: 0% 0% -5% 0%;
             font-size: 3em;
             color: white;
@@ -19,16 +15,15 @@
             </h1>
             <i style="margin: 6% 0% 0% 0%;color: black;width: 90%;height: 1%;background-color: white;"></i>
             <p class="movieInfo">Description</p>
-            <p style="  margin: 3% 0% -6% 0%;
-                        padding: 0% 10% 0% 10%;
-                        color: white;
-                        font-size: 1.3em">{{description}}</p>
+            <p class="movieText">{{description}}</p>
             <p class="movieInfo">Directors</p>
             <p class="movieText">{{directors}}</p>
             <p class="movieInfo">Main actors</p>
              <p class="movieText">{{actors}}</p>
-            <p class="movieInfo">Runtime</p>
-             <p class="movieText">{{runtime}}</p>
+             {{#if runtime}}
+                <p class="movieInfo">Runtime</p>
+                <p class="movieText">{{runtime}}mins</p>
+             {{/if}}
             <p class="movieInfo">Year</p>
              <p class="movieText">{{year}}</p>
              {{/with}}

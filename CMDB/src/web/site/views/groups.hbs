@@ -1,11 +1,14 @@
-<br><br><br><br>
+<div class = "fixed-bg">
+    <img src = "https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg">
+</div>
 <div style="
+        margin:3%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     ">
-    <h1> My Groups</h1>
+    <h1 class="popular-search"> My Groups</h1>
     <div
         style="
             outline: transparent;
@@ -35,7 +38,7 @@
             >
 
             <div>
-                <label for="name" style="color:white;">Name</label>
+                <label for="name" class="popular-search">Name</label>
                 <input
                     type="text"
                     name="name"
@@ -68,17 +71,26 @@
             <button type="submit" style="margin: 5%;">Create Group</button>
         </form>
     </div>
-    <h2>User Groups</h2>
+    <h2 class="popular-search">User Groups</h2>
     <ul>
         {{#each groups}}
         <li class="group">
             {{! verify name }}
-            <h2><a href="/groups/{{id}}">{{name}}</a></h2>
-            <p>{{description}}</p>
-            <p>{{"number of movies"}}</p>
-            <p>{{"total duration"}}</p>
+            <h2><a href="/groups/{{id}}" style="text-decoration:none; color:purple;text-transform:uppercase">{{name}}</a></h2>
+            <p class="popular-search">{{description}}</p>
+            <p class="popular-search">{{"number of movies"}} movies</p>
+            {{#if "total duration"}}
+            <p class="popular-search">{{"total duration"}}mins</p>
+            {{/if}}
             <form action="groups/{{id}}/delete" method="POST">
-                <button type="submit">Delete</button>
+                <button type="submit" style="
+                    border:0;
+                    outline:0;
+                    background: linear-gradient(
+                    to bottom right,
+                  rgb(20 0 255 / 63%),
+                  rgb(146 26 165 / 87%));
+                ">Delete</button>
             </form>
         </li>
         {{/each}}
