@@ -418,6 +418,7 @@ header {
 }
 /*Search ------------*/
 .fixed-bg img{
+  width: inherit;
   height: 100vh;
   position: fixed;
   z-index: -1;

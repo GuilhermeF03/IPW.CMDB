@@ -124,6 +124,10 @@ export default function(data, mem) {
     return info;
   }
 
+
+
+  //mem.createUser("276381264wgdgw72361-1");
+
   return {
     getPopularMovies,
     searchMovie,

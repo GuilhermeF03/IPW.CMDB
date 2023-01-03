@@ -3,29 +3,31 @@ import { errors } from "../../errors/http-errors.mjs";
 import path from "path";
 import url from "url";
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const dataPath = __dirname+"../../data/data.json";
+const dataPath = path.join(__dirname,"..\\","..\\","data/data.json");
 
 /* ------------------------------ [FILE] ------------------------------------------------------------------------------------------------------- */
-function checkFileExists(file) {
+/*function checkFileExists(file) {
   return fs
     .access(file, fs.constants.F_OK)
     .then(() => true)
     .catch((error) => console.log(error))
     .catch(() => false)
     
-}
+}*/
 
-
-
-const readData = (path) => {
-  return fs
+const readData = async (path) => {
+  console.log(path)
+  const data = await
+   fs
     .readFile(path)
     .then((data) => JSON.parse(data))
-    .catch(() => console.error("[fs] File not found"));
+    .catch(() => console.error("[fs] File not found at "+ path));
+  console.log("data", data);
+  return data;
 };
 
-const writeData = (path, data) => {
-  fs.writeFile(path, JSON.stringify(data, null, 2))
+const writeData = async (path, data) => {
+  return fs.writeFile(path, JSON.stringify(data, null, 2))
     .then(() => console.log("[fs] Data was successfully written!"))
     .catch(() => console.error("[fs] Couldn't finish writing data."));
 };
@@ -107,6 +109,7 @@ function getGroupById(userToken, groupId) {
 
       return group;
     })
+    .catch(console.log)
 }
 
 function updateGroup(userToken, groupId, updateInfo) {
@@ -163,6 +166,7 @@ function addMovie(userToken, groupId, mInfo) {
 
     group.movies[mInfo.id] = mInfo;
     group["total-duration"] += parseInt(mInfo.runtime);
+    data[userToken].groups[groupId] = group;
 
     writeData(dataPath, data);
 
@@ -189,9 +193,9 @@ function deleteMovie(userToken, groupId, movieId) {
     })
 }
 
-checkFileExists(dataPath)
-  .then(exists => {if(!exists) writeData(dataPath, {})})
-  .catch((error) => console.error(error));
+// checkFileExists(dataPath)
+//   .then(exists => {if(!exists) writeData(dataPath, {})})
+//   .catch((error) => console.error(error));
 
 export default {
   createUser,

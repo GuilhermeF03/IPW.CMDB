@@ -10,9 +10,10 @@ function handlerMiddleware(handler){
     return async function(req, resp){
         req.userToken = HAMMER_TOKEN
         try {
+          console.log(handler)
             let view = await handler(req, resp)
+            console.log(view)
             if (view){
-              console.log("+++",view.data)
               resp.render(view.name , view.data) 
             } 
         } catch(e) {
@@ -169,7 +170,7 @@ export default function (services){
     }
 
     async function updateGroup(req, resp) {
-      try {
+      try {conso
         let group = await services.updateGroup(req.userToken, req.params.groupId, req.body)
 
         console.log(`[>] Successfully updated group info.`)
@@ -201,16 +202,19 @@ export default function (services){
     // MOVIES
     async function addMovie(req, resp){
       try {
-        let movie = await services.addMovie(req.userToken, req.params.groupId, req.body);
+        
+        let movie = await services.addMovie(req.userToken, req.params.groupId, req.body.movieId);
   
         console.log(`[>] Successfully added movie to group.`);
   
         resp.redirect(`/groups/${req.params.groupId}`)
+        return movie
       } catch (error) {
         if (!error.code) console.error(error);
   
         const httpError = convertToHttpError(error);
         resp.status(httpError.status).json(httpError.body);
+        console.log(2)
       }
     }
 

@@ -1,20 +1,12 @@
 {
-  "276381264wgdgw72361-1": {
-    "token": "276381264wgdgw72361-1",
-    "name": "Eusébio",
-    "groups": [
-      {
-        "name": " abc ",
-        "description": " rec ",
-        "total-duration": 0,
-        "movies": {}
-      },
-      {
-        "name": "my group",
-        "description": "my description",
-        "total-duration": 0,
-        "movies": {}
-      }
-    ]
+    "276381264wgdgw72361-1": {
+        "name": "Euseébio",
+
+    "groups": [ {
+        "name":"abc",
+        "description":" rec",
+        "movies":{
+        }
+    }]
   }
 }
