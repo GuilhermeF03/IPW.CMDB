@@ -20,7 +20,7 @@ async function getTop250() {
           title: mov.title,
           year: mov.year,
           imDbRating: mov.imDbRating,
-          image: mov.image,
+          image: mov.image
         })
     ),
   };
@@ -35,7 +35,7 @@ async function searchMovieByName(movieName) {
           id: elem.id,
           title: elem.title,
           description: elem.description,
-          image: elem.image,
+          image: elem.image
         })
     ),
   };
@@ -58,7 +58,7 @@ async function getMovieById(movieId) {
     year: movie.year,
     image: movie.image,
     directors: movie.directors,
-    actors: movie.stars,
+    actors: movie.stars
   };
 
 }

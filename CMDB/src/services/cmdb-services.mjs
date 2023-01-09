@@ -59,10 +59,12 @@ export default function (data, mem) {
   }
 
   async function createUser(userInfo) {
+    
     await validateString(userInfo.name);
 
     let uInfo = { token: crypto.randomUUID(), name: userInfo.name };
-
+    
+    //console.log(uInfo.token);
     await mem.createUser(uInfo);
 
     return uInfo;

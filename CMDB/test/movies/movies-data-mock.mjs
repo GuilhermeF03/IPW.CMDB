@@ -1,9 +1,11 @@
-const top250Url = `CMDB/test/movies/top250.json`;
-const searchMovieByNameUrl = `CMDB/test/movies/search.json/`;
-const getMovieByIdUrl = `CMDB/test/movies/movies-test.json`;
+const top250Path = "./test/movies/top250.json";
+// const searchGodfatherByPath = `CMDB/test/movies/searchMovieTheGodfatherPart2.json`;
+// const getDarkKnightByPath = `CMDB/test/movies/getMovieByIdDarkKnight.json`;
+// const getLordOfTheRingsByPath = `CMDB/test/movies/getMovieByIdLordOfTheRings.json`;
+// const getPulpFictionByPath = `CMDB/test/movies/getMovieByIdPulpFiction.json`;
 
 import fs from "node:fs/promises"
-import { errors } from "../errors/http-errors.mjs";
+import { errors } from "../../errors/http-errors.mjs";
 
 async function getTop250() {
   let top = await mockFetch(top250Path);
@@ -16,14 +18,15 @@ async function getTop250() {
           title: mov.title,
           year: mov.year,
           imDbRating: mov.imDbRating,
+          image: mov.image
         })
     ),
   };
 }
 
 // TODO: add error
-async function searchMovieByName(movieName) {
-  let search = await mockFetch(`${searchMovieByNameUrl}${movieName}`);
+async function searchMovieByName(path) {
+  let search = await mockFetch(path);
   return {
     results: search.results.map(
       (elem) =>
@@ -31,13 +34,14 @@ async function searchMovieByName(movieName) {
           id: elem.id,
           title: elem.title,
           description: elem.description,
+          image: elem.image
         })
     ),
   };
 }
 
-async function getMovieById(movieId) {
-  let movie = await mockFetch(`${getMovieByIdUrl}${movieId}`);
+async function getMovieById(path) {
+  let movie = await mockFetch(path);
 
   if (!movie.title)
     return Promise.reject(
@@ -52,6 +56,9 @@ async function getMovieById(movieId) {
     description: movie.plot,
     runtime: movie.runtimeMins,
     year: movie.year,
+    image: movie.image,
+    directors: movie.directors,
+    actors: movie.stars
   };
 }
 

@@ -1,6 +1,160 @@
 {
-  "276381264wgdgw72361-1": {
-    "name": "Euseébio",
-    "groups": []
+  "aff3f8c7-dc25-4765-a1e1-60d3c278b876": {
+    "token": "aff3f8c7-dc25-4765-a1e1-60d3c278b876",
+    "name": "Ricardo",
+    "groups": [
+      {
+        "id": "0",
+        "name": "acao",
+        "description": "filmes de acao",
+        "movies": {},
+        "total-duration": 0
+      },
+      {
+        "id": "1",
+        "name": "fantasia",
+        "description": "filmes de fantasia",
+        "movies": {
+          "tt0167260": {
+            "id": "tt0167260",
+            "title": "The Lord of the Rings: The Return of the King",
+            "description": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+            "runtime": "201",
+            "year": "2003",
+            "image": "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6762_AL_.jpg",
+            "directors": "Peter Jackson",
+            "actors": "Elijah Wood, Viggo Mortensen, Ian McKellen"
+          }
+        },
+        "total-duration": 201
+      },
+      {
+        "id": "2",
+        "name": "ferias de natal",
+        "description": "filmes para ver nas ferias de natal",
+        "movies": {
+          "tt0110912": {
+            "id": "tt0110912",
+            "title": "Pulp Fiction",
+            "description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+            "runtime": "154",
+            "year": "1994",
+            "image": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6904_AL_.jpg",
+            "directors": "Quentin Tarantino",
+            "actors": "John Travolta, Uma Thurman, Samuel L. Jackson"
+          }
+        },
+        "total-duration": 154
+      }
+    ]
+  },
+  "f03a4361-ab20-463a-b365-57eed71bfa12": {
+    "token": "f03a4361-ab20-463a-b365-57eed71bfa12",
+    "name": "Rodrigo",
+    "groups": [
+      {
+        "id": "0",
+        "name": "acao",
+        "description": "filmes de acao",
+        "movies": {
+          "tt0468569": {
+            "id": "tt0468569",
+            "title": "The Dark Knight",
+            "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+            "runtime": "152",
+            "year": "2008",
+            "image": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6762_AL_.jpg",
+            "directors": "Christopher Nolan",
+            "actors": "Christian Bale, Heath Ledger, Aaron Eckhart"
+          }
+        },
+        "total-duration": 152
+      },
+      {
+        "id": "1",
+        "name": "fantasia",
+        "description": "filmes de fantasia",
+        "movies": {},
+        "total-duration": 0
+      },
+      {
+        "id": "2",
+        "name": "ferias de natal",
+        "description": "filmes para ver nas ferias de natal",
+        "movies": {
+          "tt0110912": {
+            "id": "tt0110912",
+            "title": "Pulp Fiction",
+            "description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+            "runtime": "154",
+            "year": "1994",
+            "image": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6904_AL_.jpg",
+            "directors": "Quentin Tarantino",
+            "actors": "John Travolta, Uma Thurman, Samuel L. Jackson"
+          }
+        },
+        "total-duration": 154
+      }
+    ]
+  },
+  "839620c6-944c-4534-af5d-730f4b8c87fb": {
+    "token": "839620c6-944c-4534-af5d-730f4b8c87fb",
+    "name": "Manuel",
+    "groups": [
+      {
+        "id": "0",
+        "name": "acao",
+        "description": "filmes de acao",
+        "movies": {
+          "tt0468569": {
+            "id": "tt0468569",
+            "title": "The Dark Knight",
+            "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+            "runtime": "152",
+            "year": "2008",
+            "image": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6762_AL_.jpg",
+            "directors": "Christopher Nolan",
+            "actors": "Christian Bale, Heath Ledger, Aaron Eckhart"
+          }
+        },
+        "total-duration": 152
+      },
+      {
+        "id": "1",
+        "name": "fantasia",
+        "description": "filmes de fantasia",
+        "movies": {
+          "tt0167260": {
+            "id": "tt0167260",
+            "title": "The Lord of the Rings: The Return of the King",
+            "description": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+            "runtime": "201",
+            "year": "2003",
+            "image": "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6762_AL_.jpg",
+            "directors": "Peter Jackson",
+            "actors": "Elijah Wood, Viggo Mortensen, Ian McKellen"
+          }
+        },
+        "total-duration": 201
+      },
+      {
+        "id": "2",
+        "name": "ferias de natal",
+        "description": "filmes para ver nas ferias de natal",
+        "movies": {
+          "tt0110912": {
+            "id": "tt0110912",
+            "title": "Pulp Fiction",
+            "description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+            "runtime": "154",
+            "year": "1994",
+            "image": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6904_AL_.jpg",
+            "directors": "Quentin Tarantino",
+            "actors": "John Travolta, Uma Thurman, Samuel L. Jackson"
+          }
+        },
+        "total-duration": 154
+      }
+    ]
   }
 }

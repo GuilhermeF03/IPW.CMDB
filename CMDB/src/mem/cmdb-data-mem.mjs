@@ -15,18 +15,18 @@ const dataPath = path.join(__dirname,"..\\","..\\","data/data.json");
     
 }*/
 
-const readData = async (path) => {
+async function readData(path) {
   console.log(path)
   const data = await
    fs
     .readFile(path)
     .then((data) => JSON.parse(data))
     .catch(() => console.error("[fs] File not found at "+ path));
-  console.log("data", data);
+  //console.log("data", data);
   return data;
 };
 
-const writeData = async (path, data) => {
+async function writeData(path, data) {
   return fs.writeFile(path, JSON.stringify(data, null, 2))
     .then(() => console.log("[fs] Data was successfully written!"))
     .catch(() => console.error("[fs] Couldn't finish writing data."));
@@ -198,6 +198,8 @@ function deleteMovie(userToken, groupId, movieId) {
 //   .catch((error) => console.error(error));
 
 export default {
+  readData,
+  writeData,
   createUser,
   createGroup,
   getGroupById,
