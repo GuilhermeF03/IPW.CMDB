@@ -70,12 +70,11 @@ export default function (services){
     async function getMovieById(req, resp){
       try{
         let movieInfo = await services.getMovieById(req.params.movieId)
-        let groups = await services.listUserGroups(req.userToken).catch()
+        //let groups = await services.listUserGroups(req.userToken).catch()
        
         // return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups.groups, movieInfo:movieInfo}}
         return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups, movieInfo: movieInfo}}
 
-        
       } catch(error) {
         if (!error.code) console.error(error);
   
@@ -130,7 +129,7 @@ export default function (services){
         if (!req.body.name || !req.body.description){
           resp
             .status(400)
-            .json({ error: "[WA] Invalid body request, check valid format ahahah." });
+            .json({ error: "[WA] Invalid body request, check valid format." });
             return;
         }
         await services.createGroup(req.userToken, req.body);

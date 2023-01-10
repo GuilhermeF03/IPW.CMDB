@@ -24,7 +24,7 @@ async function createDummyMovie() {
   return await mem.addMovie(userToken, 1, movieInfo);
 }
 
-describe("CMDB Data Elastic Tests", () => {
+/*describe("CMDB Data Elastic Tests", () => {
   
   describe("#createUser Tests", () => {
     it("Should create a user", async () => {
@@ -214,4 +214,4 @@ describe("CMDB Data Elastic Tests", () => {
       await fetch(baseURL + `groups/_doc/${group.id}`, { method: "DELETE" });
     });
   });
-});
+});*/

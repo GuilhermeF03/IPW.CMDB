@@ -2,6 +2,26 @@ import fetch from "node-fetch";
 
 const baseURL = "http://localhost:9200/";
 
+// checks for indexes at elastic -> add missing indexes
+async function startupRoutine(){
+  try{
+    const json = await((await fetch('http://localhost:9200/_cat/indices?format=json')).json());
+    let indices = await json.map((i => i.index));
+    console.log(indices)
+    const mandatory =['groups','users','movies']; // mandatory indexes
+
+    mandatory.forEach(
+      async idx => {
+          if(!indices.includes(idx))
+            await fetch(`http://localhost:9200/${idx}`,{ method: 'PUT'}); // add index
+      });
+  }catch(error) {
+    console.error(error)
+  }
+}
+// called at boot time
+startupRoutine();
+
 /* ---------------------- [USER] -------------------------------------------------------------------------------------------------------- */
 function createUser(userInfo) {
   return fetch(baseURL + `users/_doc?refresh=wait_for`, {
@@ -152,6 +172,7 @@ function getGroupMoviesInfo(groupId) {
     .then((response) => response.json())
     .then((body) => {
       let totalDuration = 0;
+      console.log(JSON.stringify(body,null,2))
       let bodyInfo = body.hits.hits;
       let movies = bodyInfo.map((hits) => hits._source);
       for (const mov in movies) {
