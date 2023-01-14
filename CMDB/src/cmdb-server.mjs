@@ -46,7 +46,7 @@ app.get("/api/popular", webapi.getPopularMovies);
 app.get("/api/search/", webapi.searchMovie);
 app.get("/api/movie/:movieId", webapi.getMovieById);
 // USER
-app.post("/api/users", webapi.createUser);
+app.post("/api/signup", webapi.createUser);
 // GROUPS
 app.get("/api/groups", webapi.listGroups);
 app.post("/api/groups", webapi.createGroup);

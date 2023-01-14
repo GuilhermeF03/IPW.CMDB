@@ -24,21 +24,23 @@ const baseURL = "http://localhost:9200/";
 
 /* ---------------------- [USER] -------------------------------------------------------------------------------------------------------- */
 function createUser(userInfo) {
-  return fetch(baseURL + `users/_doc?refresh=wait_for`, {
-    method: "POST",
-    body: JSON.stringify(userInfo),
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  }).then((response) => response.json());
+  if (validateUser(userInfo.username)) {
+    return fetch(baseURL + `users/_doc?refresh=wait_for`, {
+      method: "POST",
+      body: JSON.stringify(userInfo),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => response.json());
+  }else{
+    Promise.reject("Username already exists");
 }
 
-function validateUser(username, password) {
+function validateUser(username) {
   return fetch(baseURL + `users/_search?q=username:${username}`)
   .then(resp => resp.json())
-  .then(res => res.hits.hits.map(hits => hits._source)[0])
-  .then(user => {return (user.password == password)? {token:user.token} : Promise.reject()})
+  .then(res => res.hits.hits.map(hits => hits._source).length == 0)
 }
 
 /* ---------------------- [GROUP] -------------------------------------------------------------------------------------------------------- */

@@ -68,7 +68,6 @@ export default function (services) {
 
     } catch (error) {
       if (!error.code) console.error(error);
-
       const httpError = convertToHttpError(error);
       resp.status(httpError.status).json(httpError.body);
     }
