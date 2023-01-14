@@ -29,17 +29,28 @@ export default function (services) {
   function getLogin(req, resp) {
     resp.render("login",{title: "CMDB | LOG-IN", scripts:["showPass.mjs"]});
   }
+  function getSignup(req,resp){
+    resp.render("signup",{title: "CMDB | SIGN-UP", scripts:["showPass.mjs","validateSignup.mjs"]});
+  }
 
   function postLogin(req, resp) {
     const username = req.body.username;
     const password = req.body.password;
 
-    console.log(`login ${req.body.username}`);
+    
     services
       .validateUser(username, password)
       .then((user) => login(req, user))
       .then(() => resp.redirect("/"))
       .catch(() => resp.status(401).send("Couldn't authenticate"));
+  }
+
+  function postSignup(req,resp){ // validation done in validateSignup.mjs
+    const username = req.body.username;
+    const password = req.body.password;
+    services.createUser({username,password})
+    .then((user) => login(req,user))
+    .then(()=> resp.redirect("/login"))
   }
 
   function postLogout(req, resp) {

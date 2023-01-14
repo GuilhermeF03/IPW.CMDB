@@ -23,6 +23,10 @@ export default function (data, mem) {
       return Promise.reject(errors.BAD_REQUEST());
   }
 
+  async function validateMovieId(movieId) { 
+    
+  }
+
   /* ---------------------- [GENERAL] ------------------------------------------------------------------------------------------------------- */
   async function getPopularMovies(max) {
     max = Number(max);
@@ -53,11 +57,10 @@ export default function (data, mem) {
   /* ------------------------ [USER] --------------------------------------------------------------------------------------------------------- */
   async function createUser(userInfo) {
     
-    await validateString(userInfo.name);
+    await validateString(userInfo.username);
     await validateString(userInfo.password);
 
-    let uInfo = { token: crypto.randomUUID(), username: userInfo.name, password: userInfo.password };
-    //console.log(uInfo.token);
+    let uInfo = { token: crypto.randomUUID(), username: userInfo.username, password: userInfo.password };
     await mem.createUser(uInfo);
     return uInfo;
   }
