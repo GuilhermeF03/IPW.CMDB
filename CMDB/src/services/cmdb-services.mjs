@@ -9,13 +9,6 @@ export default function (data, mem) {
   if (!data) throw new Error("[Ser] Data module not provided");
   if (!mem) throw new Error("[Ser] Mem module not provided");
 
-  // async function validateId(id) {
-  //   if (isNaN(id) || id < 0)
-  //     return Promise.reject(
-  //       errors.BAD_REQUEST(`[Ser] Invalid group id <${id}>.`)
-  //     );
-  // }
-
   async function validateMaxMovies(max) {
     if (isNaN(max) || !range(MAX_LIMIT).includes(max))
       return Promise.reject(
@@ -57,17 +50,23 @@ export default function (data, mem) {
   async function getMovieById(movieId) {
     return await data.getMovieById(movieId);
   }
-
+  /* ------------------------ [USER] --------------------------------------------------------------------------------------------------------- */
   async function createUser(userInfo) {
     
     await validateString(userInfo.name);
+    await validateString(userInfo.password);
 
-    let uInfo = { token: crypto.randomUUID(), name: userInfo.name };
-    
+    let uInfo = { token: crypto.randomUUID(), username: userInfo.name, password: userInfo.password };
     //console.log(uInfo.token);
     await mem.createUser(uInfo);
-
     return uInfo;
+  }
+
+  async function validateUser(username, password){
+    const user = await mem.validateUser(username, password);
+    if(user.lenght == 0)
+      return Promise.reject();
+    return Promise.resolve(user);
   }
 
   /* ---------------------- [GROUPS] -------------------------------------------------------------------------------------------------------- */
@@ -87,9 +86,7 @@ export default function (data, mem) {
     // Validate Info
     await validateString(updateInfo.name);
     await validateString(updateInfo.description);
-
     await mem.updateGroup(userToken, groupId, updateInfo);
-    // talvez
   }
 
   async function deleteGroup(userToken, groupId) {
@@ -100,7 +97,6 @@ export default function (data, mem) {
 
   async function addMovie(userToken, groupId, movieId) {
     let mInfo = await data.getMovieById(movieId);
-
     await mem.addMovie(userToken, groupId, mInfo);
   }
 
@@ -113,6 +109,7 @@ export default function (data, mem) {
     searchMovie,
     getMovieById,
     createUser,
+    validateUser,
     createGroup,
     updateGroup,
     listUserGroups,

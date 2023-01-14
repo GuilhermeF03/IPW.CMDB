@@ -1,20 +1,23 @@
 <div class="fixed-bg">
-    <img src = "https://i.ibb.co/V9SdjjV/bg-test1.jpg">
+  <img src="https://i.ibb.co/V9SdjjV/bg-test1.jpg" />
 </div>
-<div class ="container-column">
+<div class="container-column">
 
-    {{#each movies}}
-        {{#if image}}
-        <div class="dynamic-panel-col">
-           
-            <img  src={{image}} alt={{title}}>
-            <a class="popular-text" href="/movies/{{id}}" 
-            style="display: flex;
-                   flex-direction: column;">
-                <p>#{{rank}}</p>
-                <p>{{title}}</p>
-            </a> 
-        </div>
-        {{/if}}
-    {{/each}}
+  {{#each movies}}
+    {{#if image}}
+      <div class="dynamic-panel-col">
+
+        <img src={{image}} alt={{title}} />
+        <a
+          class="popular-text"
+          href="/movies/{{id}}"
+          style="display: flex;
+                   flex-direction: column;"
+        >
+          <p>#{{rank}}</p>
+          <p>{{title}}</p>
+        </a>
+      </div>
+    {{/if}}
+  {{/each}}
 </div>

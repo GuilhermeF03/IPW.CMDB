@@ -1,6 +1,7 @@
 <div class="fixed-bg">
   <img src="https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg" />
 </div>
+<<<<<<< Updated upstream
 <div class="container-column">
   {{#with group}}
   <form action="/groups/{{id}}/update" method="POST" style="
@@ -30,17 +31,55 @@
     justify-items: center;
     align-content: center;
 ">
+=======
+{{#with user}}
+  <input type="hidden" id="user-token" value="{{token}}" />
+{{/with}}
+{{#with group}}
+  <input type="hidden" id="group-id" value="{{id}}" />
+  <div class="container-column">
+    <div class="update-group">
+      <input
+        name="name"
+        type="text"
+        class="group-text"
+        id="group-name"
+        style="font-size: 2em;"
+        value="{{name}}"
+        required
+      />
+      <p class="popular-search">
+        <textarea
+          name="description"
+          type="text"
+          class="group-text"
+          id="group-description"
+          style="width: 21vw ; font-size: 1em;resize:none;text-align:center"
+          value="{{description}}"
+          required
+        >
+          {{description}}
+        </textarea>
+      </p>
+      <button type="submit" class="custom-button" id="update">Update</button>
+    </div>
+    <p class="popular-search">Total movies: {{"number of movies"}} movies </p>
+    <p class="popular-search">Total duration: {{"total duration"}} mins </p>
+  </div>
+  <div class="container-collumn group-info">
+>>>>>>> Stashed changes
     {{#if movies}}
       {{#each movies}}
-        <div style="width:35%;" class="dynamic-panel-col" >
-          <img src="{{image}}" alt="{{title}}">
+        <div style="width:35%;" class="dynamic-panel-col">
+          <img src="{{image}}" alt="{{title}}" />
           <a href="/movies/{{id}}" style="position:absolute;"></a>
-          <form action="/groups/{{groupId}}/{{_id}}/delete" method="POST"
-            style="position:absolute; align-self:flex-end;">
-            <button type="submit" class="custom-button">Delete Movie</button>
-          </form>
+          <div style="position:absolute; align-self:flex-end;">
+            <button type="submit" class="custom-button" id="delete_{{id}}">
+              Delete Movie
+            </button>
+          </div>
         </div>
-        {{/each}}
-      {{/if}}
-  {{/with}}
+      {{/each}}
+    {{/if}}
   </div>
+{{/with}}

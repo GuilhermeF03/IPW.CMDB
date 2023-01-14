@@ -63,7 +63,6 @@ nav a:hover{
 
 
 /* Search bar --------------------------------- */
-
 .dynamic-form {
   width: 2%;
   display: flex;
@@ -165,7 +164,6 @@ nav a:hover{
   background-color: #fff;
   outline: none;
 }
-
 .dynamic-form:hover #search-max{
   text-align: center;
   color: white;
@@ -176,7 +174,6 @@ nav a:hover{
   background-color: rgb(120, 120, 120);
   outline: none;
 }
-
 #search-icon{
   background-color: transparent;
   border: none;
@@ -191,6 +188,26 @@ nav a:hover{
 header {
   width: 100%;
   height: 100vh;
+}
+
+
+.login-nav{
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  flex-direction: row;
+  align-content: center;
+}
+.login-nav a{
+  font-size:1.1em;
+  text-align: center;
+  padding:1%;
+}
+.login-nav a:hover{
+  /* padding: 0.2% 0.2%; */
+  width: 7%;
+  height: 2%;
+  margin: 1%;
 }
 
 /* Panels -------------------- */
@@ -483,7 +500,6 @@ header {
   font-size: 1.3em;
 }
 
-
 button {
   background-color: rgba(0, 0, 0, 0.3);
   border-color: transparent;
@@ -494,14 +510,14 @@ button {
   width: fit-content;
   border-radius: 10px;
   font-size: 2vh;
-
-  
 }
 
 input {
   border-radius: 10px;
   padding: 1vh;
 }
+
+/* GROUPS ============================================================================================================================*/
 
 .group {
   display: flex;
@@ -517,6 +533,79 @@ input {
   margin: -1% 0% 0% 0%;
 }
 
+.group-info{
+    display: grid;
+    place-items: center;
+    gap: 0%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,47%);
+    justify-content: start;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+}
+
+.update-group{
+  height: 30vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.groups-container{
+  width: 100vw;
+  margin:3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  flex-direction: column;
+}
+.create-group-header{
+  outline: transparent;
+  background: rgba(0,0,0,0.5);
+  height: 30vh;
+  width: 30%;
+  border: transparent;
+  padding: 5%;
+  border-radius: 10px;
+}
+
+.create-group-name{
+  outline: transparent;
+  text-align: center;
+  background-color: white;
+  border: transparent;
+  margin: 5%;
+  width:100%;
+}
+
+.create-group-desc{
+  outline: transparent;
+  text-align: center;
+  resize: none;
+  border: transparent;
+  margin: 5%;
+  width:100%;
+}
+
+.create-group{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-group{
+  border:0;
+  outline:0;
+  background: linear-gradient(
+  to bottom right,
+rgb(20 0 255 / 63%),
+rgb(146 26 165 / 87%));
+}
 .popular-text p {
   margin:0;
 }
@@ -547,3 +636,20 @@ rgb(146 26 165 / 87%));
   width: 0%;
 }
 
+/* LOGIN ============================================================== */
+.login-panel{
+  width: 21vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.17);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.6px);
+  -webkit-backdrop-filter: blur(4.6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  height: 30vh;
+  margin: 25vh;
+}

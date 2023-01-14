@@ -1,101 +1,52 @@
-<div class = "fixed-bg">
-    <img src = "https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg">
+<div class="fixed-bg">
+  <img src="https://i.ibb.co/jTnzcGM/d4b30ea3a48f2cd7abff3b8072f6b5b9.jpg" />
 </div>
-<div style="
-        margin:3%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    ">
-    <h1 class="popular-search"> My Groups</h1>
-    <div
-        style="
-            outline: transparent;
-            background: rgba(0,0,0,0.5);
-            height: 30vh;
-            width: 30%;
-            border: transparent;
-            padding: 5%;
-            border-radius: 10px;
-        "
-        >
-        <h2
-            style="
-                color:white;
-                text-align: center; 
-                margin-top: -5%;
-            "
-            >Create new Group</h2>
-        <form action="/groups"
-            method="POST"
-            style="
-                display: flex;
-                
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            "
-            >
+<div class="groups-container">
+  <h1 class="popular-search"> My Groups</h1>
+  <div class="create-group-header">
+    <h2 style="color:white; text-align: center; margin-top: -5%;">Create new
+      Group</h2>
+    <form action="/groups" method="POST" class="create-group">
+      <div>
+        <label for="name" class="popular-search">Name</label>
+        <input type="text" name="name" class="create-group-name" required />
+      </div>
 
-            <div>
-                <label for="name" class="popular-search">Name</label>
-                <input
-                    type="text"
-                    name="name"
-                    style="
-                        outline: transparent;
-                        text-align: center;
-                        background-color: white;
-                        border: transparent;
-                        margin: 5%;
-                        width:100%;
-                    "
-                    required/>
-            </div>
-
-            <div>
-                <label for="description" style="color:white;">Description</label>
-                <input
-                    name="description"
-                    style="
-                        outline: transparent;
-                        resize: none;
-                        border: transparent;
-                        margin: 5%;
-                        width:100%;
-                    "
-                    required/>
-            </div>
-           
-            
-            <button type="submit" style="margin: 5%;">Create Group</button>
-        </form>
-    </div>
-    {{#if groups}}
+      <div>
+        <label for="description" style="color:white;">Description</label>
+        <input name="description" class="create-group-desc" required />
+      </div>
+      <button type="submit" style="margin: 5%;">Create Group</button>
+    </form>
+  </div>
+  {{#if groups}}
     <h2 class="popular-search">Groups</h2>
     <ul>
-        {{#each groups}}
-        <li class="group">
-            {{! verify name }}
-            <h2><a href="/groups/{{id}}" style="text-decoration:none; color:purple;text-transform:uppercase">{{name}}</a></h2>
-            <p class="popular-search">{{description}}</p>
-            <p class="popular-search">{{"number of movies"}} movies</p>
-            {{#if "total duration"}}
+      {{#with user}}
+        <input type="hidden" id="user-token" value="{{token}}" />
+      {{/with}}
+      {{#each groups}}
+        <li class="group" id="{{id}}">
+          {{! verify name }}
+          <h2><a
+              href="/groups/{{id}}"
+              style="text-decoration:none; color:purple;text-transform:uppercase"
+            >{{name}}</a></h2>
+          <p class="popular-search">{{description}}</p>
+          <p class="popular-search">{{"number of movies"}} movies</p>
+          {{#if "total duration"}}
             <p class="popular-search">{{"total duration"}}mins</p>
-            {{/if}}
-            <form action="groups/{{id}}/delete" method="POST">
-                <button type="submit" style="
-                    border:0;
-                    outline:0;
-                    background: linear-gradient(
-                    to bottom right,
-                  rgb(20 0 255 / 63%),
-                  rgb(146 26 165 / 87%));
-                ">Delete</button>
-            </form>
+          {{/if}}
+          <div>
+
+            <button
+              type="submit"
+              class="delete-group"
+              id="delete:{{id}}"
+            >Delete</button>
+          </div>
         </li>
-        {{/each}}
-        {{/if}}
+      {{/each}}
     </ul>
+  {{/if}}
 </div>

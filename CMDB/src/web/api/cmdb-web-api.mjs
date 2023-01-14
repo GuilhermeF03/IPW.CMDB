@@ -1,22 +1,9 @@
 import  convertToHttpError  from "../../../errors/http-errors.mjs";
 
-// Autorization verification -> closure
-function verifyAuthentication(handlerFunction) {
-  return function (req, resp) {
-    let userToken = req.get("Authorization");
-    userToken = userToken ? userToken.split(" ")[1] : null;
-
-    if (!userToken)
-      return resp.status(400).json({ error: `[WA] User token not provided` });
-
-    req.userToken = userToken;
-    handlerFunction(req, resp);
-  };
-}
-
 // Export api as object with dependency injection
 export default function (services) {
   if (!services) throw new Error("[>] Services module not provided");
+    
   /* ----------------------------- [GENERAL] -------------------------------------------------------------------------------------------------- */
   async function getPopularMovies(req, resp) {
     try {
@@ -75,7 +62,7 @@ export default function (services) {
       console.log(`[>] Successfully created new user.`)
 
       resp.status(201).json({
-        status: `User <${newUser.name}> was successfully created with token <${newUser.token}>`,
+        status: `User <${newUser.name}> was successfully created with password <${newUser.password}>`,
         "user-info": newUser,
       });
 
@@ -86,9 +73,8 @@ export default function (services) {
       resp.status(httpError.status).json(httpError.body);
     }
   }
-
   /* --------------------------- [GROUP] ---------------------------------------------------------------------------------------------------- */
-  async function createGroupInternal(req, resp) {
+  async function createGroup(req, resp) {
     try {
       if (!req.body.name || !req.body.description)
         return resp
@@ -112,8 +98,9 @@ export default function (services) {
     }
   }
 
-  async function listGroupsInternal(req, resp) {
+  async function listGroups(req, resp) {
     try {
+      
       let userGroups = await services.listUserGroups(req.userToken);
 
       console.log(`[>] Successfully retrieved all user's groups.`)
@@ -130,7 +117,7 @@ export default function (services) {
     }
   }
 
-  async function getGroupByIdInternal(req, resp) {
+  async function getGroupById(req, resp) {
     try {
       let group = await services.getGroupById(
         req.userToken,
@@ -151,10 +138,11 @@ export default function (services) {
     }
   }
 
-  async function updateGroupInternal(req, resp) {
+  async function updateGroup(req, resp) {
     try {
-      let updatedGroup = await services.updateGroup(
-        req.userToken,
+      // let updatedGroup =
+      await services.updateGroup(
+        req.user.token,
         req.params.groupId,
         req.body
       );
@@ -163,17 +151,18 @@ export default function (services) {
 
       resp.status(200).json({
         status: `Group with id <${req.params.groupId}> was successfully updated.`,
-        "updated-info": updatedGroup,
+        // "updated-info": updatedGroup,
       });
     } catch (error) {
       if (!error.code) console.error(error);
 
       const httpError = convertToHttpError(error);
+      console.log(error)
       resp.status(httpError.status).json(httpError.body);
     }
   }
 
-  async function deleteGroupInternal(req, resp) {
+  async function deleteGroup(req, resp) {
     try {
       let deletedGroup = await services.deleteGroup(
         req.userToken,
@@ -183,19 +172,19 @@ export default function (services) {
       console.log(`[>] Successfully deleted group.`)
 
       resp.status(200).json({
-        status: `${deletedGroup.name} was successfully removed from groups list.`,
-        content: undefined,
+        status: `Group was successfully removed from groups list.`
       });
     } catch (error) {
       if (!error.code) console.error(error);
 
       const httpError = convertToHttpError(error);
+      console.log(error)
       resp.status(httpError.status).json(httpError.body);
     }
   }
 
   /* --------------------------- [MOVIE] ---------------------------------------------------------------------------------------------------- */
-  async function addMovieInternal(req, resp) {
+  async function addMovie(req, resp) {
     try {
       let movieInfo = await services.addMovie(
         req.userToken,
@@ -218,6 +207,7 @@ export default function (services) {
       if (!error.code) console.error(error);
 
       const httpError = convertToHttpError(error);
+      console.log(error)
       resp.status(httpError.status).json(httpError.body);
     }
   }
@@ -236,11 +226,12 @@ export default function (services) {
       if (!error.code) console.error(error);
 
       const httpError = convertToHttpError(error);
+      console.log(error)
       resp.status(httpError.status).json(httpError.body);
     }
   }
 
-  async function deleteMovieInternal(req, resp) {
+  async function deleteMovie(req, resp) {
     try {
       let deletedMovie = await services.deleteMovie(
         req.userToken,
@@ -257,6 +248,7 @@ export default function (services) {
       if (!error.code) console.error(error);
 
       const httpError = convertToHttpError(error);
+      console.log(error)
       resp.status(httpError.status).json(httpError.body);
     }
   }
@@ -268,12 +260,12 @@ export default function (services) {
     getMovieById,
     createUser,
     // Each handler requires a user token, token is validated on 'services' module
-    createGroup: verifyAuthentication(createGroupInternal),
-    updateGroup: verifyAuthentication(updateGroupInternal),
-    listGroups: verifyAuthentication(listGroupsInternal),
-    deleteGroup: verifyAuthentication(deleteGroupInternal),
-    deleteMovie: verifyAuthentication(deleteMovieInternal),
-    addMovie: verifyAuthentication(addMovieInternal),
-    getGroupById: verifyAuthentication(getGroupByIdInternal),
+    createGroup,
+    updateGroup,
+    listGroups,
+    deleteGroup,
+    deleteMovie,
+    addMovie,
+    getGroupById,
   };
 }

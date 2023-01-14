@@ -1,9 +1,9 @@
 import fetch from "node-fetch";
 
-
-
-fetch('http://localhost:9200/users', {
-  method: 'DELETE'
-})
-  .then(response => console.log(response))
-  .catch(error => console.error(error));
+const baseURL = "http://localhost:9200/";
+  console.log(await fetch(baseURL + `groups/_delete_by_query?q=userId:ADMIN`,{
+    method:"POST"
+  })
+  .then(resp => resp.json())
+  //.then(body => console.log(body))
+  )

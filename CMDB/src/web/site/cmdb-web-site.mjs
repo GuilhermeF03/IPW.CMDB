@@ -5,16 +5,13 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 
 function handlerMiddleware(handler){
-    const HAMMER_TOKEN = "276381264wgdgw72361-1";
-
     return async function(req, resp){
-        req.userToken = HAMMER_TOKEN
+      //console.log(req.user)
         try {
-          
             let view = await handler(req, resp)
-            
             if (view){
-              resp.render(view.name , view.data) 
+                view.data.user = req.user
+                resp.render(view.name , view.data) 
             } 
         } catch(e) {
             const response = convertToHttpError(e)
@@ -25,16 +22,21 @@ function handlerMiddleware(handler){
 }
 
 export default function (services){
-
     if(!services) throw new Error("Invalid parameter services")
 
     async function getHome(req, resp) {
-        resp.render('index')
+      if(req.user)
+        resp.render('index',{user: req.user})
+      else resp.render('index')
     }
   
     async function getCss(req, resp) {
         resp.sendFile(__dirname + "css/site.css",resp);
         
+    }
+
+    async function getScript(req,resp){
+      resp.sendFile(__dirname +`scripts/${req.params.scriptName}`,resp);
     }
 
     async function getPopularMovies(req,resp){
@@ -70,8 +72,7 @@ export default function (services){
     async function getMovieById(req, resp){
       try{
         let movieInfo = await services.getMovieById(req.params.movieId)
-        //let groups = await services.listUserGroups(req.userToken).catch()
-       
+        let groups = (req.user)? await services.listUserGroups(req.user.token).catch() : undefined;
         // return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups.groups, movieInfo:movieInfo}}
         return { name:'movieInfo', data: {title: "CMDB | INFO", groups: groups, movieInfo: movieInfo}}
 
@@ -111,16 +112,15 @@ export default function (services){
     // GROUPS
     async function listGroups(req, resp){
       try {
-        let userGroups = await services.listUserGroups(req.userToken);
+        let userGroups = await services.listUserGroups(req.user.token);
   
         console.log(`[>] Successfully retrieved all user's groups.`)
-        return {name: "groups", data: {title:"My groups",groups: userGroups}}
+        return {name: "groups", data: {title:"My groups",groups: userGroups,scripts:["delete-group.mjs"]}}
         
       } catch (error) {
         if (!error.code) console.error(error);
   
         const httpError = convertToHttpError(error);
-        //resp.status(httpError.status).json(httpError.body);
       }
     }
 
@@ -132,12 +132,11 @@ export default function (services){
             .json({ error: "[WA] Invalid body request, check valid format." });
             return;
         }
-        await services.createGroup(req.userToken, req.body);
+        await services.createGroup(req.user.token, req.body);
   
         console.log(`[>] Successfully created new group.`);
   
         resp.redirect("/groups")
-  
       } catch (error) {
         if (!error.code) console.error(error);
   
@@ -149,16 +148,11 @@ export default function (services){
     async function getGroupById(req, resp){
       try {
         let group = await services.getGroupById(
-          req.userToken,
+          req.user.token,
           req.params.groupId
         );
-  
         console.log(`[>] Successfully retrieved group info.`)
-          /*
-            _id:
-
-          */
-        return { name: 'groupInfo', data: {title:group.name, group}}
+        return { name: 'groupInfo', data: {title:group.name, group,scripts:["update-group.mjs"]}}
       } catch (error) {
         if (!error.code) console.error(error);
   
@@ -171,7 +165,7 @@ export default function (services){
       try {
         console.log("-- Updating Group --")
         console.log(req)
-        await services.updateGroup(req.userToken, req.params.groupId, req.body)
+        await services.updateGroup(req.user.token, req.params.groupId, req.body)
 
         console.log(`[>] Successfully updated group info.`)
 
@@ -186,10 +180,8 @@ export default function (services){
    
     async function deleteGroup(req, resp){
       try {
-        await services.deleteGroup(req.userToken, req.params.groupId);
-  
+        await services.deleteGroup(req.user.token, req.params.groupId);
         console.log(`[>] Successfully deleted group.`);
-  
         resp.redirect("/groups")
       } catch (error) {
         if (!error.code) console.error(error);
@@ -203,7 +195,7 @@ export default function (services){
     async function addMovie(req, resp){
       try {
         
-        await services.addMovie(req.userToken, req.params.groupId, req.body.movieId);
+        await services.addMovie(req.user.token, req.params.groupId, req.body.movieId);
   
         console.log(`[>] Successfully added movie to group.`);
         
@@ -219,7 +211,7 @@ export default function (services){
 
     async function deleteMovie(req, resp){
       try {
-        let movie = await services.deleteMovie(req.userToken, req.params.groupId, req.params.movieId);
+        let movie = await services.deleteMovie(req.user.token, req.params.groupId, req.params.movieId);
   
         console.log(`[>] Successfully deleted movie from group.`);
   
@@ -235,6 +227,7 @@ export default function (services){
     return {
         getHome,
         getCss,
+        getScript,
         getPopularMovies,
         searchMovie,
         getMovieById: handlerMiddleware(getMovieById),
