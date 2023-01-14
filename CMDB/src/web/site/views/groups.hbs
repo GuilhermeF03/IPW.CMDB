@@ -26,7 +26,7 @@
         <input type="hidden" id="user-token" value="{{token}}" />
       {{/with}}
       {{#each groups}}
-        <li class="group" id="{{id}}">
+        <li class="group" id="group-{{id}}">
           {{! verify name }}
           <h2><a
               href="/groups/{{id}}"

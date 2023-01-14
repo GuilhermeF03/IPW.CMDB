@@ -19,6 +19,8 @@ export default function (services) {
   passport.deserializeUser((user, done) => done(null, user));
 
   router.get("/login", getLogin);
+  router.get("/signup", getSignup);
+  router.post("/signup", postSignup);
   router.post("/logout", postLogout);
   router.post("/login", postLogin);
 

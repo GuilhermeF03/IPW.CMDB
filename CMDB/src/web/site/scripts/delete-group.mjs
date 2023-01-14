@@ -8,9 +8,9 @@ function loadHandler() {
 
 async function deleteGroupHandler() {
     try {
-        const userToken = document.getElementById('user-token');
+        const userToken = document.getElementById('user-token').value;
         const groupId = this.id.split(':')[1]
-        const group = document.querySelector(`#${groupId}`)
+        const group = document.getElementById(`group-${groupId}`)
         const options = {
             method : "DELETE",
             headers : {
@@ -18,8 +18,7 @@ async function deleteGroupHandler() {
             "Authorization" : `Bearer ${userToken}`
            }
         }
-        const response = await fetch(`/api/groups/${groupId}`,options)
-        console.log("I AM GROUP:\n"+JSON.stringify(response));
+        await fetch(`/api/groups/${groupId}`,options)
         group.remove();
     } catch (error) {
         console.log(error)

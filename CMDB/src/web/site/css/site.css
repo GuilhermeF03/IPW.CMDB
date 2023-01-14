@@ -234,8 +234,8 @@ header {
 /* DYNAMIC PANEL ROW -----------*/
 .dynamic-panel-row{
   margin: 3%;
-  width: 50%;
-  height: 100%;
+  width: 38%;
+  height: 70%;
   background: linear-gradient(
     to bottom right,
    rgb(20 0 255 / 63%),
@@ -278,7 +278,7 @@ header {
 
 /* DYNAMIC PANEL COLUMN ---------------- */
 .dynamic-panel-col{
-  width: 29%;
+  width: 20%;
   height: 100%;
   display: grid;
   place-items: center;
@@ -344,12 +344,14 @@ header {
   height: 100vh;
   background: linear-gradient(
     rgba(0,0,0,0.7), rgba(0,0,0,0.5)),
-    url(https://i.ibb.co/VjK9LPK/bg-test4.jpg);
+    url(https://i.ibb.co/r4gc8t2/wallpaperflare-com-wallpaper-2.jpg);
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+
 
 #popular-movies a:hover #popular-search-bar {
   width: 10%;
@@ -534,15 +536,16 @@ input {
 }
 
 .group-info{
-    display: grid;
     place-items: center;
-    gap: 0%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit,47%);
-    justify-content: start;
-    align-items: center;
+    gap: 5%;
+    display: flex;
+    /* grid-template-columns: repeat(auto-fit,50%); */
     justify-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
     align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 
 .update-group{

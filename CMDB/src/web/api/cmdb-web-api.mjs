@@ -233,7 +233,7 @@ export default function (services) {
 
   async function deleteMovie(req, resp) {
     try {
-      let deletedMovie = await services.deleteMovie(
+      await services.deleteMovie(
         req.userToken,
         req.params.groupId,
         req.params.movieId
@@ -242,7 +242,7 @@ export default function (services) {
       console.log(`[>] Successfully deleted movie from group.`)
 
       resp.status(200).json({
-        status: `${deletedMovie.title} was successfully removed from <${deletedMovie.group.name}>.`,
+        status: `Movie was successfully removed from group.`,
       });
     } catch (error) {
       if (!error.code) console.error(error);

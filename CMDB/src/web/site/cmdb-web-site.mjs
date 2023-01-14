@@ -147,17 +147,25 @@ export default function (services){
     
     async function getGroupById(req, resp){
       try {
-        let group = await services.getGroupById(
-          req.user.token,
-          req.params.groupId
-        );
-        console.log(`[>] Successfully retrieved group info.`)
-        return { name: 'groupInfo', data: {title:group.name, group,scripts:["update-group.mjs"]}}
-      } catch (error) {
-        if (!error.code) console.error(error);
+          let group = await services.getGroupById(
+            req.user.token,
+            req.params.groupId
+          );
+
+          console.log(`[>] Successfully retrieved group info.`)
+
+          console.log(group)
+
+
+
+
+          return { name: 'groupInfo', data: {title:group.name.toUpperCase(), group,scripts:["update-group.mjs","delete-movie.mjs"]}}
+
+        } catch (error) {
+          if (!error.code) console.error(error);
   
-        const httpError = convertToHttpError(error);
-        resp.status(httpError.status).json(httpError.body);
+          const httpError = convertToHttpError(error);
+          resp.status(httpError.status).json(httpError.body);
       }
     }
 

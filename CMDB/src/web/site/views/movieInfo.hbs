@@ -16,10 +16,14 @@
             <i style="margin: 6% 0% 0% 0%;color: black;width: 90%;height: 1%;background-color: white;"></i>
             <p class="movieInfo">Description</p>
             <p class="movieText">{{description}}</p>
-            <p class="movieInfo">Directors</p>
-            <p class="movieText">{{directors}}</p>
+            {{#if directors}}
+                <p class="movieInfo">Directors</p>
+                <p class="movieText">{{directors}}</p>
+            {{/if}}
+            {{#if actors}}
             <p class="movieInfo">Main actors</p>
              <p class="movieText">{{actors}}</p>
+             {{/if}}
              {{#if runtime}}
                 <p class="movieInfo">Runtime</p>
                 <p class="movieText">{{runtime}}mins</p>
@@ -32,12 +36,9 @@
                 <form action="/groups/{{groups.0.id}}" method="POST" id="form">
                     <select name="groups" onchange="updateValue()" required>
                             <option value="" selected disabled>Choose Group</option>
-
-                         
                             {{#each groups}}
                                 <option class="opt" value="{{id}}">{{name}}</option>
                             {{/each}}
-                       
                     </select>
                     <script>function updateValue() {
                             const id = document.querySelector(".opt").value
