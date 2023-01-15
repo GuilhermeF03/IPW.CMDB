@@ -1,27 +1,33 @@
 import fetch from "node-fetch";
-
 const baseURL = "http://localhost:9200/";
 
-function createUser(userInfo) {
-    return fetch(baseURL + `users/_doc?refresh=wait_for`, {
-      method: "POST",
-      body: JSON.stringify(userInfo),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }).then((response) => response.json());
-  }
-  
-  function validateUser(username, ) {
-    return fetch(baseURL + `users/_search?q=username:${username}`)
-    .then(resp => resp.json())
-    .then(res => res.hits.hits.map(hits => hits._source).length == 0)
-    // .then(user => {return (user.password == password)? {token:user.token} : Promise.reject()})
+// async function getAllEntries() {
+//   const response = await fetch('http://localhost:9200/users/_search', {
+//       method: 'GET'
+//   });
+//   const json = await response.json();
+//   return json.hits.hits;
+// }
+
+// getAllEntries().then(console.log);
+  // check if username already exists
+  async function deleteAllEntries() {
+    const response = await fetch('http://localhost:9200/users/_delete_by_query', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "query": {
+                "match_all": {}
+            }
+        })
+    });
+    const json = await response.json();
+    return json;
 }
-  
-let user = { token: "ADMIN2", username: "admin2", password: "admin" };
 
-// await createUser(user)
+deleteAllEntries().then(console.log)
+    
 
-console.log(await validateUser("adalberto"));
+

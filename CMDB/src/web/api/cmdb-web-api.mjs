@@ -57,13 +57,12 @@ export default function (services) {
           .status(400)
           .json({ message: "[WA] No user info was provided. Try again." });
 
-      let newUser = await services.createUser(req.body);
+      await services.createUser(req.body);
 
       console.log(`[>] Successfully created new user.`)
 
       resp.status(201).json({
-        status: `User <${newUser.name}> was successfully created with password <${newUser.password}>`,
-        "user-info": newUser,
+        status: `User was successfully created`,
       });
 
     } catch (error) {

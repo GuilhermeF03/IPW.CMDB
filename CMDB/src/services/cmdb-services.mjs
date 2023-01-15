@@ -61,7 +61,9 @@ export default function (data, mem) {
     await validateString(userInfo.password);
 
     let uInfo = { token: crypto.randomUUID(), username: userInfo.username, password: userInfo.password };
-    await mem.createUser(uInfo);
+    const response = await mem.createUser(uInfo)
+    console.log("Response:"+ response);
+    if(response == -1) return Promise.reject(errors.NOT_AUTHORIZED())
     return uInfo;
   }
 

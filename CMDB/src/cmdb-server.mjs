@@ -100,8 +100,10 @@ console.log(`[>] Setting up server...\n
           `);
           
 function authMW(req, resp, next) {
-  if(req.path.includes('/signup' || '/search' || '/popular') || '/movie') 
+  if(req.path.includes('/signup' || '/search' || '/popular' || '/movie') ) {
     next();
+    return
+  }
   if (!req.user) {
     let userToken = req.get("Authorization");
     userToken = userToken ? userToken.split(" ")[1] : null;
