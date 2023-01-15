@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import { errors } from "../../errors/http-errors.mjs";
 import path from "path";
 import url from "url";
+import { read } from "node:fs";
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const dataPath = path.join(__dirname,"..\\","..\\","data/data.json");
 
@@ -45,11 +46,21 @@ function createUser(userInfo) {
   return readData(dataPath).then((data) => {
     data[userInfo.token] = {
       token: userInfo.token,
-      name: userInfo.name,
-      groups: [],
+      username: userInfo.username,
+      password: userInfo.password,
+      groups: []
     };
     return Promise.resolve(writeData(dataPath, data));
   });
+}
+
+function validateUser(username, password) {
+  return readData(dataPath).then((data) => {
+    Object.getOwnPropertyNames(data).forEach(key => {
+      if(data[key].username == username && data[key].password == password) {return {token: data[key].token}};
+    });
+    return Promise.reject(errors.NOT_AUTHORIZED());
+  })
 }
 
 /* -------------------------------- [GROUP] ------------------------------------------------------------------------------------------------- */
@@ -91,7 +102,7 @@ function listUserGroups(userToken) {
     if (!groups) throw new Error("[Mem] No groups found");
   
     console.log(groups)
-    return { name: data[userToken].name, groups };
+    return { username: data[userToken].username, groups };
 
   });
 }
@@ -201,6 +212,7 @@ export default {
   readData,
   writeData,
   createUser,
+  validateUser,
   createGroup,
   getGroupById,
   updateGroup,

@@ -23,9 +23,9 @@ export default function (data, mem) {
       return Promise.reject(errors.BAD_REQUEST());
   }
 
-  async function validateMovieId(movieId) { 
+  // async function validateMovieId(movieId) { 
     
-  }
+  // }
 
   /* ---------------------- [GENERAL] ------------------------------------------------------------------------------------------------------- */
   async function getPopularMovies(max) {
@@ -61,7 +61,7 @@ export default function (data, mem) {
     await validateString(userInfo.password);
 
     let uInfo = { token: crypto.randomUUID(), username: userInfo.username, password: userInfo.password };
-    const response = await mem.createUser(uInfo)
+    let response = await mem.createUser(uInfo)
     console.log("Response:"+ response);
     if(response == -1) return Promise.reject(errors.NOT_AUTHORIZED())
     return uInfo;
@@ -89,7 +89,7 @@ export default function (data, mem) {
 
   async function updateGroup(userToken, groupId, updateInfo) {
     // Validate Info
-    await validateString(updateInfo.name);
+    await validateString(updateInfo.username);
     await validateString(updateInfo.description);
     await mem.updateGroup(userToken, groupId, updateInfo);
   }

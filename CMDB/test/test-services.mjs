@@ -46,13 +46,12 @@ const getPulpFictionByPath = "./test/movies/getMovieByIdPulpFiction.json";
 //   }
 // }
 
-const userRicardo = await services.createUser({name: "Ricardo"})
-const userRodrigo = await services.createUser({name: "Rodrigo"})
-const userManuel = await services.createUser({name: "Manuel"})
+const userRicardo = await services.createUser({username: "Ricardo", password: "k29fFQBYdzrY"})
+const userRodrigo = await services.createUser({username: "Rodrigo", password: "Y3w3vA6Kbdf8vxf"})
+const userManuel = await services.createUser({username: "Manuel", password: "u4Q6sVzXmAJLJn"})
 
 describe('Services Tests', () => {
 
-  
   describe('Get top movies tests', () => {
     it('get 3 top movies', () => {
       const getTop3 = services.getPopularMovies(3);
@@ -127,6 +126,32 @@ describe('Services Tests', () => {
                 description: "(2016) (Podcast Episode) - The Next Reel Film Podcast Master Feed (2011) (Podcast Series)"
               }
             ]
+          }))
+    })
+  })
+
+  describe('Validate users tests', () => {
+    it('Validate user Ricardo', () => {
+      return services.validateUser("Ricardo", "k2%9fFQBY)d+zrY!")
+        .then(validate => expect(validate)
+          .deep.equal({
+            token: userRicardo.token
+          }))
+    })
+
+    it('Validate user Rodrigo', () => {
+      return services.validateUser("Rodrigo", "Y3w3vA6K@bdf8vxf")
+        .then(validate => expect(validate)
+          .deep.equal({
+            token: userRodrigo.token
+          }))
+    })
+
+    it('Validate user Manuel', () => {
+      return services.validateUser("Manuel", "u4Q6sVz(&XmAJLJn")
+        .then(validate => expect(validate)
+          .deep.equal({
+            token: userManuel.token
           }))
     })
   })
@@ -400,7 +425,7 @@ describe('Services Tests', () => {
       return services.listUserGroups(userRicardo.token)
         .then(list => expect(list)
           .deep.equal({
-            name: "Ricardo",
+            username: "Ricardo",
             groups : [
               {
                 id: 0,
@@ -430,7 +455,7 @@ describe('Services Tests', () => {
       return services.listUserGroups(userRodrigo.token)
         .then(list => expect(list)
           .deep.equal({
-            name: "Rodrigo",
+            username: "Rodrigo",
             groups : [
               {
                 id: 0,
@@ -460,7 +485,7 @@ describe('Services Tests', () => {
       return services.listUserGroups(userManuel.token)
         .then(list => expect(list)
           .deep.equal({
-            name: "Manuel",
+            username: "Manuel",
             groups : [
               {
                 id: 0,
