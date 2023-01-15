@@ -1,0 +1,1 @@
+start cmd /c "curl -X PUT http://localhost:9200/users && curl -X PUT http://localhost:9200/groups && curl -X PUT http://localhost:9200/movies"
