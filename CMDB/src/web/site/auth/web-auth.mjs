@@ -20,7 +20,6 @@ export default function (services) {
 
   router.get("/login", getLogin);
   router.get("/signup", getSignup);
-  router.post("/signup", postSignup);
   router.post("/logout", postLogout);
   router.post("/login", postLogin);
 
@@ -43,14 +42,6 @@ export default function (services) {
       .then((user) => login(req, user))
       .then(() => resp.redirect("/"))
       .catch(() => resp.status(401).send("Couldn't authenticate"));
-  }
-
-  function postSignup(req,resp){ // validation done in validateSignup.mjs
-    const username = req.body.username;
-    const password = req.body.password;
-    services.createUser({username,password})
-    .then((user) => login(req,user))
-    .then(()=> resp.redirect("/login"))
   }
 
   function postLogout(req, resp) {

@@ -24,7 +24,7 @@ const baseURL = "http://localhost:9200/";
 
 /* ---------------------- [USER] -------------------------------------------------------------------------------------------------------- */
 function createUser(userInfo) {
-  if (validateUser(userInfo.username)) {
+  if (!isDuplicated(userInfo.username)) {
     return fetch(baseURL + `users/_doc?refresh=wait_for`, {
       method: "POST",
       body: JSON.stringify(userInfo),
@@ -33,14 +33,20 @@ function createUser(userInfo) {
         Accept: "application/json",
       },
     }).then((response) => response.json());
-  }else{
-    Promise.reject("Username already exists");
+  }else Promise.reject("Username already exists");
 }
 
-function validateUser(username) {
+function isDuplicated(username) { // check if username already exists
   return fetch(baseURL + `users/_search?q=username:${username}`)
   .then(resp => resp.json())
-  .then(res => res.hits.hits.map(hits => hits._source).length == 0)
+  .then(res => res.hits.hits.map(hits => hits._source).length > 0)
+}
+
+function validateUser(username, password) { // validate user credentials for login
+  return fetch(baseURL + `users/_search?q=username:${username}`)
+  .then(resp => resp.json())
+  .then(res => res.hits.hits.map(hits => hits._source)[0])
+  .then(user => {return (user.password == password)? {token:user.token} : Promise.reject()})
 }
 
 /* ---------------------- [GROUP] -------------------------------------------------------------------------------------------------------- */

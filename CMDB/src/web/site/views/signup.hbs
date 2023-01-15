@@ -3,14 +3,19 @@
 </div>
 <div class="groups-container">
     
-      <form action="/login" method="post" class="login-panel" >
+      <div class="login-panel" >
             <h2 style="color:white">Sign-up</h2>
             <label for="textUsername" class="popular-search">Username:</label>
             <input type="text" id="textUsername" name="username" required/>
             <label for="password" class="popular-search" >Password:</label>
-            <input type="password" id="password" name="password" minlength="4" required/>
+            <input type="password" id="password" name="password" minlength="4" style="" required/>
             <input type="checkbox" id="showPass" />
             <label for="showPass" class="popular-search">Show Password</label>
-            <input type="submit" value="Submit" />
-      </form>
+            <p></p>
+            <label for="password" class="popular-search" >Confirm Password:</label>
+            <input type="password" id="password" name="password" minlength="4" style="" required/>
+            <input type="checkbox" id="showPass" />
+            <label for="showPass" class="popular-search">Show Password</label>
+            <input type="submit" id="signupBtn" value="Submit" />
+      </div>
 </div>

@@ -1,13 +1,19 @@
-window.addEventListener("load", showPassHandler);
+window.addEventListener("load", loadHandler);
 
-function showPassHandler() {
-  let checkBox = document.getElementById("showPass");
-  let pass = document.getElementById("password");
-  checkBox.addEventListener("change", function () {
-    if (checkBox.checked) {
-      pass.type = "text";
-    } else {
-      pass.type = "password";
-    }
+function loadHandler() {
+  let showPass = document.querySelectorAll("#showPass");
+  let pass = document.querySelectorAll("#password");
+  showPass.forEach((elem, index) => {
+    elem.addEventListener("change", function () {
+      showPassHandler(elem, pass[index]);
+    });
   });
+}
+
+function showPassHandler(showpass, pass) {
+  if (showpass.checked) {
+    pass.type = "text";
+  } else {
+    pass.type = "password";
+  }
 }

@@ -1,4 +1,4 @@
-window.addEventListener('load', signupHandler)
+window.addEventListener('load', loadHandler)
 /**
  * Get username text box
  * get username text box value
@@ -6,42 +6,36 @@ window.addEventListener('load', signupHandler)
  * if duplicated -> change box border to solid red (box.style.border = solid red)
  * if not -> fetch(/signup,method=post, blablabla)
  */
-let usernameText;
-let passwordText;
-let passwordConfirmText;
+let username;
+let password;
+let passwordConfirm;
 
-function signupHandler() {
-    usernameText = document.getElementById('textUsername');
-    passwordText = document.getElementById('password');
-    passwordConfirmText = document.getElementById('passwordConfirm');
-    document.querySelector('#signupBtn').addEventListener('click', signup);
+function loadHandler() {
+    const passwords = document.querySelectorAll('#password')
+    username = document.getElementById('textUsername');
+    password = passwords[0]
+    passwordConfirm = passwords[1];
+    document.querySelector('#signupBtn').addEventListener('click', signupHandler);
 }
 
 async function signupHandler() {
-    const username = usernameText.value;
-    const password = passwordText.value;
-    const passwordConfirm = passwordConfirmText.value;
+    const usernameText = username.value;
+    const passwordText = password.value;
+    const passwordConfirmText = passwordConfirm.value;
 
-    if (username.includes(' ')) {
-        // provisório
-        usernameText.style.border = 'solid red';
-    } else {
-        usernameText.style.border = 'solid green';
-    }
-
-    if (password.includes(' ')) {
-        passwordText.style.border = 'solid red';
-    } else {
-        passwordText.style.border = 'solid green';
-    }
-
-    if (passwordConfirm.includes(' ')) {
+    if (usernameText.includes(' ')) 
+        username.style.border = 'solid red';
+    else username.style.border = 'solid green';
+    
+    if (passwordText.includes(' ')) 
+        password.style.border = 'solid red';
+    else password.style.border = 'solid green';
+    
+    if (passwordConfirmText.includes(' ')) 
         passwordConfirm.style.border = 'solid red';
-    } else {
-        passwordConfirm.style.border = 'solid green';
-    }
+    else passwordConfirm.style.border = 'solid green';
 
-    if (password !== passwordConfirm) {
+    if (passwordText !== passwordConfirmText) {
         // provisório
         alert('Passwords do not match');
         return;
@@ -50,15 +44,16 @@ async function signupHandler() {
     const response = await fetch('/api/signup', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Accept:'application/json',
         },
         body: JSON.stringify({
-            username,
-            password
+            usernameText,
+            passwordText
         })
     });
     if (response.status == 201) {
-        window.location = '/login';
+        window.location.href = '/login';
     } else {
         alert('Username already exists');
     }

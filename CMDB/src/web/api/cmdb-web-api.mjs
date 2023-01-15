@@ -72,6 +72,7 @@ export default function (services) {
       resp.status(httpError.status).json(httpError.body);
     }
   }
+
   /* --------------------------- [GROUP] ---------------------------------------------------------------------------------------------------- */
   async function createGroup(req, resp) {
     try {
