@@ -90,7 +90,7 @@ export default function (data, mem) {
 
   async function updateGroup(userToken, groupId, updateInfo) {
     // Validate Info
-    await validateString(updateInfo.username);
+    await validateString(updateInfo.name);
     await validateString(updateInfo.description);
     await mem.updateGroup(userToken, groupId, updateInfo);
   }
