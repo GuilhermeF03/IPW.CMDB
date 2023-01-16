@@ -23,7 +23,7 @@ const authRouter = getAuth(services);
 const webapi = getApi(services);
 const website = getWebsite(services);
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-const app = express();
+export const app = express();
 // const authRouter = authUIFunction(services);
 
 // Middlewares
@@ -31,10 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api", authMW);
 app.use(authRouter)
-
 app.use(cors());
-//app.use((req, rsp) => { rsp.status(404).render('notfound') })
-//app.use((req, rsp) => { rsp.status(400).console.log(rsp) })
 
 // View setup
 app.set("view engine", "hbs");
@@ -43,7 +40,7 @@ app.set("views", path.join(__dirname, "/web", "/site", "/views"));
 // [API Branch] ------------------------------------------------------------------------------------------------
 // GENERAL
 app.get("/api/popular", webapi.getPopularMovies);
-app.get("/api/search/", webapi.searchMovie);
+app.get("/api/search", webapi.searchMovie);
 app.get("/api/movie/:movieId", webapi.getMovieById);
 // USER
 app.post("/api/signup", webapi.createUser);
@@ -100,7 +97,9 @@ console.log(`[>] Setting up server...\n
           `);
           
 function authMW(req, resp, next) {
-  if(req.path.includes('/signup' || '/search' || '/popular' || '/movie') ) {
+  // req.user = {token: "4c2c9800-43e0-4636-a962-9aa012a757ce"}
+  const paths = ['signup', 'search', 'popular', 'movie']
+  if(paths.includes(req.path.split('/')[1])) {
     next();
     return
   }
@@ -113,6 +112,13 @@ function authMW(req, resp, next) {
   }
   next();
 }
+
+
+
+
+app.use((req, rsp) => rsp.status(404).render('not-found'))
+app.use((req, rsp) => rsp.status(401).render('not-auth'))
+
 
 app.listen(PORT, () =>
   console.log(`[>] Server listening @ http://localhost:${PORT}`)

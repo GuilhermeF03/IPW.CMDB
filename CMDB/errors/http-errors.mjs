@@ -29,7 +29,7 @@ export const errors = {
 
 function badGateway(){
     return {
-       code : e0,
+       code : "e0",
        error : 'Was unable to establish a connection with the server, check your connection and try again.'
     }
 }

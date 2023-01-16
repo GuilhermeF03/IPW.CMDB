@@ -41,7 +41,7 @@ export default function (services) {
       .validateUser(username, password)
       .then((user) => login(req, user))
       .then(() => resp.redirect("/"))
-      .catch(() => resp.status(401).send("Couldn't authenticate"));
+      .catch(() => resp.status(401).json({status:"Couldn't authenticate"}));
   }
 
   function postLogout(req, resp) {

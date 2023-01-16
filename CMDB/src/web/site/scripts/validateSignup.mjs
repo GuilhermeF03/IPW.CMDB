@@ -19,6 +19,7 @@ function loadHandler() {
 }
 
 async function signupHandler() {
+    console.log("hello")
   const badPass = false;
   const usernameText = username.value;
   const passwordText = password.value;
@@ -42,7 +43,7 @@ async function signupHandler() {
     alert("Passwords do not match");
   }else passwordConfirm.style.border = "solid green";
 
-  if(badPass){
+  if(!badPass){
     const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
@@ -55,6 +56,7 @@ async function signupHandler() {
         }),
     });
     if (response.status == 201) {
+        console.log("omg")
         window.location.href = "/login";
     } else {
         alert("Username already exists");

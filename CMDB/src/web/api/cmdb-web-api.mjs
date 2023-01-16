@@ -57,12 +57,13 @@ export default function (services) {
           .status(400)
           .json({ message: "[WA] No user info was provided. Try again." });
 
-      await services.createUser(req.body);
+      const user = await services.createUser(req.body);
 
       console.log(`[>] Successfully created new user.`)
 
       resp.status(201).json({
         status: `User was successfully created`,
+        token: user.token
       });
 
     } catch (error) {
@@ -216,7 +217,7 @@ export default function (services) {
       let movieInfo = await services.getMovieById(req.params.movieId)
 
       resp.status(200).json({
-        status: `<${movie.title}> successfully retrieved.`,
+        status: `<${movieInfo.title}> successfully retrieved.`,
         "movie-info": movieInfo
       })
       

@@ -119,7 +119,6 @@ export default function (services){
         
       } catch (error) {
         if (!error.code) console.error(error);
-  
         const httpError = convertToHttpError(error);
       }
     }
@@ -155,9 +154,6 @@ export default function (services){
           console.log(`[>] Successfully retrieved group info.`)
 
           console.log(group)
-
-
-
 
           return { name: 'groupInfo', data: {title:group.name.toUpperCase(), group,scripts:["update-group.mjs","delete-movie.mjs"]}}
 

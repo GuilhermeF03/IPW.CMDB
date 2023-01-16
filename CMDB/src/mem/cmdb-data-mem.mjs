@@ -16,18 +16,14 @@ const dataPath = path.join(__dirname,"..\\","..\\","data/data.json");
     
 }*/
 
-async function readData(path) {
-  console.log(path)
-  const data = await
-   fs
-    .readFile(path)
+function readData(path) {
+  return fs.readFile(path)
     .then((data) => JSON.parse(data))
     .catch(() => console.error("[fs] File not found at "+ path));
   //console.log("data", data);
-  return data;
 };
 
-async function writeData(path, data) {
+function writeData(path, data) {
   return fs.writeFile(path, JSON.stringify(data, null, 2))
     .then(() => console.log("[fs] Data was successfully written!"))
     .catch(() => console.error("[fs] Couldn't finish writing data."));
@@ -47,11 +43,39 @@ function createUser(userInfo) {
     data[userInfo.token] = {
       token: userInfo.token,
       username: userInfo.username,
-      password: userInfo.password,
-      groups: []
+      password:userInfo.password,
+      groups: [],
     };
-    return Promise.resolve(writeData(dataPath, data));
+    isDuplicated(userInfo.username)
+    .then( result => {
+        if(!result)
+          return Promise.resolve(writeData(dataPath, data));
+        else return -1;
+      }
+    )
   });
+}
+function isDuplicated(username) {
+  return readData(dataPath)
+         .then(data =>{
+          for(const user in data){
+            if(data[user].username == username)
+              return true;
+          }
+          return false;
+        })
+}
+
+function validateUser(username, password) {
+  // validate user credentials for login
+  return readData(dataPath)
+         .then((data) =>{
+          for(const key in data){
+            if(data[key].username == username && data[key].password == password)
+              return Promise.resolve(data[key]);
+          }
+          return Promise.reject()
+         })
 }
 
 function validateUser(username, password) {
@@ -71,7 +95,6 @@ function createGroup(userToken, groupInfo) {
     groupInfo.movies = {};
     data[userToken].groups.push(groupInfo); 
 
-
     let group = data[userToken].groups.last();
     writeData(dataPath, data);
 
@@ -86,7 +109,6 @@ function createGroup(userToken, groupInfo) {
 function listUserGroups(userToken) {
   return readData(dataPath).then((data) => {
     if (!data[userToken]) return Promise.reject(errors.NOT_AUTHORIZED());
-
 
     let groups = data[userToken].groups.map(
       (elem, index) =>
@@ -209,8 +231,7 @@ function deleteMovie(userToken, groupId, movieId) {
 //   .catch((error) => console.error(error));
 
 export default {
-  readData,
-  writeData,
+  validateUser,
   createUser,
   validateUser,
   createGroup,

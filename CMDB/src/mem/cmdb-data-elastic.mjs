@@ -36,7 +36,6 @@ function createUser(userInfo) {
           Accept: "application/json",
         },
       }).then((response) => response.json())
-        .then(undefined)
     } else {
       console.log("Duplicated");
       return -1;

@@ -54,6 +54,7 @@ export default function (data, mem) {
   async function getMovieById(movieId) {
     return await data.getMovieById(movieId);
   }
+
   /* ------------------------ [USER] --------------------------------------------------------------------------------------------------------- */
   async function createUser(userInfo) {
     
