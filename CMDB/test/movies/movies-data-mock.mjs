@@ -24,7 +24,7 @@ async function getTop250() {
   };
 }
 
-// TODO: add error
+
 async function searchMovieByName(path) {
   let search = await mockFetch(path);
   return {

@@ -1,12 +1,29 @@
 {
-  "fd633868-bfa7-4b64-8893-d1138ef5a074": {
-    "token": "fd633868-bfa7-4b64-8893-d1138ef5a074",
-    "name": "Manuel",
-    "groups": []
+  "1234": {
+    "token": 1234,
+    "username": "mock_user",
+    "password": "xax",
+    "groups": [
+      {
+        "name": "group_2",
+        "description": "group_desc_2",
+        "total-duration": 143,
+        "movies": {
+          "0": {
+            "id": 0,
+            "title": "ABC",
+            "description": "movie_desc_1",
+            "year": 2000,
+            "runtime": 143
+          }
+        }
+      }
+    ]
   },
-  "7565d56c-eb80-4393-a648-07d5d66a618e": {
-    "token": "7565d56c-eb80-4393-a648-07d5d66a618e",
-    "name": "Rodrigo",
+  "9101": {
+    "token": 9101,
+    "username": "mock_user_2",
+    "password": "xax",
     "groups": []
   }
 }

@@ -3,10 +3,6 @@ import express from "express";
 import url from "url";
 import path from "path";
 import cors from "cors";
-import bodyParser from "body-parser";
-import yaml from "yamljs";
-import swaggerUi from "swagger-ui-express";
-import hbs from "hbs";
 // Internal imports
 import getServices from "./services/cmdb-services.mjs";
 import getAuth from "./web/site/auth/web-auth.mjs";
@@ -17,7 +13,7 @@ import mem from "./mem/cmdb-data-elastic.mjs";
 // import mem from "./mem/cmdb-data-mem.mjs"
 
 // Constants
-const PORT = 8080;
+const PORT = 8081;
 const services = getServices(data, mem);
 const authRouter = getAuth(services);
 const webapi = getApi(services);
@@ -53,7 +49,7 @@ app.put("/api/groups/:groupId", webapi.updateGroup);
 app.delete("/api/groups/:groupId", webapi.deleteGroup);
 
 //app.get("api/groups/:groupId/:movieId", webapi.getMovie);
-app.put("/api/groups/:groupId/:movieId", webapi.addMovie);
+app.put("/api/groups/:groupId/:movieId", webapi.addMovie)
 app.delete("/api/groups/:groupId/:movieId", webapi.deleteMovie);
 
 // [WEB Branch] ------------------------------------------------------------------------------------------------
