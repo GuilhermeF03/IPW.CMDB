@@ -1,12 +1,12 @@
 import chai from 'chai'
 import { expect } from 'chai'
-import { errors } from '../../errors/http-errors.mjs'
+import { errors } from '../errors/http-errors.mjs'
 import fs from "node:fs/promises";
 import path from "path";
 import url from "url";
 import chaiAsPromised from 'chai-as-promised'
-import mem  from './data-mem-revised.mjs'
-import utils from './data-mem-utils.mjs'
+import mem  from './data-mem/data-mem-revised.mjs'
+import utils from './data-mem/data-mem-utils.mjs'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const dataPath = path.join(__dirname,"..\\","data/dataTest.json");
 chai.should()

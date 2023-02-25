@@ -1,10 +1,10 @@
 
-import elastic from './elastic-revised.mjs'
+import elastic from './elastic/elastic-revised.mjs'
 import chai from 'chai'
 import { expect } from 'chai'
-import { errors } from '../../errors/http-errors.mjs'
+import { errors } from '../errors/http-errors.mjs'
 import chaiAsPromised from 'chai-as-promised'
-import utils from './elastic-utils.mjs'
+import utils from './elastic/elastic-utils.mjs'
 import { MemoryStore } from 'express-session'
 chai.should()
 chai.use(chaiAsPromised)

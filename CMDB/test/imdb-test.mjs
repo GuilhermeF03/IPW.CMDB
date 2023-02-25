@@ -1,6 +1,6 @@
-import imdb from './imdb-revised.mjs'
+import imdb from './imdb/imdb-revised.mjs'
 import chai, { expect } from 'chai'
-import { errors } from '../../errors/http-errors.mjs'
+import { errors } from '../errors/http-errors.mjs'
 import chaiAsPromised from 'chai-as-promised'
 
 
