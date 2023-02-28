@@ -17,9 +17,23 @@ export default function (data, mem) {
     }
 
     async function validateString(value) 
-    {
-        if (!(typeof value == "string" && value != ""))
+    {   
+        if(typeof value != 'string' || value =='')
             return Promise.reject(errors.BAD_REQUEST());
+    }
+    async function validateNumeric(value)
+    {
+        if(isNaN(value) || !Number.isInteger(value))
+            return Promise.reject(errors.BAD_REQUEST());
+    }
+    async function validateId(value)
+    {
+        try{await validateNumeric(value);}
+        catch (err)
+        { if(err.code == errors.BAD_REQUEST().code)
+            await validateString(value)
+          else return Promise.reject(err);
+        } 
     }
 
   /* ---------------------- [GENERAL] ------------------------------------------------------------------------------------------------------- */
@@ -43,8 +57,10 @@ export default function (data, mem) {
     }
     async function getMovieById(userToken, groupId, movieId,)
     { 
-        if(userToken && groupId)
+        if(userToken != undefined && groupId != undefined)
         {
+            await validateId(userToken);
+            await validateId(groupId);
             let movie = await mem.getMovieById(userToken, groupId, movieId);
             if(movie) return movie
         }
@@ -56,13 +72,14 @@ export default function (data, mem) {
     {
         await validateString(userInfo.username);
         await validateString(userInfo.password);
-        let uInfo = { token: crypto.randomUUID(), username: userInfo.username, password: userInfo.password };
-        await mem.createUser(uInfo)
-        return uInfo;
+        userInfo.token = crypto.randomUUID()
+        return await mem.createUser(userInfo)
     }
 
     async function validateUser(username, password)
     {
+        await validateString(username)
+        await validateString(password)
         const user = await mem.validateUser(username, password);
         return user
     }
@@ -70,59 +87,60 @@ export default function (data, mem) {
   /* ---------------------- [GROUPS] -------------------------------------------------------------------------------------------------------- */
     const createGroup = async(userToken, groupInfo) => 
     {
-        await validateString(userToken)
+        await validateId(userToken)
         await validateString(groupInfo.name)
         await validateString(groupInfo.description)
-        await mem.createGroup(userToken, groupInfo);
+        return await mem.createGroup(userToken, groupInfo);
     }
     const listUserGroups = async(userToken) => 
     {
-        await validateString(userToken)
-        await mem.listUserGroups(userToken);
+        await validateId(userToken)
+        return await mem.listUserGroups(userToken);
     }
     const getGroupById = async (userToken, groupId) => 
     {
-        await validateString(userToken)
-        if(isNaN(groupId))
-            await validateString(groupId);
-        await mem.getGroupById(userToken, groupId);
+        await validateId(userToken)
+        await validateId(groupId);
+        return await mem.getGroupById(userToken, groupId);
     }
     async function updateGroup(userToken, groupId, updateInfo) 
     {
         // Validate Info
-        await validateString(userToken)
-        if(isNaN(groupId))
-            await validateString(groupId);
+        await validateId(userToken)
+        await validateId(groupId)
         await validateString(updateInfo.name);
         await validateString(updateInfo.description);
-        await mem.updateGroup(userToken, groupId, updateInfo);
+        return await mem.updateGroup(userToken, groupId, updateInfo);
     }
 
     const deleteGroup = async(userToken, groupId) => 
     {
-        await validateString(userToken)
-        if(isNaN(groupId))
-            await validateString(groupId);
-        await mem.deleteGroup(userToken, groupId);
+        await validateId(userToken)
+        await validateId(groupId)
+        return await mem.deleteGroup(userToken, groupId);
     }
 
   /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
     async function addMovie(userToken, groupId, movieId)
     {
-        await validateString(userToken)
-        if(isNaN(groupId))
-            await validateString(groupId);
-        let mInfo = await data.getMovieById(movieId);
-        await mem.addMovie(userToken, groupId, mInfo);
+        await validateId(userToken)
+        await validateId(groupId)
+        await validateString(movieId)
+        console.log('SEARCHING MEM...')
+        let mInfo = await mem.searchMovieById(movieId);
+        if(!mInfo)
+        {
+            console.log("SEARCHING IMDB...")
+            mInfo = await data.getMovieById(movieId);
+        }
+        return await mem.addMovie(userToken, groupId, mInfo);
     }
 
     const deleteMovie = async (userToken, groupId, movieId) => 
     {
-        await validateString(userToken)
-        if(isNaN(groupId))
-            await validateString(groupId);
-        await getMovieById(userToken, groupId, movieId);
-        await mem.deleteMovie(userToken, groupId, movieId);
+        await validateId(userToken)
+        await validateId(groupId)
+        return await mem.deleteMovie(userToken, groupId, movieId);
     }
 
     return (

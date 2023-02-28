@@ -1,6 +1,12 @@
 import fetch from "node-fetch";
 const baseURL = "http://localhost:9200/";
 import path from "path";
+
+async function clearDatabase() 
+{
+    const indexes = ['users', 'groups', 'movies']
+    indexes.forEach(async (index) => await deleteAllEntries(index))
+}
 async function getAllEntries(index)
 {
   const __searchPath = (index) => path.join(baseURL,index,'_search' )
@@ -37,4 +43,4 @@ async function deleteAllEntries(index)
 //     const a = "api/movie/DHAIJKDAJHL"
 // const paths = ['signup', 'search', 'popular', 'movie']
 //   console.log(paths.includes(a.split('/')[1])) 
-export default {getAllEntries, deleteAllEntries}
+export default {clearDatabase, getAllEntries, deleteAllEntries}

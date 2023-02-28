@@ -64,7 +64,8 @@ async function createUser(userInfo)
     password:userInfo.password,
     groups: [],
   };
-  return await writeData(dataPath,data)
+  await writeData(dataPath,data)
+  return userInfo
 }
 
 /* -------------------------------- [GROUP] ------------------------------------------------------------------------------------------------- */
@@ -102,7 +103,7 @@ async function listUserGroups(userToken)
     })
     if (!groups)
       return Promise.reject(errors.NOT_FOUND());
-    return { username: data[userToken].username, groups };
+    return groups 
 }
 
 async function getGroupById(userToken, groupId) 
@@ -130,7 +131,6 @@ async function updateGroup(userToken, groupId, updateInfo)
   delete group.movies;
   delete group["total-duration"];
   return group;
-
 }
 
 async function deleteGroup(userToken, groupId) 
@@ -152,16 +152,38 @@ async function getMovieById(userToken,groupId,movieId)
 
 async function addMovie(userToken, groupId, mInfo) 
 {
+  // change property name
+  if(!mInfo.movieId)
+  {
+    mInfo.movieId = mInfo.id;
+    delete mInfo.id;
+  }
   let data = await readData(dataPath)
   let group = await getGroupById(userToken, groupId)
-  let movie = group.movies[mInfo.id]
+  let movie = group.movies[mInfo.movieId]
   if(movie)
     return Promise.reject(errors.BAD_REQUEST("[Mem] The movie you're trying to add was already added."));
-  group.movies[mInfo.id] = mInfo;
+  group.movies[mInfo.movieId] = mInfo;
   group["total-duration"] += parseInt(mInfo.runtime);
   data[userToken].groups[groupId] = group;
   await writeData(dataPath, data);
   return mInfo;
+}
+// search data for movie with id
+async function searchMovieById(movieId) 
+{
+  let data = await readData(dataPath)
+  for(const user in data)
+  {
+    for(const group in data[user].groups)
+    {
+      if(group == 'last') break;
+      let movie = data[user].groups[group].movies[movieId]
+      if(movie)
+        return movie
+    }
+  }
+  return undefined
 }
 
 async function deleteMovie(userToken, groupId, movieId) 
@@ -170,7 +192,7 @@ async function deleteMovie(userToken, groupId, movieId)
   let group = await getGroupById(userToken, groupId);
   let movie = group.movies[movieId];
   if (!movie)
-      return Promise.reject(errors.BAD_REQUEST());
+      return Promise.reject(errors.NOT_FOUND());
   group["total-duration"] -= parseInt(movie.runtime);
   delete group.movies[movieId];
   await writeData(dataPath, data);
@@ -191,5 +213,6 @@ export default {
   listUserGroups,
   deleteMovie,
   addMovie,
-  getMovieById
+  getMovieById,
+  searchMovieById,
 };

@@ -1,28 +1,20 @@
 
-import elastic from './elastic/elastic-revised.mjs'
+import elastic from './elastic-revised.mjs'
 import chai from 'chai'
-import { expect } from 'chai'
-import { errors } from '../errors/http-errors.mjs'
+import { errors } from '../../errors/http-errors.mjs'
 import chaiAsPromised from 'chai-as-promised'
-import utils from './elastic/elastic-utils.mjs'
-import { MemoryStore } from 'express-session'
+import utils from './elastic-utils.mjs'
 chai.should()
 chai.use(chaiAsPromised)
 
-async function clearDatabase() 
-{
-    const indexes = ['users', 'groups', 'movies']
-    indexes.forEach(async (index) => await utils.deleteAllEntries(index))
-}
-
 const baseURL = "http://localhost:9200/";
 
-const mock_user_1 = {username:'user1', password:'xxx'}
+let mock_user_1 = {username:'user1', password:'xxx'}
 const dup_username_1 = {username:'user1', password:'ddd'}
-const mock_user_2 = {username:'user2', password:'xxx'}
+let mock_user_2 = {username:'user2', password:'xxx'}
 
-const mock_group_1 = {name:'group1',description : 'desc_group1'}
-const mock_group_2 = {name:'group2',description : 'desc_group2'}
+let mock_group_1 = {name:'group1',description : 'desc_group1'}
+let mock_group_2 = {name:'group2',description : 'desc_group2'}
 
 const mock_movies =
 [
@@ -30,13 +22,13 @@ const mock_movies =
     {id:1, title : 'DEFAULT', description : 'movie_desc_2', year : 1990, runtime: 123},
     {id:2, title : 'MOV_3', description : 'movie_desc_3', year : 1980, runtime: 112}
 ]
+
+// utils.getAllEntries('groups')
+// .then(data => console.log(data))
+//await elastic.deleteMovie('WAtDmoYB6eRzwmbOf_3K','WgtDmoYB6eRzwmbOj_39',0)
 describe('ELASTIC =================', () => 
 {
-    it('reset database', async () => 
-    {
-        await clearDatabase()
-    })
-
+  
     describe('ELASTIC - CREATE USER', () => 
     {
         it('add empty user or duplicated password - should pass', () => 
@@ -44,7 +36,7 @@ describe('ELASTIC =================', () =>
             return (elastic.createUser(mock_user_1)
             .then(data => 
             {
-                mock_user_1.token = data._id
+                mock_user_1 = data
                 return data
             })
             .should.eventually.be.an('object')
@@ -53,11 +45,11 @@ describe('ELASTIC =================', () =>
             elastic.createUser(mock_user_2)
             .then(data => 
             {
-                mock_user_2.token = data._id
+                mock_user_2 = data
                 return data
             })
             .should.eventually.be.an('object')
-            .and.property('_index').equal('users'));
+            .and.property('token'))
         })
         it('add duplicated username - should fail', () => 
         {
@@ -191,20 +183,18 @@ describe('ELASTIC =================', () =>
             it('remove valid group from valid user', () => 
             {
                 return elastic.deleteGroup(mock_user_1.token, mock_group_1.id)
-                .should.eventually.be.an('object')
-                .and.property('status').equal('deleted')
+                .should.eventually.be.undefined
             })
         })
     })
-})
-describe('ELASTIC - MOVIES', () => 
-{
-    it('-- preparing movies tests -- [SKIP THIS TEST ] --', async () => 
+    describe('ELASTIC - MOVIES', () => 
     {
-        return elastic.createGroup(mock_user_1.token, mock_group_2)
-        .then(data => 
+        it('-- preparing movies tests -- [SKIP THIS TEST ] --', async () => 
         {
-            mock_group_2.id = data.id
+            return elastic.createGroup(mock_user_1.token, mock_group_2)
+            .then(data => 
+                {
+            mock_group_2 = data
         })
     })
     describe('ADD MOVIE', () => 
@@ -225,10 +215,10 @@ describe('ELASTIC - MOVIES', () =>
             {
                 return elastic.addMovie(mock_user_1.token, mock_group_2.id, mock_movies[0])
                 .then(data => 
-                {
-                    mock_movies[0].id = data.id
-                    return data
-                })
+                    {
+                        mock_movies[0] = data
+                        return data
+                    })
                 .should.eventually.be.an('object')
                 .and.property('title').equal(mock_movies[0].title);
             })
@@ -255,8 +245,17 @@ describe('ELASTIC - MOVIES', () =>
             })
             it('remove valid movie', () => 
             {
-                return elastic.deleteMovie(mock_user_1.token, mock_group_2.id, mock_movies[0].id)
-                .should.eventually.be.an('object');
+                return elastic.deleteMovie(mock_user_1.token, mock_group_2.id, mock_movies[0].movieId)
+                .should.eventually.be.undefined
             })
         })
+    })
+    
+    describe('reset database', () => 
+    {
+        it('reset database', async () => 
+        {
+            await utils.clearDatabase()
+        })
+    })
 })

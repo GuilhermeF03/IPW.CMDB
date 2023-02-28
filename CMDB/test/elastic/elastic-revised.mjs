@@ -12,7 +12,7 @@ async function createUser(userInfo)
   
     console.log("Not duplicated username");
     console.log(userInfo);
-    return await(await fetch(baseURL + `users/_doc?refresh=wait_for`,
+    let data = await(await fetch(baseURL + `users/_doc?refresh=wait_for`,
     {
       method: "POST",
       body: JSON.stringify(userInfo),
@@ -21,6 +21,8 @@ async function createUser(userInfo)
         Accept: "application/json",
       },
     })).json();
+    userInfo.token = data._id
+    return userInfo;
 }
 
 async function isDuplicated(username) 
@@ -40,8 +42,10 @@ async function validateUser(username, password)
 {
   let resp = await fetch(baseURL + `users/_search?q=username:${username}`)
   let json = await resp.json()
+  if(json.hits.hits.length <= 0)
+    return Promise.reject(errors.NOT_AUTHORIZED());
   let user = await json.hits.hits.map((hits) => hits._source)[0]
-  return user.password == password? { token: user.token } 
+  return user.password == password ? { token: user.token } 
   : Promise.reject(errors.NOT_AUTHORIZED());
 }
 
@@ -67,7 +71,12 @@ async function createGroup(userToken, groupInfo)
       Accept: "application/json",
     },
   })).json()
-  return {id: response._id, name: groupInfo.name, description: groupInfo.description}
+  return(
+  {
+    id: response._id,
+    name: groupInfo.name,
+    description: groupInfo.description
+  });
 }
 
 async function listUserGroups(userToken) 
@@ -97,22 +106,23 @@ async function listUserGroups(userToken)
     }
     bodyInfo[i] = tmp
   }
-  return bodyInfo;
+  return bodyInfo
 }
 
 async function getGroupById(userToken, groupId) 
 {
-  let response = await(await fetch(baseURL + `groups/_doc/${groupId}`)).json();
-  if(!response.found)
-    return Promise.reject(errors.NOT_FOUND());
-  if(!(response._source.userId == userToken))
+  let response = await(await fetch(baseURL + `groups/_search?q=userId=${userToken}`)).json()
+  let groups = await response.hits.hits;
+  if(groups.length <= 0)
     return Promise.reject(errors.NOT_AUTHORIZED());
+  if(!(groups.some((group) => group._id == groupId)))
+    return Promise.reject(errors.NOT_FOUND());
   let moviesInfo = await getGroupMoviesInfo(groupId);
   return(
   {
-    id: response._id,
-    name: response._source.name,
-    description: response._source.description,
+    id: groups[0]._id,
+    name: groups[0]._source.name,
+    description: groups[0]._source.description,
     "number of movies": moviesInfo.numberOfMovies,
     "total duration": moviesInfo.totalDuration,
     movies: moviesInfo.movies,
@@ -139,13 +149,15 @@ async function deleteGroup(userToken, groupId)
     method: "DELETE",
   })).json()
   await removeGroupMovies(groupId)
-  return { status: response.result, groupId: groupId }
 }
 
 /* ---------------------- [MOVIES] -------------------------------------------------------------------------------------------------------- */
 async function addMovie(userToken, groupId, movieInfo) 
 {
   await getGroupById(userToken, groupId)
+  let movie = await getMovieById(userToken, groupId, movieInfo.id)
+  if(movie)
+    return Promise.reject(errors.BAD_REQUEST())
   movieInfo.groupId = groupId
   let response = await(await fetch(baseURL + `movies/_doc?refresh=wait_for`, 
   {
@@ -153,30 +165,42 @@ async function addMovie(userToken, groupId, movieInfo)
     body: JSON.stringify(movieInfo),
     headers: {"Content-Type": "application/json",Accept: "application/json",},
   })).json();
+  movieInfo.movieId = movieInfo.id
   movieInfo.status = response.result
   movieInfo.id = response._id
   return movieInfo
 }
 
-async function getMovieById(userToken,groupId,movieId) 
+async function getMovieById(userToken, groupId, movieId) 
 {
   await getGroupById(userToken,groupId);
-  let response = await(await fetch(baseURL + `movies/_doc/${movieId}`)).json();
-  if(!response.found)
-    return Promise.reject(errors.NOT_FOUND());
-  if(response._source.groupId != groupId)
+  let response = await searchMovieById(movieId);
+  if(!response)
+    return response;
+  if(response.groupId != groupId)
     return Promise.reject(errors.NOT_AUTHORIZED())
-  return response._source
+  response.movieId = response.id
+  delete response.id
+  return response
+}
+// search whole movie index for movie with given id
+async function searchMovieById(movieId)
+{
+  let response = await(await fetch(baseURL + `movies/_search?q=id=${movieId}`)).json();
+  if(response.hits.hits.length == 0)
+    return undefined;
+  return response.hits.hits[0]._source;
 }
 
 async function deleteMovie(userToken, groupId, movieId)
 { 
-  await getMovieById(userToken, groupId, movieId);
-  let response = await(await fetch(baseURL + `movies/_doc/${movieId}?refresh=wait_for`, 
+  let movie = await getMovieById(userToken, groupId, movieId)
+  if(movie == undefined)  
+    return Promise.reject(errors.NOT_FOUND())
+  await(await fetch(baseURL + `movies/_doc/${movieId}?refresh=wait_for`, 
   {
     method: "DELETE",
   })).json()
-  return response
 }
 /* --------------------- [AUX] ---------------------------------------------------------------------------------------------------- */
 // Get all <groupId> movies
@@ -190,18 +214,18 @@ async function getGroupMoviesInfo(groupId)
     totalDuration += movies[mov].runtime;
   return (
   {
-  movies: movies.map((movie, index) =>
-  movie = 
-  {
-    _id: bodyInfo[index]._id,
-    groupId: movie.groupId,
-    id: movie.id,
-    title: movie.title,
-    image: movie.image,
-    runtime: movie.runtime,
-  }),
-  numberOfMovies: response.hits.total.value,
-  totalDuration: totalDuration,
+    movies: movies.map((movie, index) =>
+    movie = 
+    {
+      _id: bodyInfo[index]._id,
+      groupId: movie.groupId,
+      id: movie.id,
+      title: movie.title,
+      image: movie.image,
+      runtime: movie.runtime,
+    }),
+    numberOfMovies: response.hits.total.value,
+    totalDuration: totalDuration,
   });
 }
 
@@ -225,5 +249,6 @@ export default {
   listUserGroups,
   deleteMovie,
   addMovie,
-  getMovieById
+  getMovieById,
+  searchMovieById
 };

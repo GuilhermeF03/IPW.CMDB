@@ -1,40 +1,40 @@
 import chai from 'chai'
 import { expect } from 'chai'
-import { errors } from '../errors/http-errors.mjs'
+import { errors } from '../../errors/http-errors.mjs'
 import fs from "node:fs/promises";
 import path from "path";
 import url from "url";
 import chaiAsPromised from 'chai-as-promised'
-import mem  from './data-mem/data-mem-revised.mjs'
-import utils from './data-mem/data-mem-utils.mjs'
+import mem  from './data-mem-revised.mjs'
+import utils from './data-mem-utils.mjs'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const dataPath = path.join(__dirname,"..\\","data/dataTest.json");
 chai.should()
 chai.use(chaiAsPromised)
 
-const mock_movies =
+let mock_movies =
 [
     {id:0, title : 'ABC', description : 'movie_desc_1', year: 2000, runtime: 143},
     {id:1,title : 'DEFAULT', description : 'movie_desc_2', year : 1990, runtime: 123},
     {id:2,title : 'MOV_3', description : 'movie_desc_3', year : 1980, runtime: 112}
 ]
-const mock_group_1 = 
+let mock_group_1 = 
 {
     name: 'group_1',
     description: 'group_desc_1',
     "total-duration": 155,
     movies : mock_movies
 }
-const mock_group_2 = 
+let mock_group_2 = 
 {
     name: 'group_2',
     description: 'group_desc_2',
     "total-duration": 455,
     movies : mock_movies
 }
-const mock_user_1 = {token:1234, username:'mock_user', password:'xax', groups: []}
+let mock_user_1 = {token:1234, username:'mock_user', password:'xax', groups: []}
 const mock_user_2 = {token:5678, username:'mock_user', password:'dadw', groups: []}
-const mock_user_3 = {token:9101, username:'mock_user_2', password:'xax', groups: []}
+let mock_user_3 = {token:9101, username:'mock_user_2', password:'xax', groups: []}
 
 console.log("MEMORY =============================");
 describe('MEMORY', async () => 
@@ -48,7 +48,13 @@ describe('MEMORY', async () =>
         it('create new user into empty database - should not fail', () => 
         {
             return mem.createUser(mock_user_1)
-            .should.eventually.be.undefined
+                .then(data => 
+                    {
+                        mock_user_1 = data
+                        return data
+                    })
+                .should.eventually.be.an('object')
+                .and.property('token')
         })
         describe('REPEATED CREDENTIAL', () => 
         {
@@ -67,7 +73,13 @@ describe('MEMORY', async () =>
             it('add new user - same password different username - should be ok ', () => 
             {
                 return mem.createUser(mock_user_3)
-                .should.eventually.be.undefined
+                .then(data => 
+                    {
+                        mock_user_3 = data
+                        return data
+                    })
+                .should.eventually.be.an('object')
+                .and.property('token')
             })
         })
     })
@@ -101,6 +113,11 @@ describe('MEMORY', async () =>
             it('add group to valid user - should not fail', () => 
             {
                 return mem.createGroup(mock_user_3.token, mock_group_1)
+                .then(data => 
+                    {
+                        mock_group_1 = data
+                        return data
+                    })
                 .should.eventually.be.an('object')
             })
         })
@@ -156,7 +173,7 @@ describe('MEMORY', async () =>
             it('list valid user groups', () => 
             {
                 return mem.listUserGroups(mock_user_3.token)
-                .should.eventually.have.property('groups');
+                .should.eventually.be.an('array')
             })
         })
         describe("REMOVE GROUP", () => 
@@ -186,6 +203,10 @@ describe('MEMORY', async () =>
         it('-- preparing movie tests -- [SKIP THIS TEST] --', () => 
         {
             mem.createGroup(mock_user_1.token, mock_group_2)
+            .then(data => 
+                {
+                    mock_group_2 = data
+                })
         })
         describe('ADD MOVIE', () => 
         {
@@ -204,6 +225,7 @@ describe('MEMORY', async () =>
             it('add valid movie', () => 
             {
                 return mem.addMovie(mock_user_1.token, 0 , mock_movies[0])
+                .then(data => {mock_movies[0] = data; return data;})
                 .should.eventually.deep.equal(mock_movies[0]);
             })
         })
@@ -225,11 +247,11 @@ describe('MEMORY', async () =>
             {
                 return mem.deleteMovie(mock_user_1.token, 0, -1)
                 .should.eventually.be.rejected
-                .and.deep.equal(errors.BAD_REQUEST());
+                .and.deep.equal(errors.NOT_FOUND());
             })
             it('remove valid movie', () => 
             {
-                return mem.deleteMovie(mock_user_1.token, 0, 0)
+                return mem.deleteMovie(mock_user_1.token, 0, mock_movies[0].movieId)
                 .should.eventually.be.undefined;
             })
         })
