@@ -1,10 +1,6 @@
 # CMDB <img src ="https://skillicons.dev/icons?i=js,nodejs,express&perline=8" />
 
-Repository for Introduction to Web Programming course, winter semester of 2022-2023
-
-* Daniel Sousa - nº 48642
-* Guilherme Ferreira - nº49472
-* Diogo Guerra - nº 49149
+Repository for Introduction to Web Programming course updated project, winter semester of 2022-2023
 
 <img src ="https://static.wpsocket.com/plugin/movie-database/banner-772x250.png" />
 
@@ -23,4 +19,3 @@ Develop a web application that provides a web API that follows the REST principl
     * Add a movie to a group
     * Remove a movie from a group
 * Create new user
-* For all group operations, a user token must be sent in the Authorization header using a Bearer Token. This token is generated at user creation, and consists of a UUID string, obtained from the ```crypto.randomUUID()``` method.
