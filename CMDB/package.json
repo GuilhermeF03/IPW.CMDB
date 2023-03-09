@@ -5,13 +5,16 @@
   "main": "server.js",
   "directories": {
     "doc": "docs",
-    "lib": "lib"
+    "lib": "lib",
+    "test": "test",
+    "bin": "src"
   },
   "scripts": {
+    
     "test": "mocha",
     "start": "nodemon ./src/cmdb-server.mjs "
   },
-  "author": "",
+  "author": "Guilherme Ferreira, Daniel Sousa, Diogo Guerra",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.7",

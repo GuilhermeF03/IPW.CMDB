@@ -105,3 +105,6 @@ dist
 
 # Elastic-Kibana
 elastic_kibana
+
+# VS-code folders
+.vscode
